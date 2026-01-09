@@ -1,0 +1,12 @@
+# Dependency directories
+node_modules/
+
+# Build output
+build/
+release/
+
+# Local application settings
+settings.json
+
+# Personal notes
+todo.txt
