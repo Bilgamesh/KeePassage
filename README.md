@@ -22,6 +22,9 @@ After unlocking the database, all entry metadata (URLs, usernames, notes) become
 
 # Development
 
+#### Prerequisites
+- Node.js 22
+
 ```powershell
 # install dependencies
 npm install
