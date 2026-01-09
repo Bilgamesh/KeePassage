@@ -11,7 +11,9 @@ function createDatabaseWindow() {
   win.setContentView(contentView);
   win.setContentSize(SUBWINDOW_MIN_SIZE);
   win.center();
-  win.setBackgroundColor('#f5f5f5');
+  if (process.platform === 'win32') {
+    win.setBackgroundColor('#f5f5f5');
+  }
   win.setContentSizeConstraints(SUBWINDOW_MIN_SIZE, MAX_SIZE);
 
   win.onClose.connect(() => {

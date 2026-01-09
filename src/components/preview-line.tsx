@@ -38,7 +38,7 @@ function PreviewLine(props: {
       <textedit
         style={{ flex: 1 }}
         text={props.value}
-        backgroundColor={APP_BACKGROUND_COLOR}
+        {...(process.platform === 'win32' ? { backgroundColor: APP_BACKGROUND_COLOR } : {})}
         onMouseDown={(textEdit, ev) => {
           if (ev.button === 2 && textEdit.hasFocus()) {
             TextContextMenu({

@@ -29,7 +29,9 @@ function createMainWindow() {
   const contentView = Container.create();
   contentView.setStyle({ flex: 1 });
   win.setContentView(contentView);
-  win.setBackgroundColor(APP_BACKGROUND_COLOR);
+  if (process.platform === 'win32') {
+    win.setBackgroundColor(APP_BACKGROUND_COLOR);
+  }
 
   createEffect(() => {
     const menuBar = MainMenuBar({ window: win });

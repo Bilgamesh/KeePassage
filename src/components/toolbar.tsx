@@ -62,7 +62,7 @@ function Toolbar(props: { window: Window }) {
       <container
         visible={appSettings().showToolbar}
         style={{ flexDirection: 'row', height: 50 }}
-        backgroundColor="#FFFFFF"
+        {...(process.platform === 'win32' ? { backgroundColor: '#FFFFFF' } : {})}
       >
         <IconButton
           tooltip="Open database"
