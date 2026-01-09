@@ -151,7 +151,7 @@ await packageApp(
   join(import.meta.dirname, '..', 'release', 'out'),
   join(import.meta.dirname, '..', 'release'),
   appInfo,
-  'win32',
+  process.platform,
   null
 );
 const yackageEnd = performance.now();
