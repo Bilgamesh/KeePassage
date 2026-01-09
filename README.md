@@ -23,7 +23,13 @@ After unlocking the database, all entry metadata (URLs, usernames, notes) become
 # Development
 
 #### Prerequisites
+All:
 - Node.js 22
+
+Linux:
+- libpcsclite1
+- pcscd
+- libwebkit2gtk-4.0-dev
 
 ```powershell
 # install dependencies
