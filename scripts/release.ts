@@ -1,9 +1,9 @@
-// @ts-ignore
 import fs from 'fs';
 import { cp, mkdir, readFile, writeFile } from 'fs/promises';
 import getNode from 'get-node';
 import { createRequire } from 'module';
 import { join } from 'path';
+// @ts-ignore
 import { packageApp } from 'yackage';
 
 function logStep(message: string) {

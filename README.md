@@ -5,13 +5,13 @@
     <h1 align="center">KeePassage</h1>
 </div>
 
-KeePassage is a free and open-source password manager that uses age (https://age-encryption.org) and YubiKey as its cryptographic backend, with UI inspired by KeePassXC.
+KeePassage is a free and open-source password manager that uses [age](https://age-encryption.org) and a YubiKey as its cryptographic backend, with a user interface inspired by KeePassXC.
 
-It stores all entries in a single encrypted database file protected with XChaCha20-Poly1305 (AEAD), and the database encryption key itself is encrypted with age ([typage](https://github.com/FiloSottile/typage)).
+All entries are stored in an encrypted database file protected with XChaCha20-Poly1305 (AEAD). The database encryption key itself is encrypted using age (via [typage](https://github.com/FiloSottile/typage)).
 
-Like passage, KeePassage uses public-key encryption and hardware-backed decryption via YubiKey. Age encryption works by encrypting with a public key and decrypting with the corresponding private key - in this case stored on a YubiKey and requiring a PIN and physical touch to use.
+Like [passage](https://github.com/FiloSottile/passage) with [age-plugin-yubikey](https://github.com/str4d/age-plugin-yubikey), KeePassage uses public-key encryption with hardware-backed decryption provided by a YubiKey. Age encryption works by encrypting data with a public key and decrypting it with the corresponding private key - in this case, stored on a YubiKey and requiring both a PIN and physical touch to authorize decryption.
 
-After unlocking the database, all entry metadata (URLs, usernames, notes) is available, while the secret password of each entry remains individually encrypted with age.
+After unlocking the database, all entry metadata (URLs, usernames, notes) becomes available, while the secret password for each entry remains individually encrypted with age.
 
 # Screenshots
 
@@ -26,10 +26,12 @@ After unlocking the database, all entry metadata (URLs, usernames, notes) is ava
 # install dependencies
 npm install
 ```
+
 ```powershell
 # run in dev mode
 npm run dev
 ```
+
 ```powershell
 # build binary
 npm run release
