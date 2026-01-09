@@ -1,0 +1,18 @@
+{
+  "extends": ["@tsconfig/strictest/tsconfig.json", "@tsconfig/node22/tsconfig.json"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./build",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "noEmit": true,
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}
