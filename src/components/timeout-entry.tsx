@@ -23,6 +23,7 @@ function TimeoutEntry(props: {
     '7',
     '8',
     '9',
+    '0',
     'Backspace',
     'ArrowLeft',
     'ArrowRight',

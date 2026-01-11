@@ -105,7 +105,7 @@ function SettingsPage(props: { window: Window }) {
           <container style={{ 'margin-left': 10 }}>
             <TimeoutEntry
               title="Clear clipboard after"
-              checkboxWidth={200}
+              checkboxWidth={process.platform === 'win32' ? 200 : 250}
               entryWidth={50}
               style={{ 'margin-bottom': 5 }}
               checked={unsavedAppSettings().clipboardTimout !== null}
@@ -124,7 +124,7 @@ function SettingsPage(props: { window: Window }) {
             />
             <TimeoutEntry
               title="Lock database after inactivity of"
-              checkboxWidth={200}
+              checkboxWidth={process.platform === 'win32' ? 200 : 250}
               entryWidth={50}
               checked={unsavedAppSettings().dbTimeout !== null}
               value={unsavedAppSettings().dbTimeout || 0}
