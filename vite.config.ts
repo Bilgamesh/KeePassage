@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     build: {
-      target: mode === 'daemon' ? 'node24' : 'node22',
+      target: 'node22',
       outDir: './build',
       emptyOutDir: false,
       ssr: input,

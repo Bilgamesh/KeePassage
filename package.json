@@ -3,7 +3,7 @@
   "version": "0.9.2",
   "type": "module",
   "engines": {
-    "node": "22"
+    "node": "~22"
   },
   "scripts": {
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
