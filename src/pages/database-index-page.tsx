@@ -9,15 +9,16 @@ import {
   setSelectedEntry,
   unlockedDbIndex
 } from '@/data/shared-state';
+import { Entry } from '@/schemas/database-schema';
 import { sleep } from '@/utils/time-util';
 import { SimpleTableModel, Window } from 'gui';
 
 function DatabaseIndexPage(props: { window: Window }) {
+  const sorter = (a: Entry, b: Entry) => a.title.localeCompare(b.title);
+  const entries = () => (unlockedDbIndex()?.secrets || []).filter(filter().run).sort(sorter);
   const model = () => {
     const tableModel = SimpleTableModel.create(5);
-    const index = unlockedDbIndex();
-    const secrets = (index?.secrets || []).filter(filter().run);
-    for (const entry of secrets) {
+    for (const entry of entries()) {
       const displayedUserName = appSettings().hideUserNames
         ? entry.username.replaceAll(/./g, '*')
         : entry.username;
@@ -45,8 +46,7 @@ function DatabaseIndexPage(props: { window: Window }) {
         onSelectionChange={async (self) => {
           await sleep(2);
           const index = self.getSelectedRow();
-          const entries = (unlockedDbIndex()?.secrets || []).filter(filter().run);
-          setSelectedEntry(entries[index] || null);
+          setSelectedEntry(entries()[index] || null);
         }}
         onMouseDown={async (self, event) => {
           if (event.button === 2) {

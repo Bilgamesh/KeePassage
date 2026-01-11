@@ -3,17 +3,10 @@ import { IconButton } from '@/components/icon-button';
 import { NumericEntry } from '@/components/numeric-entry';
 import { PAGE_INDEXES } from '@/data/constants';
 import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
-import {
-  CheckmarkIcon,
-  EntryButton,
-  LargeButton,
-  LargeEntry,
-  PasswordFont,
-  SmallButton
-} from '@/styles';
+import { EntryButton, LargeButton, LargeEntry, PasswordFont, SmallButton } from '@/styles';
 import { createListeners } from '@/utils/listen-util';
 import { getRandomValues } from 'crypto';
-import { Clipboard, Image } from 'gui';
+import { Clipboard } from 'gui';
 import { createSignal } from 'solid-js';
 
 const [password, setPassword] = createSignal('');
@@ -167,40 +160,36 @@ function PwGeneratorPage() {
               <container style={{ flexDirection: 'row' }}>
                 <Expand direction="row" />
                 <button
-                  title="A-Z"
+                  title={`${passwordPolicy().upperCase ? '✓ ' : ''}A-Z`}
                   style={{ ...SmallButton, 'margin-left': 10, 'margin-top': 5 }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, upperCase: !v.upperCase }));
                     generate();
                   }}
-                  image={passwordPolicy().upperCase ? CheckmarkIcon : Image.createEmpty()}
                 />
                 <button
-                  title="a-z"
+                  title={`${passwordPolicy().lowerCase ? '✓ ' : ''}a-z`}
                   style={{ ...SmallButton, 'margin-left': 10, 'margin-top': 5 }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, lowerCase: !v.lowerCase }));
                     generate();
                   }}
-                  image={passwordPolicy().lowerCase ? CheckmarkIcon : Image.createEmpty()}
                 />
                 <button
-                  title="0-9"
+                  title={`${passwordPolicy().numbers ? '✓ ' : ''}0-9`}
                   style={{ ...SmallButton, 'margin-left': 10, 'margin-top': 5 }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, numbers: !v.numbers }));
                     generate();
                   }}
-                  image={passwordPolicy().numbers ? CheckmarkIcon : Image.createEmpty()}
                 />
                 <button
-                  title="/ * + & ..."
+                  title={`${passwordPolicy().symbols ? '✓ ' : ''}/ * + & ...`}
                   style={{ ...SmallButton, 'margin-left': 10, 'margin-top': 5 }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, symbols: !v.symbols }));
                     generate();
                   }}
-                  image={passwordPolicy().symbols ? CheckmarkIcon : Image.createEmpty()}
                 />
                 <Expand direction="row" />
               </container>

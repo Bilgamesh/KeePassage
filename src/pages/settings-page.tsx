@@ -97,7 +97,10 @@ function SettingsPage(props: { window: Window }) {
           </container>
         </container>
       </group>
-      <group title="Timeouts" style={{ height: 85, 'margin-top': 10 }}>
+      <group
+        title="Timeouts"
+        style={{ height: process.platform === 'win32' ? 85 : 100, 'margin-top': 10 }}
+      >
         <container>
           <container style={{ 'margin-left': 10 }}>
             <TimeoutEntry

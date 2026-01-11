@@ -3,7 +3,7 @@ import { Settings } from '@/schemas/settings-schema';
 
 export const APP_NAME = 'KeePassage';
 export const APP_ID = 'keepassage';
-export const VERSION = '0.9.0';
+export const VERSION = '0.9.1';
 export const MIN_SIZE = { width: 800, height: 600 } as const;
 export const SUBWINDOW_MIN_SIZE = { width: 800, height: 500 } as const;
 export const MAX_SIZE = { width: 0, height: 0 } as const;

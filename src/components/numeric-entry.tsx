@@ -3,7 +3,6 @@ import { Entry } from 'gui';
 import { createEffect, createSignal, on } from 'solid-js';
 
 function NumericEntry(props: {
-  style?: Style;
   entryStyle?: Style;
   value?: number;
   minValue?: number;
@@ -62,7 +61,7 @@ function NumericEntry(props: {
   }
 
   return (
-    <container style={{ flexDirection: 'row', ...(props.style || {}) }}>
+    <>
       <entry
         ref={({ node }) => {
           entry = node;
@@ -113,7 +112,7 @@ function NumericEntry(props: {
           increment();
         }}
       />
-    </container>
+    </>
   );
 }
 

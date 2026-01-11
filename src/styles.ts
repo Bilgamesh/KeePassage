@@ -12,10 +12,6 @@ export const AppIcon = Image.createFromPath(getResourcePath('img', 'logo.ico')).
   },
   1
 );
-export const CheckmarkIcon = Image.createFromPath(getResourcePath('icons', 'check.png')).resize(
-  { height: 15, width: 15 },
-  3
-);
 export const SmallButton: Style = {
   height: 30,
   width: 80
