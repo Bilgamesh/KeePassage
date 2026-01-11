@@ -1,7 +1,7 @@
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
-import { PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
-import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
+import { DARK_MODE_FONT_COLOR, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
+import { isDark, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
 import { sleep } from '@/utils/time-util';
 import { AttributedText } from 'gui';
 
@@ -42,7 +42,14 @@ function TouchPage() {
                 )}
                 style={{ 'margin-bottom': 50 }}
               />
-              <Image src={['img', 'touch.png']} size={{ height: 100, width: 100 }} scale={5} />
+              <Image
+                src={['img', 'touch.png']}
+                size={{ height: 100, width: 100 }}
+                scale={5}
+                {...(process.platform === 'linux' && isDark()
+                  ? { tint: DARK_MODE_FONT_COLOR }
+                  : {})}
+              />
               <button
                 title="Cancel"
                 style={{
