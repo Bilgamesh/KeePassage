@@ -31,8 +31,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
       style={{
         flex: 1,
         margin: 20,
-        'margin-top': 0,
-        ...(process.platform === 'linux' ? { backgroundColor: '#FFFFFF' } : {})
+        'margin-top': 0
       }}
     >
       <label
