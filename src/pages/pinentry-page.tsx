@@ -96,6 +96,12 @@ function PinentryPage() {
                   onKeyDown={(self, ev) => {
                     // Silence error sound by returning true
                     if (ev.key === 'Enter') {
+                      if (process.platform === 'linux') {
+                        // Auto submit doesn't work on Linux by default
+                        if (pin() !== null) {
+                          pinListeners.notifyListeners(pin());
+                        }
+                      }
                       return true;
                     }
                     if (ev.key === 'Backspace' && pin() === null) {
