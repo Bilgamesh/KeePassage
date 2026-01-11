@@ -2,8 +2,8 @@ import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
 import { DARK_MODE_FONT_COLOR, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { isDark, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
-import { sleep } from '@/utils/time-util';
 import { AttributedText } from 'gui';
+import { setTimeout } from 'timers/promises';
 
 let controller: AbortController;
 
@@ -13,7 +13,7 @@ function requestTouch() {
   // In case of incorrect PIN, PSCS usually returns an error in less than 10ms,
   // but if the PIN is correct, PCSC stays silent until user touches the key sensor.
   // We assume that if there was no error within the initial 50ms, PIN must be correct and we prompt the user to tap the key.
-  sleep(50).then(() => {
+  setTimeout(50).then(() => {
     const stillOnSamePage = previousPageIndex === mainPageIndex();
     if (!controller.signal.aborted && stillOnSamePage) {
       setMainPageIndex(PAGE_INDEXES.TOUCH);

@@ -10,8 +10,8 @@ import {
   unlockedDbIndex
 } from '@/data/shared-state';
 import { Entry } from '@/schemas/database-schema';
-import { sleep } from '@/utils/time-util';
 import { SimpleTableModel, Window } from 'gui';
+import { setTimeout } from 'timers/promises';
 
 function DatabaseIndexPage(props: { window: Window }) {
   const sorter = (a: Entry, b: Entry) => a.title.localeCompare(b.title);
@@ -44,13 +44,13 @@ function DatabaseIndexPage(props: { window: Window }) {
           editEntry(props.window);
         }}
         onSelectionChange={async (self) => {
-          await sleep(2);
+          await setTimeout(2);
           const index = self.getSelectedRow();
           setSelectedEntry(entries()[index] || null);
         }}
         onMouseDown={async (self, event) => {
           if (event.button === 2) {
-            await sleep(10);
+            await setTimeout(10);
             DatabaseIndexContextMenu({ window: props.window }).popup();
           }
         }}

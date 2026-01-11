@@ -7,10 +7,10 @@ import {
   getRootDirname
 } from '@/utils/folder-util';
 import { createLineReader, createListeners } from '@/utils/listen-util';
-import { sleep } from '@/utils/time-util';
 import { spawn, type ChildProcessWithoutNullStreams } from 'child_process';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
+import { setTimeout } from 'timers/promises';
 
 const pcscDaemonFilePath = checkIfPacked()
   ? getResourcePath('pcsc-daemon.cjs')
@@ -53,7 +53,7 @@ function spawnPcscDaemon(config?: { respawnOnDeath?: boolean; logErrors?: boolea
   if (config?.respawnOnDeath) {
     daemon.on('exit', async (code, signal) => {
       if (code !== 0 && !isShuttingDown) {
-        await sleep(2000);
+        await setTimeout(2000);
         spawnPcscDaemon();
       }
     });
