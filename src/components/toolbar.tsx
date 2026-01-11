@@ -1,6 +1,11 @@
 import { IconButton } from '@/components/icon-button';
 import { Image } from '@/components/image';
-import { DATABASE_EXTENSION, PAGE_INDEXES, SMALL_ENTRY_STYLE } from '@/data/constants';
+import {
+  DARK_MODE_FONT_COLOR,
+  DATABASE_EXTENSION,
+  PAGE_INDEXES,
+  SMALL_ENTRY_STYLE
+} from '@/data/constants';
 import {
   addNewEntry,
   copyPassword,
@@ -13,6 +18,7 @@ import {
 } from '@/data/db-orchestrator';
 import {
   appSettings,
+  isDark,
   mainPageIndex,
   selectedEntry,
   setFilter,
@@ -178,6 +184,7 @@ function Toolbar(props: { window: Window }) {
           src={['icons', 'search.png']}
           style={{ 'margin-left': 5 }}
           scale={2}
+          {...(process.platform === 'linux' && isDark() ? { tint: DARK_MODE_FONT_COLOR } : {})}
         />
         <entry
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX}

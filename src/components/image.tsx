@@ -7,20 +7,18 @@ function Image(props: {
   size: { height: number; width: number };
   scale?: number;
   style?: Style;
+  tint?: string;
 }) {
-  return (
-    <gifplayer
-      image={
-        props.src
-          ? GuiImage.createFromPath(getResourcePath(...props.src)).resize(
-              props.size,
-              props.scale || 1
-            )
-          : GuiImage.createEmpty().resize(props.size, props.scale || 1)
-      }
-      style={props.style || {}}
-    />
-  );
+  const image = () => {
+    const image = props.src
+      ? GuiImage.createFromPath(getResourcePath(...props.src)).resize(props.size, props.scale || 1)
+      : GuiImage.createEmpty().resize(props.size, props.scale || 1);
+    if (props.tint) {
+      return image.tint(props.tint);
+    }
+    return image;
+  };
+  return <gifplayer image={image()} style={props.style || {}} />;
 }
 
 export { Image };
