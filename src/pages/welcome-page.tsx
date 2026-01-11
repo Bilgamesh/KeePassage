@@ -33,7 +33,7 @@ function WelcomePage(props: { window: Window }) {
         style={{ 'margin-bottom': 20 }}
       />
       <label
-        attributedText={AttributedText.create(`WelcomePage to ${APP_NAME} ${VERSION}`, {
+        attributedText={AttributedText.create(`Welcome to ${APP_NAME} ${VERSION}`, {
           align: 'center',
           font: TitleFont
         })}
