@@ -4,7 +4,7 @@ import { Font } from 'gui';
 
 export const APP_NAME = 'KeePassage';
 export const APP_ID = 'keepassage';
-export const VERSION = '0.9.1';
+export const VERSION = '0.9.2';
 export const DISABLED_COLOR = '#777777';
 export const DARK_MODE_FONT_COLOR = '#FFFFFF';
 export const WINDOWS_APP_BACKGROUND_COLOR = '#f5f5f5';
