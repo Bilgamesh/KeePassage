@@ -1,3 +1,4 @@
+import { DATABASE_EXTENSION } from '@/data/constants';
 import { DbFile, DbIndex } from '@/schemas/database-schema';
 import { YubiKey } from '@/schemas/yubikey-schema';
 
@@ -9,6 +10,9 @@ import { readFile, writeFile } from 'fs/promises';
 async function writeDatabase(path: string, dbFile: DbFile) {
   const stringified = JSON.stringify(dbFile);
   const encoded = Buffer.from(stringified).toString('base64');
+  if (!path.toLowerCase().endsWith(`.${DATABASE_EXTENSION.toLowerCase()}`)) {
+    path = `${path}.${DATABASE_EXTENSION.toLowerCase()}`;
+  }
   await writeFile(path, encoded);
 }
 
