@@ -1,11 +1,16 @@
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
-import { APP_NAME, DATABASE_EXTENSION, LARGE_BUTTON_STYLE, VERSION } from '@/data/constants';
+import {
+  APP_NAME,
+  DATABASE_EXTENSION,
+  LARGE_BUTTON_STYLE,
+  TITLE_FONT,
+  VERSION
+} from '@/data/constants';
 import { openDatabase } from '@/data/db-orchestrator';
 import { appSettings } from '@/data/shared-state';
 import { DatabaseCreationPage } from '@/pages/database-creation-page';
 import { render } from '@/renderer';
-import { TitleFont } from '@/styles';
 import { getDatabaseWindow, hasDatabaseWindow } from '@/windows/database-window';
 import { AttributedText, FileOpenDialog, SimpleTableModel, type Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
@@ -35,7 +40,7 @@ function WelcomePage(props: { window: Window }) {
       <label
         attributedText={AttributedText.create(`Welcome to ${APP_NAME} ${VERSION}`, {
           align: 'center',
-          font: TitleFont
+          font: TITLE_FONT
         })}
       />
       <label

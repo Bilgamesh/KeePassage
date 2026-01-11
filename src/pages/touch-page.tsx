@@ -1,8 +1,7 @@
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
-import { PAGE_INDEXES } from '@/data/constants';
+import { PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
-import { TitleFont } from '@/styles';
 import { sleep } from '@/utils/time-util';
 import { AttributedText } from 'gui';
 
@@ -38,7 +37,7 @@ function TouchPage() {
                   'Tap your YubiKey sensor\nto complete the operation',
                   {
                     align: 'center',
-                    font: TitleFont
+                    font: TITLE_FONT
                   }
                 )}
                 style={{ 'margin-bottom': 50 }}

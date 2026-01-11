@@ -1,7 +1,6 @@
-import { WINDOWS_APP_BACKGROUND_COLOR } from '@/data/constants';
+import { PREVIEW_LABEL_FONT, WINDOWS_APP_BACKGROUND_COLOR } from '@/data/constants';
 import { setCopyingEnabled } from '@/data/shared-state';
 import { Style } from '@/renderer/types';
-import { PreviewLabelFont } from '@/styles';
 import { AttributedText, View } from 'gui';
 import { Space } from './space';
 import { TextContextMenu } from './text-context-menu';
@@ -28,7 +27,7 @@ function PreviewLine(props: {
       <label
         style={{ width: 80 }}
         attributedText={AttributedText.create(props.label, {
-          font: PreviewLabelFont,
+          font: PREVIEW_LABEL_FONT,
           align: 'end',
           valign: props.last ? 'start' : 'center'
         })}

@@ -6,10 +6,10 @@ import {
   LARGE_BUTTON_STYLE,
   LARGE_ENTRY_STYLE,
   PAGE_INDEXES,
+  PASSWORD_FONT,
   SMALL_BUTTON_STYLE
 } from '@/data/constants';
 import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
-import { PasswordFont } from '@/styles';
 import { createListeners } from '@/utils/listen-util';
 import { getRandomValues } from 'crypto';
 import { Clipboard } from 'gui';
@@ -86,7 +86,7 @@ function PwGeneratorPage() {
           <container style={{ flexDirection: 'row', 'margin-bottom': 25 }}>
             <entry
               visible={visible()}
-              font={PasswordFont}
+              font={PASSWORD_FONT}
               style={{ ...LARGE_ENTRY_STYLE, flex: 1 }}
               text={password()}
               onTextChange={(entry) => {
@@ -95,7 +95,7 @@ function PwGeneratorPage() {
             />
             <password
               visible={!visible()}
-              font={PasswordFont}
+              font={PASSWORD_FONT}
               style={{ ...LARGE_ENTRY_STYLE, flex: 1 }}
               text={password()}
               onTextChange={(entry) => {

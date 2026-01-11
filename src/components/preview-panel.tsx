@@ -1,8 +1,7 @@
-import { PAGE_INDEXES } from '@/data/constants';
+import { PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { copyPassword, getPassword, showQrCode } from '@/data/db-orchestrator';
 import { appSettings, selectedEntry, setMainPageIndex } from '@/data/shared-state';
 import { Entry } from '@/schemas/database-schema';
-import { TitleFont } from '@/styles';
 import { AttributedText, Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
 import { IconButton } from './icon-button';
@@ -36,7 +35,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
     >
       <label
         attributedText={AttributedText.create(props.entry.title, {
-          font: TitleFont,
+          font: TITLE_FONT,
           align: 'start'
         })}
         style={{ 'margin-left': 10 }}

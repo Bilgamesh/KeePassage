@@ -1,4 +1,4 @@
-import { PasswordFont } from '@/styles';
+import { PASSWORD_FONT } from '@/data/constants';
 import { AttributedText, Window } from 'gui';
 
 function QRCode(props: { code: string; window: Window }) {
@@ -6,7 +6,7 @@ function QRCode(props: { code: string; window: Window }) {
     <container>
       <label
         attributedText={AttributedText.create(props.code, {
-          font: PasswordFont,
+          font: PASSWORD_FONT,
           align: 'center',
           wrap: false
         })}

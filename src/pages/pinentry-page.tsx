@@ -1,7 +1,6 @@
 import { Expand } from '@/components/expand';
-import { APP_NAME, LARGE_BUTTON_STYLE, PAGE_INDEXES } from '@/data/constants';
+import { APP_NAME, LARGE_BUTTON_STYLE, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { mainPageIndex, selectedDbPath, setMainPageIndex } from '@/data/shared-state';
-import { TitleFont } from '@/styles';
 
 import { createListeners } from '@/utils/listen-util';
 import { AttributedText, Entry } from 'gui';
@@ -59,7 +58,7 @@ function PinentryPage() {
           <label
             attributedText={AttributedText.create(`Unlock ${purpose()}`, {
               align: 'start',
-              font: TitleFont
+              font: TITLE_FONT
             })}
             align="start"
           />

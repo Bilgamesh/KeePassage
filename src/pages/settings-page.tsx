@@ -1,9 +1,8 @@
 import { Expand } from '@/components/expand';
 import { TimeoutEntry } from '@/components/timeout-entry';
-import { DEFAULT_SETTINGS, LARGE_BUTTON_STYLE, PAGE_INDEXES } from '@/data/constants';
+import { DEFAULT_SETTINGS, LARGE_BUTTON_STYLE, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { appSettings, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
 import { updateSettings } from '@/service/config-service';
-import { TitleFont } from '@/styles';
 import { AttributedText, MessageBox, Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
 
@@ -36,7 +35,7 @@ function SettingsPage(props: { window: Window }) {
         style={{ 'margin-left': 5 }}
         attributedText={AttributedText.create('Application Settings', {
           align: 'start',
-          font: TitleFont
+          font: TITLE_FONT
         })}
       />
       <group title="User Interface" style={{ height: 180, 'margin-top': 10 }}>

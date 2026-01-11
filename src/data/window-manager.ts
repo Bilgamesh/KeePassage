@@ -1,4 +1,4 @@
-import { AppIcon } from '@/styles';
+import { AppIcon } from '@/components/app-icon';
 import { Window } from 'gui';
 
 declare global {
@@ -9,7 +9,7 @@ global.windowMap = new Map();
 
 function createWindow(name: string) {
   const win = Window.create({});
-  win.setIcon(AppIcon);
+  win.setIcon(AppIcon());
   win.setTitle(name);
   global.windowMap.set(name, win);
   win.onClose.connect(() => deleteWindow(name));

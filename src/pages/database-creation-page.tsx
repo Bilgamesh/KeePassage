@@ -3,10 +3,10 @@ import { DatabaseKeys } from '@/components/database-keys';
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
 import { Router } from '@/components/router';
+import { TITLE_FONT } from '@/data/constants';
 import { saveNewDatabase } from '@/data/db-orchestrator';
 import { monitorYubiKeys } from '@/data/pcsc-orchestrator';
 import { YubiKey } from '@/schemas/yubikey-schema';
-import { TitleFont } from '@/styles';
 import { AttributedText, type Window } from 'gui';
 import { createSignal } from 'solid-js';
 
@@ -48,7 +48,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
           <label
             style={{ 'margin-left': 10 }}
             attributedText={AttributedText.create(TITLES[page()] || '404', {
-              font: TitleFont,
+              font: TITLE_FONT,
               align: 'start'
             })}
           />

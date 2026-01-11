@@ -1,5 +1,6 @@
 import type { Style, TableColumn } from '@/renderer/types';
 import { Settings } from '@/schemas/settings-schema';
+import { Font } from 'gui';
 
 export const APP_NAME = 'KeePassage';
 export const APP_ID = 'keepassage';
@@ -38,6 +39,9 @@ export const SMALL_ENTRY_STYLE: Style = {
 export const LARGE_ENTRY_STYLE: Style = {
   height: 25
 };
+export const PASSWORD_FONT = Font.create('Consolas', 18, 'normal', 'normal');
+export const TITLE_FONT = Font.create('Arial', 18, 'bold', 'normal');
+export const PREVIEW_LABEL_FONT = Font.create('Arial', 12, 'bold', 'normal');
 
 export const DATABASE_COLUMNS: TableColumn[] = [
   {
