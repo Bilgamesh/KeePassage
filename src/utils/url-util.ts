@@ -18,20 +18,25 @@ switch (process.platform) {
 
 function open(url: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    const child = spawn(command, [url]);
-    let errorText = '';
-    child.stderr.setEncoding('utf8');
-    child.stderr.on('data', function (data) {
-      errorText += data;
-    });
-    child.stderr.on('end', function () {
-      if (errorText.length > 0) {
-        var error = new Error(errorText);
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
+    try {
+      const child = spawn(command, [url]);
+      let errorText = '';
+      child.stderr.setEncoding('utf8');
+      child.stderr.on('data', function (data) {
+        errorText += data;
+      });
+      child.stderr.on('end', function () {
+        if (errorText.length > 0) {
+          console.error(errorText);
+          resolve();
+        } else {
+          resolve();
+        }
+      });
+    } catch (err) {
+      console.error(err);
+      resolve();
+    }
   });
 }
 
