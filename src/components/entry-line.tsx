@@ -15,7 +15,11 @@ function EntryLine(props: {
   }
   return (
     <container style={{ flexDirection: 'row', 'margin-top': 10 }}>
-      <label text={props.title} style={{ width: props.titleWidth || 70 }} align="end" />
+      <label
+        text={props.title}
+        style={{ width: props.titleWidth || (process.platform === 'win32' ? 70 : 80) }}
+        align="end"
+      />
       <entry
         visible={props.type === 'normal'}
         text={props.text ? props.text() : ''}

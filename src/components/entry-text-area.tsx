@@ -13,7 +13,7 @@ function EntryTextArea(props: {
     <container style={props.style || {}}>
       <label
         text={props.title}
-        style={{ width: props.titleWidth || 70 }}
+        style={{ width: props.titleWidth || (process.platform === 'win32' ? 70 : 80) }}
         align="end"
         vAlign="start"
       />
