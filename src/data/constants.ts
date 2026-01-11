@@ -1,13 +1,15 @@
-import { TableColumn } from '@/renderer/types';
+import type { Style, TableColumn } from '@/renderer/types';
 import { Settings } from '@/schemas/settings-schema';
 
 export const APP_NAME = 'KeePassage';
 export const APP_ID = 'keepassage';
 export const VERSION = '0.9.1';
+export const DISABLED_COLOR = '#777777';
+export const DARK_MODE_FONT_COLOR = '#FFFFFF';
+export const WINDOWS_APP_BACKGROUND_COLOR = '#f5f5f5';
 export const MIN_SIZE = { width: 800, height: 600 } as const;
 export const SUBWINDOW_MIN_SIZE = { width: 800, height: 500 } as const;
 export const MAX_SIZE = { width: 0, height: 0 } as const;
-export const APP_BACKGROUND_COLOR = '#f5f5f5';
 export const DATABASE_EXTENSION = 'kpgdb';
 export const PAGE_INDEXES = {
   WELCOME: 0,
@@ -18,6 +20,24 @@ export const PAGE_INDEXES = {
   SETTINGS: 5,
   GENERATOR: 6
 } as const;
+export const SMALL_BUTTON_STYLE: Style = {
+  height: 30,
+  width: 80
+};
+export const LARGE_BUTTON_STYLE: Style = {
+  height: 30,
+  width: 140
+};
+export const ENTRY_BUTTON_STYLE: Style = {
+  height: 25,
+  width: 25
+};
+export const SMALL_ENTRY_STYLE: Style = {
+  height: 20
+};
+export const LARGE_ENTRY_STYLE: Style = {
+  height: 25
+};
 
 export const DATABASE_COLUMNS: TableColumn[] = [
   {

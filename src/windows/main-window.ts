@@ -1,6 +1,6 @@
 import { MainMenuBar } from '@/components/main-menu-bar';
 import { TrayMenu } from '@/components/tray-menu';
-import { APP_BACKGROUND_COLOR, APP_NAME, MAX_SIZE, MIN_SIZE } from '@/data/constants';
+import { WINDOWS_APP_BACKGROUND_COLOR, APP_NAME, MAX_SIZE, MIN_SIZE } from '@/data/constants';
 import { killPcscDaemon } from '@/data/pcsc-orchestrator';
 import { appSettings } from '@/data/shared-state';
 import { createWindow, deleteWindow, getWindow } from '@/data/window-manager';
@@ -14,6 +14,7 @@ function toggleVisibility(window: Window, show: boolean) {
   if (show) {
     window.restore();
     window.setSkipTaskbar(false);
+    window.activate();
   } else {
     window.minimize();
     window.setSkipTaskbar(true);
@@ -30,7 +31,7 @@ function createMainWindow() {
   contentView.setStyle({ flex: 1 });
   win.setContentView(contentView);
   if (process.platform === 'win32') {
-    win.setBackgroundColor(APP_BACKGROUND_COLOR);
+    win.setBackgroundColor(WINDOWS_APP_BACKGROUND_COLOR);
   }
 
   createEffect(() => {

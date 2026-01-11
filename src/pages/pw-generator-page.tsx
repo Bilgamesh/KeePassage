@@ -1,9 +1,15 @@
 import { Expand } from '@/components/expand';
 import { IconButton } from '@/components/icon-button';
 import { NumericEntry } from '@/components/numeric-entry';
-import { PAGE_INDEXES } from '@/data/constants';
+import {
+  ENTRY_BUTTON_STYLE,
+  LARGE_BUTTON_STYLE,
+  LARGE_ENTRY_STYLE,
+  PAGE_INDEXES,
+  SMALL_BUTTON_STYLE
+} from '@/data/constants';
 import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
-import { EntryButton, LargeButton, LargeEntry, PasswordFont, SmallButton } from '@/styles';
+import { PasswordFont } from '@/styles';
 import { createListeners } from '@/utils/listen-util';
 import { getRandomValues } from 'crypto';
 import { Clipboard } from 'gui';
@@ -81,7 +87,7 @@ function PwGeneratorPage() {
             <entry
               visible={visible()}
               font={PasswordFont}
-              style={{ ...LargeEntry, flex: 1 }}
+              style={{ ...LARGE_ENTRY_STYLE, flex: 1 }}
               text={password()}
               onTextChange={(entry) => {
                 setPassword(entry.getText());
@@ -90,7 +96,7 @@ function PwGeneratorPage() {
             <password
               visible={!visible()}
               font={PasswordFont}
-              style={{ ...LargeEntry, flex: 1 }}
+              style={{ ...LARGE_ENTRY_STYLE, flex: 1 }}
               text={password()}
               onTextChange={(entry) => {
                 setPassword(entry.getText());
@@ -99,7 +105,7 @@ function PwGeneratorPage() {
             <IconButton
               tooltip="Preview password"
               icon={visible() ? 'eye-off.png' : 'eye.png'}
-              size={{ ...(EntryButton as { height: number; width: number }) }}
+              size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
               onClick={() => {
@@ -109,7 +115,7 @@ function PwGeneratorPage() {
             <IconButton
               tooltip="Generate new password"
               icon="refresh.png"
-              size={{ ...(EntryButton as { height: number; width: number }) }}
+              size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
               onClick={() => {
@@ -119,7 +125,7 @@ function PwGeneratorPage() {
             <IconButton
               tooltip="Copy password to clipboard"
               icon="clipboard.png"
-              size={{ ...(EntryButton as { height: number; width: number }) }}
+              size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
               onClick={() => {
@@ -145,7 +151,7 @@ function PwGeneratorPage() {
               }}
             />
             <NumericEntry
-              entryStyle={{ width: 100, ...LargeEntry }}
+              entryStyle={{ width: 100, ...LARGE_ENTRY_STYLE }}
               value={passwordPolicy().length}
               minValue={1}
               maxValue={128}
@@ -161,7 +167,7 @@ function PwGeneratorPage() {
                 <Expand direction="row" />
                 <button
                   title={`${passwordPolicy().upperCase ? '✓ ' : ''}A-Z`}
-                  style={{ ...SmallButton, 'margin-left': 10, 'margin-top': 5 }}
+                  style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10, 'margin-top': 5 }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, upperCase: !v.upperCase }));
                     generate();
@@ -169,7 +175,7 @@ function PwGeneratorPage() {
                 />
                 <button
                   title={`${passwordPolicy().lowerCase ? '✓ ' : ''}a-z`}
-                  style={{ ...SmallButton, 'margin-left': 10, 'margin-top': 5 }}
+                  style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10, 'margin-top': 5 }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, lowerCase: !v.lowerCase }));
                     generate();
@@ -177,7 +183,7 @@ function PwGeneratorPage() {
                 />
                 <button
                   title={`${passwordPolicy().numbers ? '✓ ' : ''}0-9`}
-                  style={{ ...SmallButton, 'margin-left': 10, 'margin-top': 5 }}
+                  style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10, 'margin-top': 5 }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, numbers: !v.numbers }));
                     generate();
@@ -185,7 +191,7 @@ function PwGeneratorPage() {
                 />
                 <button
                   title={`${passwordPolicy().symbols ? '✓ ' : ''}/ * + & ...`}
-                  style={{ ...SmallButton, 'margin-left': 10, 'margin-top': 5 }}
+                  style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10, 'margin-top': 5 }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, symbols: !v.symbols }));
                     generate();
@@ -202,7 +208,7 @@ function PwGeneratorPage() {
               visible={requestInProgress()}
               enabled={password().length > 0}
               title="Apply password"
-              style={{ ...LargeButton, 'margin-left': 10 }}
+              style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
               onClick={() => {
                 pwListeners.notifyListeners(password());
                 setMainPageIndex(previousPageIndex);
@@ -211,7 +217,7 @@ function PwGeneratorPage() {
             />
             <button
               title="Close"
-              style={{ ...SmallButton, 'margin-left': 10 }}
+              style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10 }}
               onClick={() => {
                 setMainPageIndex(previousPageIndex);
                 setPassword('');

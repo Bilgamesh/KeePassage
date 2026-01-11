@@ -1,5 +1,6 @@
 import { DEFAULT_SETTINGS } from '@/data/constants';
 import { DbIndex, Entry } from '@/schemas/database-schema';
+import { appearance } from 'gui';
 import { createSignal } from 'solid-js';
 
 export const [mainPageIndex, setMainPageIndex] = createSignal(0);
@@ -11,3 +12,4 @@ export const [filter, setFilter] = createSignal<{ run: (entry: Entry) => boolean
   run: () => true
 });
 export const [copyingEnabled, setCopyingEnabled] = createSignal(true);
+export const [isDark, setDark] = createSignal(appearance.isDarkScheme());

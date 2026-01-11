@@ -1,6 +1,6 @@
 import type * as gui from 'gui';
 
-type Style = {
+export type Style = {
   color?: string;
   backgroundColor?: string;
   fontSize?: number;
@@ -21,7 +21,7 @@ type Style = {
   width?: number;
 };
 
-type MenuItemOptions = {
+export type MenuItemOptions = {
   type?: gui.MenuItemType;
   role?: gui.MenuItemRole;
   checked?: boolean;
@@ -34,12 +34,12 @@ type MenuItemOptions = {
   onClick?: (self: gui.MenuItem) => void;
 };
 
-type TableColumn = {
+export type TableColumn = {
   label: string;
   options: gui.TableColumnOptions;
 };
 
-interface view<NodeType> {
+export interface view<NodeType> {
   ref?: (element: { node: NodeType }) => void;
   color?: string;
   backgroundColor?: string;
@@ -65,19 +65,19 @@ interface view<NodeType> {
   style?: Style;
 }
 
-interface label<NodeType> extends view<NodeType> {
+export interface label<NodeType> extends view<NodeType> {
   text?: string;
   align?: gui.TextAlign;
   vAlign?: gui.TextAlign;
   attributedText?: gui.AttributedText;
 }
 
-interface container<NodeType> extends view<NodeType> {
+export interface container<NodeType> extends view<NodeType> {
   children?: gui.View[];
   onDraw?: (self: NodeType, painter: gui.Painter, dirty: gui.RectF) => void;
 }
 
-interface button<NodeType> extends view<NodeType> {
+export interface button<NodeType> extends view<NodeType> {
   title?: string;
   controlSize?: gui.ControlSize;
   hasBorder?: boolean;
@@ -86,46 +86,46 @@ interface button<NodeType> extends view<NodeType> {
   onClick?: (self: NodeType) => void;
 }
 
-interface datepicker<NodeType> extends view<NodeType> {
+export interface datepicker<NodeType> extends view<NodeType> {
   range?: { minimum: Date; maximum: Date };
   date?: Date;
   onDateChange?: (self: NodeType) => void;
 }
 
-interface combobox<NodeType> extends picker<NodeType> {
+export interface combobox<NodeType> extends picker<NodeType> {
   text?: string;
   onTextChange?: (self: NodeType) => void;
 }
 
-interface picker<NodeType> extends view<NodeType> {
+export interface picker<NodeType> extends view<NodeType> {
   items?: string[];
   selectedItemIndex?: number;
   onSelectionChange?: (self: NodeType) => void;
 }
 
-interface entry<NodeType> extends view<NodeType> {
+export interface entry<NodeType> extends view<NodeType> {
   text?: string;
   onTextChange?: (self: NodeType) => void;
   onActivate?: (self: NodeType) => void;
 }
 
-interface gifplayer<NodeType> extends view<NodeType> {
+export interface gifplayer<NodeType> extends view<NodeType> {
   image?: gui.Image;
   animating?: boolean;
   scale?: gui.ImageScale;
 }
 
-interface group<NodeType> extends view<NodeType> {
+export interface group<NodeType> extends view<NodeType> {
   title?: string;
   children?: [gui.Container];
 }
 
-interface progressbar<NodeType> extends view<NodeType> {
+export interface progressbar<NodeType> extends view<NodeType> {
   value?: number;
   indeterminate?: boolean;
 }
 
-interface scroll<NodeType> extends view<NodeType> {
+export interface scroll<NodeType> extends view<NodeType> {
   contentSize?: gui.SizeF;
   children?: [gui.View];
   scrollPosition?: { horizon: number; vertical: number };
@@ -138,11 +138,11 @@ interface scroll<NodeType> extends view<NodeType> {
   onScroll?: (self: NodeType) => void;
 }
 
-interface vseparator<NodeType> extends view<NodeType> {}
+export interface vseparator<NodeType> extends view<NodeType> {}
 
-interface hseparator<NodeType> extends view<NodeType> {}
+export interface hseparator<NodeType> extends view<NodeType> {}
 
-interface slider<NodeType> extends view<NodeType> {
+export interface slider<NodeType> extends view<NodeType> {
   value?: number;
   step?: number;
   range?: { min: number; max: number };
@@ -150,14 +150,14 @@ interface slider<NodeType> extends view<NodeType> {
   onSlidingComplete?: (self: NodeType) => void;
 }
 
-interface tab<NodeType> extends view<NodeType> {
+export interface tab<NodeType> extends view<NodeType> {
   children: gui.View[];
   titles: string[];
   selectedPage?: number;
   onSelectedPageChange?: (self: NodeType) => void;
 }
 
-interface table<NodeType> extends view<NodeType> {
+export interface table<NodeType> extends view<NodeType> {
   model?: gui.TableModel;
   columns?: string[];
   columnsWithOptions?: { label: string; options: gui.TableColumnOptions }[];
@@ -172,7 +172,7 @@ interface table<NodeType> extends view<NodeType> {
   onToggleCheckbox?: (self: NodeType, column: number, row: number) => void;
 }
 
-interface textedit<NodeType> extends view<NodeType> {
+export interface textedit<NodeType> extends view<NodeType> {
   text?: string;
   selectedRange?: { start: number; end: number };
   overlayScrollbar?: boolean;
@@ -185,20 +185,20 @@ interface textedit<NodeType> extends view<NodeType> {
   shouldInsertNewLine?: (self: NodeType) => boolean;
 }
 
-interface vibrant<NodeType> extends container<NodeType> {
+export interface vibrant<NodeType> extends container<NodeType> {
   material?: gui.VibrantMaterial;
   blendingMode?: gui.VibrantBlendingMode;
 }
 
-interface checkbox<NodeType> extends button<NodeType> {
+export interface checkbox<NodeType> extends button<NodeType> {
   checked?: boolean;
 }
 
-interface radio<NodeType> extends button<NodeType> {
+export interface radio<NodeType> extends button<NodeType> {
   checked?: boolean;
 }
 
-interface browser<NodeType> extends view<NodeType> {
+export interface browser<NodeType> extends view<NodeType> {
   url?: string;
   html?: { html: string; baseUrl?: string } | string;
   userAgent?: string;
@@ -242,5 +242,3 @@ declare module 'solid-js' {
     }
   }
 }
-
-export type { MenuItemOptions, Style, TableColumn };

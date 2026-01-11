@@ -2,12 +2,11 @@ import { EntryLine } from '@/components/entry-line';
 import { EntryTextArea } from '@/components/entry-text-area';
 import { Expand } from '@/components/expand';
 import { IconButton } from '@/components/icon-button';
-import { PAGE_INDEXES } from '@/data/constants';
+import { LARGE_BUTTON_STYLE, PAGE_INDEXES, SMALL_ENTRY_STYLE } from '@/data/constants';
 import { mainPageIndex, setMainPageIndex, unlockedDbIndex } from '@/data/shared-state';
 import { getGeneratedPassword } from '@/pages/pw-generator-page';
 import { Entry } from '@/schemas/database-schema';
 import { encrypt } from '@/service/pcsc-service';
-import { LargeButton, SmallEntry } from '@/styles';
 import { createListeners } from '@/utils/listen-util';
 import { createEffect, createSignal } from 'solid-js';
 
@@ -108,7 +107,7 @@ function EntryPage() {
         <IconButton
           tooltip="Password generator"
           icon={'dice-3.png'}
-          size={{ height: SmallEntry.height!, width: 20 }}
+          size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           imageSize={{ height: 13, width: 13 }}
           style={{
             'margin-top': 0,
@@ -123,7 +122,7 @@ function EntryPage() {
         <IconButton
           tooltip="Preview password"
           icon={passwordVisible() ? 'eye-off.png' : 'eye.png'}
-          size={{ height: SmallEntry.height!, width: 20 }}
+          size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           imageSize={{ height: 13, width: 13 }}
           style={{
             'margin-top': 0,
@@ -147,7 +146,7 @@ function EntryPage() {
         <button
           title="OK"
           enabled={title().trim().length > 0}
-          style={LargeButton}
+          style={LARGE_BUTTON_STYLE}
           onClick={() => {
             setModified(new Date().getTime());
             onEntrySubmit();
@@ -155,7 +154,7 @@ function EntryPage() {
         />
         <button
           title="Cancel"
-          style={{ ...LargeButton, 'margin-left': 20 }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 20 }}
           onClick={(button) => {
             controller.abort('Cancel');
           }}

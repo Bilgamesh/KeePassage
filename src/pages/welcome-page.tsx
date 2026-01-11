@@ -1,11 +1,11 @@
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
-import { APP_NAME, DATABASE_EXTENSION, VERSION } from '@/data/constants';
+import { APP_NAME, DATABASE_EXTENSION, LARGE_BUTTON_STYLE, VERSION } from '@/data/constants';
 import { openDatabase } from '@/data/db-orchestrator';
 import { appSettings } from '@/data/shared-state';
 import { DatabaseCreationPage } from '@/pages/database-creation-page';
 import { render } from '@/renderer';
-import { LargeButton, TitleFont } from '@/styles';
+import { TitleFont } from '@/styles';
 import { getDatabaseWindow, hasDatabaseWindow } from '@/windows/database-window';
 import { AttributedText, FileOpenDialog, SimpleTableModel, type Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
@@ -46,7 +46,7 @@ function WelcomePage(props: { window: Window }) {
         <Expand />
         <button
           title="+ Create Database"
-          style={LargeButton}
+          style={LARGE_BUTTON_STYLE}
           onClick={() => {
             const win = getDatabaseWindow();
             render(() => <DatabaseCreationPage window={win} mainWindow={props.window} />, win);
@@ -55,7 +55,7 @@ function WelcomePage(props: { window: Window }) {
         />
         <button
           title="Open Database"
-          style={{ ...LargeButton, 'margin-left': 10 }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={async () => {
             if (hasDatabaseWindow()) {
               getDatabaseWindow().activate();
@@ -74,7 +74,11 @@ function WelcomePage(props: { window: Window }) {
             }
           }}
         />
-        <button enabled={false} title="Import File" style={{ ...LargeButton, 'margin-left': 10 }} />
+        <button
+          enabled={false}
+          title="Import File"
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
+        />
         <Expand />
       </container>
       <container visible={recent().length > 0} style={{ flex: 1, flexDirection: 'row' }}>

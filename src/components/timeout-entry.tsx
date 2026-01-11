@@ -1,5 +1,5 @@
+import { LARGE_ENTRY_STYLE } from '@/data/constants';
 import { Style } from '@/renderer/types';
-import { LargeEntry } from '@/styles';
 import { Entry } from 'gui';
 import { createEffect, createSignal, on } from 'solid-js';
 
@@ -81,7 +81,7 @@ function TimeoutEntry(props: {
           entry = node;
         }}
         text={`${props.value || 0} sec`}
-        style={{ ...LargeEntry, width: props.entryWidth }}
+        style={{ ...LARGE_ENTRY_STYLE, width: props.entryWidth }}
         onTextChange={(entry) => {
           const text = entry.getText();
           if (/^\d* sec$/g.test(text)) {

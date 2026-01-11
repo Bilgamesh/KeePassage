@@ -26,7 +26,15 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
     appSettings().hideUserNames ? props.entry.username.replaceAll(/./g, '*') : props.entry.username;
 
   return (
-    <container visible={props.visible !== false} style={{ flex: 1, margin: 20, 'margin-top': 0 }}>
+    <container
+      visible={props.visible !== false}
+      style={{
+        flex: 1,
+        margin: 20,
+        'margin-top': 0,
+        ...(process.platform === 'linux' ? { backgroundColor: '#FFFFFF' } : {})
+      }}
+    >
       <label
         attributedText={AttributedText.create(props.entry.title, {
           font: TitleFont,
@@ -44,11 +52,11 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
           <PreviewLine
             label="Password"
             value={password() === null ? '***' : password()!}
-            style={{ 'margin-top': 10, height: 22 }}
+            style={{ 'margin-top': 10, height: process.platform === 'win32' ? 22 : 35 }}
           >
             <IconButton
               icon={password() === null ? 'eye.png' : 'eye-off.png'}
-              tooltip='Preview password'
+              tooltip="Preview password"
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
               style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
@@ -62,7 +70,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
             />
             <IconButton
               icon="qrcode.png"
-              tooltip='Generate QR code with password'
+              tooltip="Generate QR code with password"
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
               style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
@@ -72,7 +80,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
             />
             <IconButton
               icon="clipboard.png"
-              tooltip='Copy password to clipboard'
+              tooltip="Copy password to clipboard"
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
               style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}

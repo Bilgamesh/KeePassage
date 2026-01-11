@@ -1,4 +1,4 @@
-import { SmallEntry } from '@/styles';
+import { SMALL_ENTRY_STYLE } from '@/data/constants';
 import { View } from 'gui';
 import { Accessor } from 'solid-js';
 
@@ -23,7 +23,7 @@ function EntryLine(props: {
       <entry
         visible={props.type === 'normal'}
         text={props.text ? props.text() : ''}
-        style={{ flex: 1, 'margin-left': 10, 'margin-right': 0, ...SmallEntry }}
+        style={{ flex: 1, 'margin-left': 10, 'margin-right': 0, ...SMALL_ENTRY_STYLE }}
         onKeyDown={(self, ev) => {
           if (ev.key === 'Enter') {
             return true;
@@ -42,7 +42,7 @@ function EntryLine(props: {
       <password
         visible={props.type === 'password'}
         text={props.text ? props.text() : ''}
-        style={{ flex: 1, 'margin-left': 10, 'margin-right': 0, ...SmallEntry }}
+        style={{ flex: 1, 'margin-left': 10, 'margin-right': 0, ...SMALL_ENTRY_STYLE }}
         onKeyDown={(self, ev) => {
           if (ev.key === 'Enter') {
             return true;

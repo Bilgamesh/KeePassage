@@ -1,4 +1,3 @@
-import { Style } from '@/renderer/types';
 import { getResourcePath } from '@/utils/folder-util';
 import { Font, Image } from 'gui';
 
@@ -12,21 +11,3 @@ export const AppIcon = Image.createFromPath(getResourcePath('img', 'logo.ico')).
   },
   1
 );
-export const SmallButton: Style = {
-  height: 30,
-  width: 80
-};
-export const LargeButton: Style = {
-  height: 30,
-  width: 140
-};
-export const EntryButton: Style = {
-  height: 25,
-  width: 25
-};
-export const SmallEntry: Style = {
-  height: 20
-};
-export const LargeEntry: Style = {
-  height: 25
-};

@@ -1,4 +1,4 @@
-import { APP_BACKGROUND_COLOR } from '@/data/constants';
+import { WINDOWS_APP_BACKGROUND_COLOR } from '@/data/constants';
 import { setCopyingEnabled } from '@/data/shared-state';
 import { Style } from '@/renderer/types';
 import { PreviewLabelFont } from '@/styles';
@@ -38,7 +38,7 @@ function PreviewLine(props: {
       <textedit
         style={{ flex: 1 }}
         text={props.value}
-        {...(process.platform === 'win32' ? { backgroundColor: APP_BACKGROUND_COLOR } : {})}
+        {...(process.platform === 'win32' ? { backgroundColor: WINDOWS_APP_BACKGROUND_COLOR } : {})}
         onMouseDown={(textEdit, ev) => {
           if (ev.button === 2 && textEdit.hasFocus()) {
             TextContextMenu({

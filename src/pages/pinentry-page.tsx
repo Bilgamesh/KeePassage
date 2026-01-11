@@ -1,7 +1,7 @@
 import { Expand } from '@/components/expand';
-import { APP_NAME, PAGE_INDEXES } from '@/data/constants';
+import { APP_NAME, LARGE_BUTTON_STYLE, PAGE_INDEXES } from '@/data/constants';
 import { mainPageIndex, selectedDbPath, setMainPageIndex } from '@/data/shared-state';
-import { LargeButton, TitleFont } from '@/styles';
+import { TitleFont } from '@/styles';
 
 import { createListeners } from '@/utils/listen-util';
 import { AttributedText, Entry } from 'gui';
@@ -115,12 +115,12 @@ function PinentryPage() {
                   <button
                     title="Submit"
                     enabled={pin() !== null}
-                    style={LargeButton}
+                    style={LARGE_BUTTON_STYLE}
                     onClick={() => pinListeners.notifyListeners(pin())}
                   />
                   <button
                     title="Cancel"
-                    style={{ ...LargeButton, 'margin-left': 10 }}
+                    style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
                     onClick={() => {
                       controller?.abort('Cancel');
                     }}

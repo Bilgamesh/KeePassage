@@ -1,6 +1,6 @@
 import { IconButton } from '@/components/icon-button';
 import { Image } from '@/components/image';
-import { DATABASE_EXTENSION, PAGE_INDEXES } from '@/data/constants';
+import { DATABASE_EXTENSION, PAGE_INDEXES, SMALL_ENTRY_STYLE } from '@/data/constants';
 import {
   addNewEntry,
   copyPassword,
@@ -23,7 +23,6 @@ import {
 } from '@/data/shared-state';
 import { openPasswordGenerator } from '@/pages/pw-generator-page';
 import { openSettingsPage } from '@/pages/settings-page';
-import { SmallEntry } from '@/styles';
 import { Entry, Event, FileOpenDialog, KeyEvent, Window } from 'gui';
 import { createEffect } from 'solid-js';
 
@@ -187,7 +186,7 @@ function Toolbar(props: { window: Window }) {
             'margin-left': 2,
             'margin-right': 20,
             'margin-top': 14,
-            ...SmallEntry
+            ...SMALL_ENTRY_STYLE
           }}
           onKeyDown={(self, ev) => {
             if (ev.key === 'Enter') {

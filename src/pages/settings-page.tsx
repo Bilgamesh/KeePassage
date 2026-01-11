@@ -1,9 +1,9 @@
 import { Expand } from '@/components/expand';
 import { TimeoutEntry } from '@/components/timeout-entry';
-import { DEFAULT_SETTINGS, PAGE_INDEXES } from '@/data/constants';
+import { DEFAULT_SETTINGS, LARGE_BUTTON_STYLE, PAGE_INDEXES } from '@/data/constants';
 import { appSettings, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
 import { updateSettings } from '@/service/config-service';
-import { LargeButton, TitleFont } from '@/styles';
+import { TitleFont } from '@/styles';
 import { AttributedText, MessageBox, Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
 
@@ -161,7 +161,7 @@ function SettingsPage(props: { window: Window }) {
       <container style={{ flexDirection: 'row' }}>
         <button
           title="Reset settings to default"
-          style={{ ...LargeButton, 'margin-left': 10 }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             const msgBox = MessageBox.create();
             msgBox.setType('information');
@@ -178,7 +178,7 @@ function SettingsPage(props: { window: Window }) {
         <Expand direction="row" />
         <button
           title="OK"
-          style={{ ...LargeButton, 'margin-left': 10 }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             setMainPageIndex(previousPageIndex);
             updateSettings(() => unsavedAppSettings());
@@ -186,7 +186,7 @@ function SettingsPage(props: { window: Window }) {
         />
         <button
           title="Cancel"
-          style={{ ...LargeButton, 'margin-left': 10 }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             setMainPageIndex(previousPageIndex);
             reset();

@@ -1,3 +1,5 @@
+import { DARK_MODE_FONT_COLOR, DISABLED_COLOR } from '@/data/constants';
+import { isDark } from '@/data/shared-state';
 import { Style } from '@/renderer/types';
 import { getResourcePath } from '@/utils/folder-util';
 import { Button, Image } from 'gui';
@@ -15,6 +17,24 @@ function IconButton(props: {
   if (props.enabled === undefined) {
     props.enabled = true;
   }
+
+  const image = () => {
+    let image = Image.createFromPath(getResourcePath('icons', props.icon)).resize(
+      { height: props.imageSize?.height || 20, width: props.imageSize?.width || 20 },
+      4
+    );
+    if (!props.enabled) {
+      return image.tint(DISABLED_COLOR);
+    }
+    if (process.platform === 'win32') {
+      return image;
+    }
+    if (isDark()) {
+      return image.tint(DARK_MODE_FONT_COLOR);
+    }
+    return image;
+  };
+
   return (
     <button
       visible={props.visible !== false}
@@ -26,10 +46,7 @@ function IconButton(props: {
         'margin-top': 5,
         ...(props.style || {})
       }}
-      image={Image.createFromPath(getResourcePath('icons', props.icon)).resize(
-        { height: props.imageSize?.height || 20, width: props.imageSize?.width || 20 },
-        4
-      )}
+      image={image()}
       tooltip={props.tooltip || ''}
       onClick={props.onClick || (() => {})}
     />
