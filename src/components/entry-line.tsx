@@ -1,6 +1,7 @@
 import { View } from 'gui';
 import { Accessor } from 'solid-js';
 
+import { ReactiveEntry, ReactivePassword } from '@/components/reactive-textfields';
 import { SMALL_ENTRY_STYLE } from '@/data/constants';
 
 function EntryLine(props: {
@@ -21,9 +22,9 @@ function EntryLine(props: {
         style={{ width: props.titleWidth || (process.platform === 'win32' ? 70 : 80) }}
         align="end"
       />
-      <entry
+      <ReactiveEntry
         visible={props.type === 'normal'}
-        text={props.text ? props.text() : ''}
+        text={props.text || (() => '')}
         style={{ flex: 1, 'margin-left': 10, 'margin-right': 0, ...SMALL_ENTRY_STYLE }}
         onKeyDown={(self, ev) => {
           if (ev.key === 'Enter') {
@@ -34,15 +35,15 @@ function EntryLine(props: {
           }
           return false;
         }}
-        onTextChange={(self) => {
+        onTextChange={(text) => {
           if (props.onTextChange) {
-            props.onTextChange(self.getText());
+            props.onTextChange(text);
           }
         }}
       />
-      <password
+      <ReactivePassword
         visible={props.type === 'password'}
-        text={props.text ? props.text() : ''}
+        text={props.text || (() => '')}
         style={{ flex: 1, 'margin-left': 10, 'margin-right': 0, ...SMALL_ENTRY_STYLE }}
         onKeyDown={(self, ev) => {
           if (ev.key === 'Enter') {
@@ -53,9 +54,9 @@ function EntryLine(props: {
           }
           return false;
         }}
-        onTextChange={(self) => {
+        onTextChange={(text) => {
           if (props.onTextChange) {
-            props.onTextChange(self.getText());
+            props.onTextChange(text);
           }
         }}
       />
