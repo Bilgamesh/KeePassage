@@ -1,3 +1,6 @@
+import { Clipboard, FileSaveDialog, MessageBox, Window } from 'gui';
+import { Accessor } from 'solid-js';
+
 import { DATABASE_EXTENSION, PAGE_INDEXES } from '@/data/constants';
 import {
   appSettings,
@@ -26,8 +29,6 @@ import { decrypt } from '@/service/pcsc-service';
 import { showError } from '@/utils/message-box-util';
 import { showQrCodeWindow } from '@/utils/qr-code-util';
 import { getMainWindow } from '@/windows/main-window';
-import { Clipboard, FileSaveDialog, MessageBox, Window } from 'gui';
-import { Accessor } from 'solid-js';
 
 async function openDatabase(window: Window, path: string) {
   const previousPath = selectedDbPath();

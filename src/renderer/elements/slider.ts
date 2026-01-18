@@ -1,5 +1,6 @@
-import { View } from '@/renderer/elements/view';
 import { Slider as GuiSlider } from 'gui';
+
+import { View } from '@/renderer/elements/view';
 
 class Slider extends View {
   override node: GuiSlider;

@@ -11,4 +11,4 @@ const child = execFile(path, args);
 child.stdout!.pipe(process.stdout);
 child.stderr!.pipe(process.stderr);
 
-child.on('exit', code => process.exit(code));
+child.on('exit', (code) => process.exit(code));

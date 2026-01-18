@@ -1,10 +1,11 @@
+import { AttributedText, MessageBox, Window } from 'gui';
+import { createEffect, createSignal } from 'solid-js';
+
 import { Expand } from '@/components/expand';
 import { TimeoutEntry } from '@/components/timeout-entry';
 import { DEFAULT_SETTINGS, LARGE_BUTTON_STYLE, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { appSettings, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
 import { updateSettings } from '@/service/config-service';
-import { AttributedText, MessageBox, Window } from 'gui';
-import { createEffect, createSignal } from 'solid-js';
 
 const [unsavedAppSettings, setUnsavedAppSettings] = createSignal({ ...appSettings() });
 

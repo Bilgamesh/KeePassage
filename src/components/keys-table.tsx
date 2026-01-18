@@ -1,7 +1,8 @@
-import type { YubiKey } from '@/schemas/yubikey-schema';
 import type { TableColumnOptions } from 'gui';
 import { SimpleTableModel } from 'gui';
 import { Accessor, createEffect, Setter } from 'solid-js';
+
+import type { YubiKey } from '@/schemas/yubikey-schema';
 
 function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<YubiKey[]> }) {
   const dbTable = SimpleTableModel.create(4);

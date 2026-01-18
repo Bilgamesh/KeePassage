@@ -3,6 +3,7 @@ import { cp, mkdir, readFile, writeFile } from 'fs/promises';
 import getNode from 'get-node';
 import { createRequire } from 'module';
 import { join } from 'path';
+import rcedit from 'rcedit';
 // @ts-ignore
 import { packageApp } from 'yackage';
 
@@ -25,7 +26,7 @@ async function copyModule(module: string) {
 
 async function copyResources() {
   await cp(
-    join(import.meta.dirname, '..', 'res'),
+    join(import.meta.dirname, '..', 'src', 'assets'),
     join(import.meta.dirname, '..', 'release', 'out', 'res'),
     { recursive: true }
   );
@@ -103,7 +104,11 @@ const appInfo = {
   unpack: '+(*.node)',
   build: {
     minify: true
-  }
+  },
+  appId: 'keepassage',
+  productName: 'KeePassage',
+  description: 'KeePassage',
+  copyright: `Copyright © ${new Date().getFullYear()} KeePassage`
 };
 
 logStep('🚀 Starting release build process...');
@@ -129,12 +134,13 @@ await writeFile(
     {
       main: appInfo.main,
       build: {
-        appId: 'keepassage',
-        productName: 'KeePassage',
-        description: 'KeePassage',
+        appId: appInfo.appId,
+        productName: appInfo.productName,
+        description: appInfo.description,
         version: appInfo.version,
+        copyright: appInfo.copyright,
         icons: {
-          win: '../res/img/logo.ico'
+          win: '../src/assets/img/logo.ico'
         }
       }
     },
@@ -195,7 +201,7 @@ await Promise.all([
 ]);
 
 // === Step 6: Patch PCSC Daemon ===
-logStep('🩹 patching PCSC Daemon...');
+logStep('🩹 Patching PCSC Daemon...');
 const code = (await readFile(daemonDest)).toString();
 const patched = code.replaceAll(
   join(import.meta.dirname, '..', 'node_modules', 'pcsc-mini', 'build', 'addon.node').replaceAll(
@@ -206,7 +212,21 @@ const patched = code.replaceAll(
 );
 await writeFile(daemonDest, patched);
 
-// === Step 7: Summary ===
+// === Step 7: Patch Node.js Daemon ===
+if (process.platform === 'win32') {
+  logStep('🩹 Patching Node.js...');
+  await rcedit(nodeDest, {
+    'version-string': {
+      FileDescription: `${appInfo.description} PCSC Daemon`,
+      ProductName: `${appInfo.productName} PCSC Daemon`,
+      LegalCopyright: appInfo.copyright
+    },
+    'file-version': appInfo.version,
+    'product-version': appInfo.version
+  });
+}
+
+// === Step 8: Summary ===
 const totalEnd = performance.now();
 const totalDuration = ((totalEnd - totalStart) / 1000).toFixed(2);
 

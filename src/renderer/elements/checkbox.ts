@@ -1,5 +1,6 @@
-import { Button } from '@/renderer/elements/button';
 import { Button as GuiButton } from 'gui';
+
+import { Button } from '@/renderer/elements/button';
 
 class Checkbox extends Button {
   override name: string = 'checkbox';

@@ -1,3 +1,5 @@
+import { FileOpenDialog, Menu, MenuBar, MenuItem, MessageLoop, Window } from 'gui';
+
 import { DATABASE_EXTENSION, PAGE_INDEXES } from '@/data/constants';
 import {
   addNewEntry,
@@ -28,7 +30,6 @@ import { MenuItemOptions } from '@/renderer/types';
 import { updateSettings } from '@/service/config-service';
 import { open } from '@/utils/url-util';
 import { getDatabaseWindow } from '@/windows/database-window';
-import { FileOpenDialog, Menu, MenuBar, MenuItem, MessageLoop, Window } from 'gui';
 
 const rules = () => [
   {

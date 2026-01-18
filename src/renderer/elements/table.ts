@@ -1,5 +1,6 @@
-import { View } from '@/renderer/elements/view';
 import { Table as GuiTable, type TableColumnOptions, type TableModel } from 'gui';
+
+import { View } from '@/renderer/elements/view';
 
 class Table extends View {
   override node: GuiTable;

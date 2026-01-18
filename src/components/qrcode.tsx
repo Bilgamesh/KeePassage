@@ -1,5 +1,6 @@
-import { PASSWORD_FONT } from '@/data/constants';
 import { AttributedText, Window } from 'gui';
+
+import { PASSWORD_FONT } from '@/data/constants';
 
 function QRCode(props: { code: string; window: Window }) {
   return (

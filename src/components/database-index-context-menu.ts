@@ -1,3 +1,5 @@
+import { Menu, Window } from 'gui';
+
 import {
   addNewEntry,
   copyPassword,
@@ -9,7 +11,6 @@ import {
 } from '@/data/db-orchestrator';
 import { selectedEntry } from '@/data/shared-state';
 import type { MenuItemOptions } from '@/renderer/types';
-import { Menu, Window } from 'gui';
 
 function DatabaseIndexContextMenu(props: { window: Window }) {
   if (!selectedEntry()) {

@@ -1,9 +1,12 @@
+import { AttributedText } from 'gui';
+import { setTimeout } from 'timers/promises';
+
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
 import { DARK_MODE_FONT_COLOR, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { isDark, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
-import { AttributedText } from 'gui';
-import { setTimeout } from 'timers/promises';
+
+import touchImage from '@/assets/img/touch.png';
 
 let controller: AbortController;
 
@@ -43,7 +46,7 @@ function TouchPage() {
                 style={{ 'margin-bottom': 50 }}
               />
               <Image
-                src={['img', 'touch.png']}
+                src={touchImage}
                 size={{ height: 100, width: 100 }}
                 scale={5}
                 {...(process.platform === 'linux' && isDark()

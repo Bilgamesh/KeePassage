@@ -1,5 +1,6 @@
-import { createWindow } from '@/data/window-manager';
 import { Container } from 'gui';
+
+import { createWindow } from '@/data/window-manager';
 
 function createQrCodeWindow(title: string) {
   const win = createWindow(title);

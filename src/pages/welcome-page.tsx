@@ -1,3 +1,6 @@
+import { AttributedText, FileOpenDialog, SimpleTableModel, type Window } from 'gui';
+import { createEffect, createSignal } from 'solid-js';
+
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
 import {
@@ -12,8 +15,8 @@ import { appSettings } from '@/data/shared-state';
 import { DatabaseCreationPage } from '@/pages/database-creation-page';
 import { render } from '@/renderer';
 import { getDatabaseWindow, hasDatabaseWindow } from '@/windows/database-window';
-import { AttributedText, FileOpenDialog, SimpleTableModel, type Window } from 'gui';
-import { createEffect, createSignal } from 'solid-js';
+
+import logoImage from '@/assets/img/logo.ico';
 
 function WelcomePage(props: { window: Window }) {
   const [dbTable, setDbTable] = createSignal(SimpleTableModel.create(1));
@@ -32,7 +35,7 @@ function WelcomePage(props: { window: Window }) {
     <container style={{ flex: 1, flexDirection: 'column' }}>
       <Expand />
       <Image
-        src={['img', 'logo.ico']}
+        src={logoImage}
         size={{ height: 50, width: 50 }}
         scale={2}
         style={{ 'margin-bottom': 20 }}

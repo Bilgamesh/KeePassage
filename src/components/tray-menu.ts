@@ -1,3 +1,5 @@
+import { Menu, MessageLoop, Window } from 'gui';
+
 import { PAGE_INDEXES } from '@/data/constants';
 import {
   mainPageIndex,
@@ -6,7 +8,6 @@ import {
   setUnlockedDbIndex,
   unlockedDbIndex
 } from '@/data/shared-state';
-import { Menu, MessageLoop, Window } from 'gui';
 
 function TrayMenu(props: { win: Window; toggleVisibility: (win: Window, show: boolean) => void }) {
   const menu = Menu.create([

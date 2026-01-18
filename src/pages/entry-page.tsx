@@ -1,3 +1,5 @@
+import { createEffect, createSignal } from 'solid-js';
+
 import { EntryLine } from '@/components/entry-line';
 import { EntryTextArea } from '@/components/entry-text-area';
 import { Expand } from '@/components/expand';
@@ -8,7 +10,10 @@ import { getGeneratedPassword } from '@/pages/pw-generator-page';
 import { Entry } from '@/schemas/database-schema';
 import { encrypt } from '@/service/pcsc-service';
 import { createListeners } from '@/utils/listen-util';
-import { createEffect, createSignal } from 'solid-js';
+
+import diceIcon from '@/assets/icons/dice-3.png';
+import eyeOffIcon from '@/assets/icons/eye-off.png';
+import eyeIcon from '@/assets/icons/eye.png';
 
 let controller: AbortController;
 const [passwordVisible, setPasswordVisible] = createSignal(false);
@@ -106,7 +111,7 @@ function EntryPage() {
       >
         <IconButton
           tooltip="Password generator"
-          icon={'dice-3.png'}
+          src={diceIcon}
           size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           imageSize={{ height: 13, width: 13 }}
           style={{
@@ -121,7 +126,7 @@ function EntryPage() {
         />
         <IconButton
           tooltip="Preview password"
-          icon={passwordVisible() ? 'eye-off.png' : 'eye.png'}
+          src={passwordVisible() ? eyeOffIcon : eyeIcon}
           size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           imageSize={{ height: 13, width: 13 }}
           style={{

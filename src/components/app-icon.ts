@@ -1,8 +1,9 @@
-import { getResourcePath } from '@/utils/folder-util';
 import { Image } from 'gui';
 
+import logo from '@/assets/img/logo.ico';
+
 function AppIcon() {
-  return Image.createFromPath(getResourcePath('img', 'logo.ico')).resize(
+  return Image.createFromPath(logo).resize(
     {
       height: 40,
       width: 40

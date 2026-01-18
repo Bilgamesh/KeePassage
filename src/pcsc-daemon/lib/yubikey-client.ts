@@ -1,6 +1,5 @@
 import { bech32 } from '@scure/base';
-import type { Card } from 'pcsc-mini';
-import { CardDisposition, CardMode, Client, Err, ReaderStatus } from 'pcsc-mini';
+import { type Card, CardDisposition, CardMode, Client, Err, ReaderStatus } from 'pcsc-mini';
 
 const APDU_KEYS = {
   CLASS_BYTE: { STANDARD_COMMAND: 0x00 },

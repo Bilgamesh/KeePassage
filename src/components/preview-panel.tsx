@@ -1,11 +1,17 @@
+import { AttributedText, Window } from 'gui';
+import { createEffect, createSignal } from 'solid-js';
+
 import { PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { copyPassword, getPassword, showQrCode } from '@/data/db-orchestrator';
 import { appSettings, selectedEntry, setMainPageIndex } from '@/data/shared-state';
 import { Entry } from '@/schemas/database-schema';
-import { AttributedText, Window } from 'gui';
-import { createEffect, createSignal } from 'solid-js';
 import { IconButton } from './icon-button';
 import { PreviewLine } from './preview-line';
+
+import clipboardIcon from '@/assets/icons/clipboard.png';
+import eyeOffIcon from '@/assets/icons/eye-off.png';
+import eyeIcon from '@/assets/icons/eye.png';
+import qrcodeIcon from '@/assets/icons/qrcode.png';
 
 function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }) {
   const [password, setPassword] = createSignal<string | null>(null);
@@ -53,7 +59,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
             style={{ 'margin-top': 10, height: process.platform === 'win32' ? 22 : 35 }}
           >
             <IconButton
-              icon={password() === null ? 'eye.png' : 'eye-off.png'}
+              src={password() === null ? eyeIcon : eyeOffIcon}
               tooltip="Preview password"
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
@@ -67,7 +73,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
               }}
             />
             <IconButton
-              icon="qrcode.png"
+              src={qrcodeIcon}
               tooltip="Generate QR code with password"
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
@@ -77,7 +83,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
               }}
             />
             <IconButton
-              icon="clipboard.png"
+              src={clipboardIcon}
               tooltip="Copy password to clipboard"
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}

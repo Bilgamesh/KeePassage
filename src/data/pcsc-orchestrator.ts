@@ -1,16 +1,12 @@
-import { DaemonMessage, DaemonResponse } from '@/schemas/daemon-message-schema';
-import { YubiKey } from '@/schemas/yubikey-schema';
-import {
-  checkIfPacked,
-  getBinExecPath,
-  getResourcePath,
-  getRootDirname
-} from '@/utils/folder-util';
-import { createLineReader, createListeners } from '@/utils/listen-util';
 import { spawn, type ChildProcessWithoutNullStreams } from 'child_process';
 import { randomUUID } from 'crypto';
 import { join } from 'path';
 import { setTimeout } from 'timers/promises';
+
+import { checkIfPacked, getBinExecPath, getResourcePath, getRootDirname } from '@/renderer/package';
+import { DaemonMessage, DaemonResponse } from '@/schemas/daemon-message-schema';
+import { YubiKey } from '@/schemas/yubikey-schema';
+import { createLineReader, createListeners } from '@/utils/listen-util';
 
 const pcscDaemonFilePath = checkIfPacked()
   ? getResourcePath('pcsc-daemon.cjs')
@@ -25,6 +21,7 @@ let isShuttingDown = false;
 
 function spawnPcscDaemon(config?: { respawnOnDeath?: boolean; logErrors?: boolean }) {
   console.log('Spawning PCSC Daemon');
+  isShuttingDown = false;
   daemon = spawn(nodePath, [pcscDaemonFilePath], {
     stdio: ['pipe', 'pipe', 'pipe']
   });
@@ -54,7 +51,7 @@ function spawnPcscDaemon(config?: { respawnOnDeath?: boolean; logErrors?: boolea
     daemon.on('exit', async (code, signal) => {
       if (code !== 0 && !isShuttingDown) {
         await setTimeout(2000);
-        spawnPcscDaemon();
+        spawnPcscDaemon(config);
       }
     });
   }
@@ -67,6 +64,7 @@ function spawnPcscDaemon(config?: { respawnOnDeath?: boolean; logErrors?: boolea
 }
 
 function killPcscDaemon() {
+  isShuttingDown = true;
   daemon?.kill();
   daemon = null;
 }

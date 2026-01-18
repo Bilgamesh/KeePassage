@@ -1,3 +1,6 @@
+import { SimpleTableModel, Window } from 'gui';
+import { setTimeout } from 'timers/promises';
+
 import { DatabaseIndexContextMenu } from '@/components/database-index-context-menu';
 import { PreviewPanel } from '@/components/preview-panel';
 import { DATABASE_COLUMNS } from '@/data/constants';
@@ -10,8 +13,6 @@ import {
   unlockedDbIndex
 } from '@/data/shared-state';
 import { Entry } from '@/schemas/database-schema';
-import { SimpleTableModel, Window } from 'gui';
-import { setTimeout } from 'timers/promises';
 
 function DatabaseIndexPage(props: { window: Window }) {
   const sorter = (a: Entry, b: Entry) => a.title.localeCompare(b.title);

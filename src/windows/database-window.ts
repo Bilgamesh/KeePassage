@@ -1,6 +1,7 @@
+import { Container } from 'gui';
+
 import { APP_NAME, MAX_SIZE, SUBWINDOW_MIN_SIZE } from '@/data/constants';
 import { createWindow, deleteWindow, getWindow } from '@/data/window-manager';
-import { Container } from 'gui';
 
 const title = `Create a new ${APP_NAME} database`;
 

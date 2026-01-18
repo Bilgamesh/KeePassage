@@ -1,3 +1,6 @@
+import { Entry, Event, FileOpenDialog, KeyEvent, Window } from 'gui';
+import { createEffect } from 'solid-js';
+
 import { IconButton } from '@/components/icon-button';
 import { Image } from '@/components/image';
 import {
@@ -29,8 +32,19 @@ import {
 } from '@/data/shared-state';
 import { openPasswordGenerator } from '@/pages/pw-generator-page';
 import { openSettingsPage } from '@/pages/settings-page';
-import { Entry, Event, FileOpenDialog, KeyEvent, Window } from 'gui';
-import { createEffect } from 'solid-js';
+
+import copyIcon from '@/assets/icons/copy.png';
+import diceIcon from '@/assets/icons/dice-3.png';
+import editIcon from '@/assets/icons/edit.png';
+import folderIcon from '@/assets/icons/folder.png';
+import linkIcon from '@/assets/icons/link.png';
+import lockIcon from '@/assets/icons/lock.png';
+import userIcon from '@/assets/icons/person.png';
+import qrcodeIcon from '@/assets/icons/qrcode.png';
+import searchIcon from '@/assets/icons/search.png';
+import settingsIcon from '@/assets/icons/settings.png';
+import plusIcon from '@/assets/icons/square-plus.png';
+import trashIcon from '@/assets/icons/trash.png';
 
 function Toolbar(props: { window: Window }) {
   function updateFilter(text: string) {
@@ -71,7 +85,7 @@ function Toolbar(props: { window: Window }) {
       >
         <IconButton
           tooltip="Open database"
-          icon="folder.png"
+          src={folderIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX
           }
@@ -91,7 +105,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           tooltip="Lock database"
-          icon="lock.png"
+          src={lockIcon}
           enabled={unlockedDbIndex() !== null && mainPageIndex() === PAGE_INDEXES.DB_INDEX}
           onClick={() => {
             setUnlockedDbIndex(null);
@@ -102,7 +116,7 @@ function Toolbar(props: { window: Window }) {
         <vseparator style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }} />
         <IconButton
           tooltip="Add new entry"
-          icon="square-plus.png"
+          src={plusIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX}
           onClick={() => {
             addNewEntry();
@@ -110,7 +124,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           tooltip="Edit selected entry"
-          icon="edit.png"
+          src={editIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
             editEntry(props.window);
@@ -118,7 +132,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           tooltip="Delete selected entry"
-          icon="trash.png"
+          src={trashIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
             deleteEntry(props.window);
@@ -127,7 +141,7 @@ function Toolbar(props: { window: Window }) {
         <vseparator style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }} />
         <IconButton
           tooltip="Copy selected username"
-          icon="user.png"
+          src={userIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
             copyUsername();
@@ -135,7 +149,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           tooltip="Copy selected password"
-          icon="copy.png"
+          src={copyIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
             copyPassword(props.window);
@@ -143,7 +157,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           tooltip="Generate QR code with password"
-          icon="qrcode.png"
+          src={qrcodeIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
             showQrCode(props.window);
@@ -151,7 +165,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           tooltip="Copy selected URL"
-          icon="link.png"
+          src={linkIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
             copyUrl();
@@ -160,7 +174,7 @@ function Toolbar(props: { window: Window }) {
         <vseparator style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }} />
         <IconButton
           tooltip="Password generator"
-          icon="dice-3.png"
+          src={diceIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX
           }
@@ -170,7 +184,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           tooltip="Settings"
-          icon="settings.png"
+          src={settingsIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX
           }
@@ -181,7 +195,7 @@ function Toolbar(props: { window: Window }) {
         <vseparator style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }} />
         <Image
           size={{ height: 15, width: 15 }}
-          src={['icons', 'search.png']}
+          src={searchIcon}
           style={{ 'margin-left': 5 }}
           scale={2}
           {...(process.platform === 'linux' && isDark() ? { tint: DARK_MODE_FONT_COLOR } : {})}

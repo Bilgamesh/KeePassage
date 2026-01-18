@@ -1,7 +1,8 @@
-import { LARGE_ENTRY_STYLE } from '@/data/constants';
-import { Style } from '@/renderer/types';
 import { Entry } from 'gui';
 import { createEffect, createSignal, on } from 'solid-js';
+
+import { LARGE_ENTRY_STYLE } from '@/data/constants';
+import { Style } from '@/renderer/types';
 
 function TimeoutEntry(props: {
   title: string;

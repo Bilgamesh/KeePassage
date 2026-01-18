@@ -1,6 +1,7 @@
-import { type View as ViewWrapper } from '@/renderer/elements/view';
 import { Container, type View } from 'gui';
 import { Accessor, children, createEffect } from 'solid-js';
+
+import { type View as ViewWrapper } from '@/renderer/elements/view';
 
 function Router(props: { children: View[]; selectedPageIndex: Accessor<number> }): View[] {
   const pages: ViewWrapper[] = children(() => props.children).toArray();

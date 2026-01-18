@@ -1,5 +1,6 @@
-import { Entry } from '@/renderer/elements/entry';
 import { Entry as GuiEntry } from 'gui';
+
+import { Entry } from '@/renderer/elements/entry';
 
 class Password extends Entry {
   override name: string = 'password';

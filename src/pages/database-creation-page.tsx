@@ -1,3 +1,6 @@
+import { AttributedText, type Window } from 'gui';
+import { createSignal } from 'solid-js';
+
 import { DatabaseGeneralInfo } from '@/components/database-general-info';
 import { DatabaseKeys } from '@/components/database-keys';
 import { Expand } from '@/components/expand';
@@ -7,8 +10,8 @@ import { TITLE_FONT } from '@/data/constants';
 import { saveNewDatabase } from '@/data/db-orchestrator';
 import { monitorYubiKeys } from '@/data/pcsc-orchestrator';
 import { YubiKey } from '@/schemas/yubikey-schema';
-import { AttributedText, type Window } from 'gui';
-import { createSignal } from 'solid-js';
+
+import yubiKeyImage from '@/assets/img/yubikey.png';
 
 const TITLES = ['General Database Information', 'Pair YubiKey Keys'];
 
@@ -34,10 +37,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
   return (
     <container style={{ flex: 1 }}>
       <container style={{ flex: 5, flexDirection: 'row', 'margin-top': 20 }}>
-        <Image
-          src={page() === 1 ? ['img', 'yubiKey.png'] : null}
-          size={{ height: 200, width: 200 }}
-        />
+        <Image src={page() === 1 ? yubiKeyImage : null} size={{ height: 200, width: 200 }} />
         <container
           style={{
             flex: 1,

@@ -1,7 +1,8 @@
-import { DEFAULT_SETTINGS } from '@/data/constants';
-import { DbIndex, Entry } from '@/schemas/database-schema';
 import { appearance } from 'gui';
 import { createSignal } from 'solid-js';
+
+import { DEFAULT_SETTINGS } from '@/data/constants';
+import { DbIndex, Entry } from '@/schemas/database-schema';
 
 export const [mainPageIndex, setMainPageIndex] = createSignal(0);
 export const [appSettings, setAppSettings] = createSignal(DEFAULT_SETTINGS);

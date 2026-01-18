@@ -1,6 +1,7 @@
+import { Font } from 'gui';
+
 import type { Style, TableColumn } from '@/renderer/types';
 import { Settings } from '@/schemas/settings-schema';
-import { Font } from 'gui';
 
 export const APP_NAME = 'KeePassage';
 export const APP_ID = 'keepassage';

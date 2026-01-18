@@ -1,6 +1,7 @@
-import { Style } from '@/renderer/types';
 import { Entry } from 'gui';
 import { createEffect, createSignal, on } from 'solid-js';
+
+import { Style } from '@/renderer/types';
 
 function NumericEntry(props: {
   entryStyle?: Style;

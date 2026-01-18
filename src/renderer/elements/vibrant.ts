@@ -1,5 +1,6 @@
-import { Container } from '@/renderer/elements/container';
 import { Vibrant as GuiVibrant, type VibrantBlendingMode, type VibrantMaterial } from 'gui';
+
+import { Container } from '@/renderer/elements/container';
 
 class Vibrant extends Container {
   override node: GuiVibrant;

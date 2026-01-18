@@ -1,11 +1,11 @@
-import path from 'path';
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
+import yuePlugin from './src/renderer/vite-plugin.ts';
 
 export default defineConfig(({ mode }) => {
   const input = mode === 'daemon' ? 'src/pcsc-daemon/pcsc-daemon.ts' : 'src/index.tsx';
   const output = mode === 'daemon' ? 'pcsc-daemon.cjs' : 'index.cjs';
-
   return {
     plugins: [
       solidPlugin({
@@ -13,33 +13,12 @@ export default defineConfig(({ mode }) => {
           generate: 'universal',
           moduleName: '@/renderer'
         }
-      })
+      }),
+      yuePlugin({ src: resolve(__dirname, 'src'), input, output })
     ],
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, 'src')
-      }
-    },
-    ssr: {
-      noExternal: true,
-      resolve: {
-        conditions: ['browser']
-      }
-    },
     build: {
-      target: 'node22',
-      outDir: './build',
-      emptyOutDir: false,
-      ssr: input,
-      minify: 'esbuild',
       rollupOptions: {
-        input,
-        output: {
-          format: 'cjs',
-          entryFileNames: output
-        },
-        external: ['gui', './addon.node'],
-        treeshake: true
+        external: ['./addon.node']
       }
     }
   };

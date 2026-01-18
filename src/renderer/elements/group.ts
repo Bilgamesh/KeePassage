@@ -1,5 +1,6 @@
-import { View } from '@/renderer/elements/view';
 import { Container, Group as GuiGroup } from 'gui';
+
+import { View } from '@/renderer/elements/view';
 
 const EMPTY_CHILD = Container.create();
 

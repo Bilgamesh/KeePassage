@@ -1,3 +1,5 @@
+import { randomUUID } from 'crypto';
+
 import { sendAndWait } from '@/data/pcsc-orchestrator';
 import type {
   DecryptionDaemonResponse,
@@ -5,7 +7,6 @@ import type {
   EncryptionDaemonResponse
 } from '@/schemas/daemon-message-schema';
 import { Payload } from '@/schemas/database-schema';
-import { randomUUID } from 'crypto';
 
 async function detectYubiKey(options?: {
   timeoutMs?: number | undefined;

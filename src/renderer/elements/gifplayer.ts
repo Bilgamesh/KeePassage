@@ -1,5 +1,6 @@
-import { View } from '@/renderer/elements/view';
 import { type Image, type ImageScale, GifPlayer as GuiGifPlayer } from 'gui';
+
+import { View } from '@/renderer/elements/view';
 
 class GifPlayer extends View {
   override node: GuiGifPlayer;

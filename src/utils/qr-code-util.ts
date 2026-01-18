@@ -1,8 +1,9 @@
+import { Container } from 'gui';
+import { toString } from 'qrcode';
+
 import { QRCode } from '@/components/qrcode';
 import { render } from '@/renderer';
 import { createQrCodeWindow } from '@/windows/qr-code-window';
-import { Container } from 'gui';
-import { toString } from 'qrcode';
 
 async function showQrCodeWindow(title: string, text: string) {
   const code = await toString(text);

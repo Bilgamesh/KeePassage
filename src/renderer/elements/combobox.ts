@@ -1,5 +1,6 @@
-import { Picker } from '@/renderer/elements/picker';
 import { ComboBox as GuiComboBox } from 'gui';
+
+import { Picker } from '@/renderer/elements/picker';
 
 class ComboBox extends Picker {
   override node: GuiComboBox;

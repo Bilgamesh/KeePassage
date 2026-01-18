@@ -1,3 +1,7 @@
+import { getRandomValues } from 'crypto';
+import { Clipboard } from 'gui';
+import { createSignal } from 'solid-js';
+
 import { Expand } from '@/components/expand';
 import { IconButton } from '@/components/icon-button';
 import { NumericEntry } from '@/components/numeric-entry';
@@ -11,9 +15,11 @@ import {
 } from '@/data/constants';
 import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
 import { createListeners } from '@/utils/listen-util';
-import { getRandomValues } from 'crypto';
-import { Clipboard } from 'gui';
-import { createSignal } from 'solid-js';
+
+import clipboardIcon from '@/assets/icons/clipboard.png';
+import eyeOffIcon from '@/assets/icons/eye-off.png';
+import eyeIcon from '@/assets/icons/eye.png';
+import refreshIcon from '@/assets/icons/refresh.png';
 
 const [password, setPassword] = createSignal('');
 const [passwordPolicy, setPasswordPolicy] = createSignal({
@@ -104,7 +110,7 @@ function PwGeneratorPage() {
             />
             <IconButton
               tooltip="Preview password"
-              icon={visible() ? 'eye-off.png' : 'eye.png'}
+              src={visible() ? eyeOffIcon : eyeIcon}
               size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
@@ -114,7 +120,7 @@ function PwGeneratorPage() {
             />
             <IconButton
               tooltip="Generate new password"
-              icon="refresh.png"
+              src={refreshIcon}
               size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
@@ -124,7 +130,7 @@ function PwGeneratorPage() {
             />
             <IconButton
               tooltip="Copy password to clipboard"
-              icon="clipboard.png"
+              src={clipboardIcon}
               size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}

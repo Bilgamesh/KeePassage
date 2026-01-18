@@ -8,7 +8,8 @@
     "noEmit": true,
     "noUnusedParameters": false,
     "noUnusedLocals": false,
-    "module": "preserve",
+    "module": "ESNext",
+    "types": ["vite/client"],
     "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./src/*"]

@@ -1,4 +1,3 @@
-import { View } from '@/renderer/elements/view';
 import {
   type ScrollElasticity,
   type ScrollPolicy,
@@ -6,6 +5,8 @@ import {
   Container,
   Scroll as GuiScroll
 } from 'gui';
+
+import { View } from '@/renderer/elements/view';
 
 const EMPTY_CHILD = Container.create();
 

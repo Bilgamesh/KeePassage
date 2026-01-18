@@ -1,5 +1,6 @@
-import { View } from '@/renderer/elements/view';
 import { type ScrollElasticity, type ScrollPolicy, TextEdit as GuiTextEdit } from 'gui';
+
+import { View } from '@/renderer/elements/view';
 
 class TextEdit extends View {
   override node: GuiTextEdit;

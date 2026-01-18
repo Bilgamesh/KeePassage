@@ -1,9 +1,10 @@
-import { DEFAULT_SETTINGS } from '@/data/constants';
-import { setAppSettings } from '@/data/shared-state';
-import { Settings } from '@/schemas/settings-schema';
-import { getRootDirname, isFile } from '@/utils/folder-util';
 import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
+
+import { DEFAULT_SETTINGS } from '@/data/constants';
+import { setAppSettings } from '@/data/shared-state';
+import { getRootDirname, isFile } from '@/renderer/package';
+import { Settings } from '@/schemas/settings-schema';
 
 const path = join(getRootDirname(), 'settings.json');
 let isInit = false;

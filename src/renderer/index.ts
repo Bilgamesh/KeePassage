@@ -1,7 +1,8 @@
-import { ElementFactory } from '@/renderer/element-factory';
-import { type View as ViewWrapper } from '@/renderer/elements/view';
 import { type Container, Window } from 'gui';
 import { createRenderer } from 'solid-js/universal';
+
+import { ElementFactory } from '@/renderer/element-factory';
+import { type View as ViewWrapper } from '@/renderer/elements/view';
 
 const elementFactory = new ElementFactory();
 
