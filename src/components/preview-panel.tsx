@@ -12,6 +12,7 @@ import clipboardIcon from '@/assets/icons/clipboard.png';
 import eyeOffIcon from '@/assets/icons/eye-off.png';
 import eyeIcon from '@/assets/icons/eye.png';
 import qrcodeIcon from '@/assets/icons/qrcode.png';
+import { t } from '@/data/i18n';
 
 function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }) {
   const [password, setPassword] = createSignal<string | null>(null);
@@ -49,18 +50,18 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
       <container style={{ flexDirection: 'row' }}>
         <container style={{ flex: 1, flexDirection: 'column' }}>
           <PreviewLine
-            label="Username"
+            label={`${t('username')}:`}
             value={displayedUserName()}
             style={{ 'margin-top': 10, height: 20 }}
           />
           <PreviewLine
-            label="Password"
+            label={t('password')}
             value={password() === null ? '***' : password()!}
             style={{ 'margin-top': 10, height: process.platform === 'win32' ? 22 : 35 }}
           >
             <IconButton
               src={password() === null ? eyeIcon : eyeOffIcon}
-              tooltip="Preview password"
+              tooltip={t('previewPassword')}
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
               style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
@@ -74,7 +75,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
             />
             <IconButton
               src={qrcodeIcon}
-              tooltip="Generate QR code with password"
+              tooltip={t('showQrCode')}
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
               style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
@@ -84,7 +85,7 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
             />
             <IconButton
               src={clipboardIcon}
-              tooltip="Copy password to clipboard"
+              tooltip={t('copyPassword')}
               size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
               style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
@@ -94,21 +95,21 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
             />
           </PreviewLine>
           <PreviewLine
-            label="Tags"
+            label={t('tags')}
             value={props.entry.tags}
             style={{ 'margin-top': 10, height: 20 }}
           />
         </container>
         <container style={{ flex: 1, flexDirection: 'column' }}>
           <PreviewLine
-            label="URL"
+            label={t('url')}
             value={props.entry.url}
             style={{ 'margin-top': 10, height: 20 }}
           />
         </container>
       </container>
       <PreviewLine
-        label="Notes"
+        label={t('notes')}
         value={props.entry.notes}
         style={{ 'margin-top': 10, flex: 1 }}
         last={true}

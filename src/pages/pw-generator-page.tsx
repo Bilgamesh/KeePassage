@@ -21,6 +21,7 @@ import eyeOffIcon from '@/assets/icons/eye-off.png';
 import eyeIcon from '@/assets/icons/eye.png';
 import refreshIcon from '@/assets/icons/refresh.png';
 import { ReactiveEntry, ReactivePassword } from '@/components/reactive-textfields';
+import { t } from '@/data/i18n';
 
 const [password, setPassword] = createSignal('');
 const [passwordPolicy, setPasswordPolicy] = createSignal({
@@ -85,7 +86,7 @@ function PwGeneratorPage() {
   const [visible, setVisible] = createSignal(true);
 
   return (
-    <group title="Password generator" style={{ flex: 1, margin: 100 }}>
+    <group title={t('passwordGenerator')} style={{ flex: 1, margin: 100 }}>
       <container style={{ margin: 5, flexDirection: 'row' }}>
         <Expand direction="row" />
         <container style={{ flex: 8 }}>
@@ -110,7 +111,7 @@ function PwGeneratorPage() {
               }}
             />
             <IconButton
-              tooltip="Preview password"
+              tooltip={t('previewPassword')}
               src={visible() ? eyeOffIcon : eyeIcon}
               size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
@@ -120,7 +121,7 @@ function PwGeneratorPage() {
               }}
             />
             <IconButton
-              tooltip="Generate new password"
+              tooltip={t('generateNew')}
               src={refreshIcon}
               size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
@@ -130,7 +131,7 @@ function PwGeneratorPage() {
               }}
             />
             <IconButton
-              tooltip="Copy password to clipboard"
+              tooltip={t('copyToClipboard')}
               src={clipboardIcon}
               size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
               imageSize={{ height: 15, width: 15 }}
@@ -142,7 +143,7 @@ function PwGeneratorPage() {
               }}
             />
           </container>
-          <label text="Length" align="start" />
+          <label text={t('length')} align="start" />
           <container style={{ flexDirection: 'row' }}>
             <slider
               range={{ min: 1, max: 129 }}
@@ -169,7 +170,7 @@ function PwGeneratorPage() {
             />
           </container>
           <container style={{ height: 70, 'margin-top': 25 }}>
-            <group title="Character types" style={{ flex: 1 }}>
+            <group title={t('charTypes')} style={{ flex: 1 }}>
               <container style={{ flexDirection: 'row' }}>
                 <Expand direction="row" />
                 <button
@@ -214,7 +215,7 @@ function PwGeneratorPage() {
             <button
               visible={requestInProgress()}
               enabled={password().length > 0}
-              title="Apply password"
+              title={t('applyPassword')}
               style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
               onClick={() => {
                 pwListeners.notifyListeners(password());
@@ -223,7 +224,7 @@ function PwGeneratorPage() {
               }}
             />
             <button
-              title="Close"
+              title={t('close')}
               style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10 }}
               onClick={() => {
                 setMainPageIndex(previousPageIndex);

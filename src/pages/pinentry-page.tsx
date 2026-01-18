@@ -3,6 +3,7 @@ import { createEffect, createSignal } from 'solid-js';
 
 import { Expand } from '@/components/expand';
 import { APP_NAME, LARGE_BUTTON_STYLE, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
+import { t } from '@/data/i18n';
 import { mainPageIndex, selectedDbPath, setMainPageIndex } from '@/data/shared-state';
 import { createListeners } from '@/utils/listen-util';
 
@@ -17,9 +18,9 @@ const [purpose, setPurpose] = createSignal(`${APP_NAME} Database`);
 
 async function requestPin(serial: number, entryName?: string) {
   if (entryName) {
-    setPurpose(`${entryName} Entry`);
+    setPurpose(`${t('unlockEntry')}: ${entryName}`);
   } else {
-    setPurpose(`${APP_NAME} Database`);
+    setPurpose(t('unlockDb'));
   }
   setSerial(serial);
   controller = new AbortController();
@@ -56,7 +57,7 @@ function PinentryPage() {
         <Expand direction="row" />
         <container style={{ width: 650 }}>
           <label
-            attributedText={AttributedText.create(`Unlock ${purpose()}`, {
+            attributedText={AttributedText.create(purpose(), {
               align: 'start',
               font: TITLE_FONT
             })}
@@ -67,13 +68,10 @@ function PinentryPage() {
             align="start"
             style={{ 'margin-top': 5, 'margin-bottom': 20 }}
           />
-          <group title="PIN entry" style={{ flex: 1 }}>
+          <group title={t('pinEntry')} style={{ flex: 1 }}>
             <container style={{ height: 600 }}>
               <container style={{ margin: 20, height: 170 }}>
-                <label
-                  text={`Enter PIN for YubiKey with serial number ${serial()}:`}
-                  align="start"
-                />
+                <label text={`${t('enterPinFor')} ${serial()}:`} align="start" />
                 <password
                   ref={(element) => {
                     entryNode = element.node;
@@ -118,13 +116,13 @@ function PinentryPage() {
                 <container style={{ flexDirection: 'row', 'margin-bottom': 10 }}>
                   <Expand direction="row" />
                   <button
-                    title="Submit"
+                    title={t('submit')}
                     enabled={pin() !== null}
                     style={LARGE_BUTTON_STYLE}
                     onClick={() => pinListeners.notifyListeners(pin())}
                   />
                   <button
-                    title="Cancel"
+                    title={t('cancel')}
                     style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
                     onClick={() => {
                       controller?.abort('Cancel');

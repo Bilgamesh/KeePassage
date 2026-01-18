@@ -5,6 +5,7 @@ import { EntryTextArea } from '@/components/entry-text-area';
 import { Expand } from '@/components/expand';
 import { IconButton } from '@/components/icon-button';
 import { LARGE_BUTTON_STYLE, PAGE_INDEXES, SMALL_ENTRY_STYLE } from '@/data/constants';
+import { t } from '@/data/i18n';
 import { mainPageIndex, setMainPageIndex, unlockedDbIndex } from '@/data/shared-state';
 import { getGeneratedPassword } from '@/pages/pw-generator-page';
 import { Entry } from '@/schemas/database-schema';
@@ -101,16 +102,16 @@ function EntryPage() {
 
   return (
     <container style={{ flex: 1, margin: 20, 'margin-right': 40 }}>
-      <EntryLine title="Title:" text={title} onTextChange={setTitle} />
-      <EntryLine title="Username:" text={username} onTextChange={setUsername} />
+      <EntryLine title={`${t('title')}:`} text={title} onTextChange={setTitle} />
+      <EntryLine title={`${t('username')}:`} text={username} onTextChange={setUsername} />
       <EntryLine
-        title="Password:"
+        title={t('password')}
         text={password}
         type={passwordVisible() ? 'normal' : 'password'}
         onTextChange={setPassword}
       >
         <IconButton
-          tooltip="Password generator"
+          tooltip={t('passwordGenerator')}
           src={diceIcon}
           size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           imageSize={{ height: 13, width: 13 }}
@@ -125,7 +126,7 @@ function EntryPage() {
           }}
         />
         <IconButton
-          tooltip="Preview password"
+          tooltip={t('previewPassword')}
           src={passwordVisible() ? eyeOffIcon : eyeIcon}
           size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           imageSize={{ height: 13, width: 13 }}
@@ -138,10 +139,10 @@ function EntryPage() {
           }}
         />
       </EntryLine>
-      <EntryLine title="URL:" text={url} onTextChange={setUrl} />
-      <EntryLine title="Tags:" text={tags} onTextChange={setTags} />
+      <EntryLine title={t('url')} text={url} onTextChange={setUrl} />
+      <EntryLine title={t('tags')} text={tags} onTextChange={setTags} />
       <EntryTextArea
-        title="Notes:"
+        title={t('notes')}
         text={notes}
         style={{ flex: 1, flexDirection: 'row', 'margin-top': 10 }}
         onTextChange={setNotes}
@@ -149,7 +150,7 @@ function EntryPage() {
       <container style={{ flexDirection: 'row', 'margin-top': 20 }}>
         <Expand direction="row" />
         <button
-          title="OK"
+          title={t('ok')}
           enabled={title().trim().length > 0}
           style={LARGE_BUTTON_STYLE}
           onClick={() => {
@@ -158,7 +159,7 @@ function EntryPage() {
           }}
         />
         <button
-          title="Cancel"
+          title={t('cancel')}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 20 }}
           onClick={(button) => {
             controller.abort('Cancel');

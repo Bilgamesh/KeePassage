@@ -1,6 +1,7 @@
 import { Menu, MessageLoop, Window } from 'gui';
 
 import { PAGE_INDEXES } from '@/data/constants';
+import { t } from '@/data/i18n';
 import {
   mainPageIndex,
   setMainPageIndex,
@@ -12,7 +13,7 @@ import {
 function TrayMenu(props: { win: Window; toggleVisibility: (win: Window, show: boolean) => void }) {
   const menu = Menu.create([
     {
-      label: 'Toggle window',
+      label: t('toggleWindow'),
       onClick: () => {
         if (props.win.isMinimized()) {
           props.toggleVisibility(props.win, true);
@@ -22,7 +23,7 @@ function TrayMenu(props: { win: Window; toggleVisibility: (win: Window, show: bo
       }
     },
     {
-      label: 'Lock database',
+      label: t('lockDb'),
       onClick: () => {
         setUnlockedDbIndex(null);
         setSelectedDbPath('');
@@ -30,7 +31,7 @@ function TrayMenu(props: { win: Window; toggleVisibility: (win: Window, show: bo
       }
     },
     {
-      label: 'Quit',
+      label: t('quit'),
       onClick: () => {
         MessageLoop.quit();
         process.exit(0);

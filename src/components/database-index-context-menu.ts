@@ -9,6 +9,7 @@ import {
   editEntry,
   showQrCode
 } from '@/data/db-orchestrator';
+import { t } from '@/data/i18n';
 import { selectedEntry } from '@/data/shared-state';
 import type { MenuItemOptions } from '@/renderer/types';
 
@@ -16,7 +17,7 @@ function DatabaseIndexContextMenu(props: { window: Window }) {
   if (!selectedEntry()) {
     return Menu.create([
       {
-        label: 'New Entry...',
+        label: t('newEntry...'),
         onClick: (self) => {
           addNewEntry();
         }
@@ -25,44 +26,44 @@ function DatabaseIndexContextMenu(props: { window: Window }) {
   } else {
     return Menu.create([
       {
-        label: 'Copy Username',
+        label: t('copyUsername'),
         onClick: () => {
           copyUsername();
         }
       },
       {
-        label: 'Copy Password',
+        label: t('copyPassword'),
         onClick: () => {
           copyPassword(props.window);
         }
       },
       {
-        label: 'Show QR Code',
+        label: t('showQrCode'),
         onClick: () => {
           showQrCode(props.window);
         }
       },
       {
-        label: 'Copy URL',
+        label: t('copyUrl'),
         onClick: () => {
           copyUrl();
         }
       },
       { type: 'separator' },
       {
-        label: 'Edit Entry',
+        label: t('editEntry'),
         onClick: () => {
           editEntry(props.window);
         }
       },
       {
-        label: 'Delete Entry',
+        label: t('deleteEntry'),
         onClick: () => {
           deleteEntry(props.window);
         }
       },
       {
-        label: 'New Entry',
+        label: t('newEntry'),
         onClick: () => {
           addNewEntry();
         }

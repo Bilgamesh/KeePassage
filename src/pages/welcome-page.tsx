@@ -11,6 +11,7 @@ import {
   VERSION
 } from '@/data/constants';
 import { openDatabase } from '@/data/db-orchestrator';
+import { t } from '@/data/i18n';
 import { appSettings } from '@/data/shared-state';
 import { DatabaseCreationPage } from '@/pages/database-creation-page';
 import { render } from '@/renderer';
@@ -41,19 +42,16 @@ function WelcomePage(props: { window: Window }) {
         style={{ 'margin-bottom': 20 }}
       />
       <label
-        attributedText={AttributedText.create(`Welcome to ${APP_NAME} ${VERSION}`, {
+        attributedText={AttributedText.create(`${t('welcomeTo')} ${APP_NAME} ${VERSION}`, {
           align: 'center',
           font: TITLE_FONT
         })}
       />
-      <label
-        visible={!recent().length}
-        text="Start storing your password in a YubiKey-encrypted KeePassage database"
-      />
+      <label visible={!recent().length} text={t('startStoring')} />
       <container style={{ flexDirection: 'row', 'margin-top': 20 }}>
         <Expand />
         <button
-          title="+ Create Database"
+          title={`+ ${t('createDatabase')}`}
           style={LARGE_BUTTON_STYLE}
           onClick={() => {
             const win = getDatabaseWindow();
@@ -62,7 +60,7 @@ function WelcomePage(props: { window: Window }) {
           }}
         />
         <button
-          title="Open Database"
+          title={t('openDb')}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={async () => {
             if (hasDatabaseWindow()) {
@@ -84,7 +82,7 @@ function WelcomePage(props: { window: Window }) {
         />
         <button
           enabled={false}
-          title="Import File"
+          title={t('importFile')}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
         />
         <Expand />
@@ -93,14 +91,14 @@ function WelcomePage(props: { window: Window }) {
         <Expand direction="row" />
         <container style={{ flexDirection: 'column', width: 440 }}>
           <label
-            text="Recent databases"
+            text={t('recentDatabases')}
             align="start"
             style={{ 'margin-top': 20, 'margin-bottom': 5 }}
           />
           <table
             columnsWithOptions={[
               {
-                label: 'Recent databases',
+                label: '',
                 options: {
                   type: 'text'
                 }

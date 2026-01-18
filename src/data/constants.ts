@@ -1,6 +1,6 @@
 import { Font } from 'gui';
 
-import type { Style, TableColumn } from '@/renderer/types';
+import type { Style } from '@/renderer/types';
 import { Settings } from '@/schemas/settings-schema';
 
 export const APP_NAME = 'KeePassage';
@@ -44,43 +44,6 @@ export const PASSWORD_FONT = Font.create('Consolas', 18, 'normal', 'normal');
 export const TITLE_FONT = Font.create('Arial', 18, 'bold', 'normal');
 export const PREVIEW_LABEL_FONT = Font.create('Arial', 12, 'bold', 'normal');
 
-export const DATABASE_COLUMNS: TableColumn[] = [
-  {
-    label: 'Title',
-    options: {
-      type: 'text',
-      width: 150
-    }
-  },
-  {
-    label: 'Username',
-    options: {
-      type: 'text',
-      width: 150
-    }
-  },
-  {
-    label: 'URL',
-    options: {
-      type: 'text',
-      width: 150
-    }
-  },
-  {
-    label: 'Notes',
-    options: {
-      type: 'text',
-      width: 150
-    }
-  },
-  {
-    label: 'Modified',
-    options: {
-      type: 'text',
-      width: 140
-    }
-  }
-] as const;
 export const DEFAULT_SETTINGS: Settings = {
   recent: [],
   alwaysOnTop: false,
@@ -92,5 +55,6 @@ export const DEFAULT_SETTINGS: Settings = {
   minimiseInsteadOfExit: false,
   clipboardTimout: 10,
   dbTimeout: 900,
-  dbMinimiseLock: false
+  dbMinimiseLock: false,
+  language: 'en'
 };

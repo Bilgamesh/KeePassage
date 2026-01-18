@@ -2,6 +2,7 @@ import type { TableColumnOptions } from 'gui';
 import { SimpleTableModel } from 'gui';
 import { Accessor, createEffect, Setter } from 'solid-js';
 
+import { t } from '@/data/i18n';
 import type { YubiKey } from '@/schemas/yubikey-schema';
 
 function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<YubiKey[]> }) {
@@ -20,28 +21,28 @@ function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<Y
 
   const columns = [
     {
-      label: 'Serial number',
+      label: t('serialNumber'),
       options: {
         type: 'text',
         width: 80
       }
     },
     {
-      label: 'Slot',
+      label: t('slot'),
       options: {
         type: 'text',
         width: 30
       }
     },
     {
-      label: 'Public key',
+      label: t('publicKey'),
       options: {
         type: 'text',
         width: 400
       }
     },
     {
-      label: 'Paired',
+      label: t('paired'),
       options: {
         type: 'checkbox',
         width: 40

@@ -19,6 +19,7 @@ import {
   openDatabase,
   showQrCode
 } from '@/data/db-orchestrator';
+import { t } from '@/data/i18n';
 import {
   appSettings,
   isDark,
@@ -84,7 +85,7 @@ function Toolbar(props: { window: Window }) {
         {...(process.platform === 'win32' ? { backgroundColor: '#FFFFFF' } : {})}
       >
         <IconButton
-          tooltip="Open database"
+          tooltip={t('openDb...')}
           src={folderIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX
@@ -104,7 +105,7 @@ function Toolbar(props: { window: Window }) {
           }}
         />
         <IconButton
-          tooltip="Lock database"
+          tooltip={t('lockDb')}
           src={lockIcon}
           enabled={unlockedDbIndex() !== null && mainPageIndex() === PAGE_INDEXES.DB_INDEX}
           onClick={() => {
@@ -115,7 +116,7 @@ function Toolbar(props: { window: Window }) {
         />
         <vseparator style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }} />
         <IconButton
-          tooltip="Add new entry"
+          tooltip={t('newEntry...')}
           src={plusIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX}
           onClick={() => {
@@ -123,7 +124,7 @@ function Toolbar(props: { window: Window }) {
           }}
         />
         <IconButton
-          tooltip="Edit selected entry"
+          tooltip={t('editEntry')}
           src={editIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
@@ -131,7 +132,7 @@ function Toolbar(props: { window: Window }) {
           }}
         />
         <IconButton
-          tooltip="Delete selected entry"
+          tooltip={t('deleteEntry')}
           src={trashIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
@@ -140,7 +141,7 @@ function Toolbar(props: { window: Window }) {
         />
         <vseparator style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }} />
         <IconButton
-          tooltip="Copy selected username"
+          tooltip={t('copyUsername')}
           src={userIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
@@ -148,7 +149,7 @@ function Toolbar(props: { window: Window }) {
           }}
         />
         <IconButton
-          tooltip="Copy selected password"
+          tooltip={t('copyPassword')}
           src={copyIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
@@ -156,7 +157,7 @@ function Toolbar(props: { window: Window }) {
           }}
         />
         <IconButton
-          tooltip="Generate QR code with password"
+          tooltip={t('showQrCode')}
           src={qrcodeIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
@@ -164,7 +165,7 @@ function Toolbar(props: { window: Window }) {
           }}
         />
         <IconButton
-          tooltip="Copy selected URL"
+          tooltip={t('copyUrl')}
           src={linkIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null}
           onClick={() => {
@@ -173,7 +174,7 @@ function Toolbar(props: { window: Window }) {
         />
         <vseparator style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }} />
         <IconButton
-          tooltip="Password generator"
+          tooltip={t('passwordGenerator')}
           src={diceIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX
@@ -183,7 +184,7 @@ function Toolbar(props: { window: Window }) {
           }}
         />
         <IconButton
-          tooltip="Settings"
+          tooltip={t('settings')}
           src={settingsIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX

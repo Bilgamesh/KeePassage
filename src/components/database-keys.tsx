@@ -1,6 +1,7 @@
 import { Accessor, Setter } from 'solid-js';
 
 import { KeysTable } from '@/components/keys-table';
+import { t } from '@/data/i18n';
 import type { YubiKey } from '@/schemas/yubikey-schema';
 import { open } from '@/utils/url-util';
 
@@ -8,13 +9,13 @@ function DatabaseKeys(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Sette
   return (
     <container style={{ flex: 1 }}>
       <label
-        text='Please plug in the YubiKey keys you would like to pair with this database and tick the "Paired" checkbox.\nIt is recommended to add at least two keys, so that one can serve as a backup.'
+        text={t('pleasePlugInKey')}
         align="start"
         style={{ 'margin-left': 10, 'margin-right': 10 }}
       />
 
       <label
-        text="Before using a YubiKey with this program, you need to generate an ECDSA P-256 key in the PIV applet.\nYou can follow this guide:"
+        text={t('beforeUsingGenerateKey')}
         align="start"
         style={{ 'margin-left': 10, 'margin-right': 10 }}
       />
@@ -30,7 +31,7 @@ function DatabaseKeys(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Sette
       />
 
       <container style={{ flex: 1, margin: 10 }}>
-        <label text="Detected keys" align="start" style={{ 'margin-bottom': 5 }} />
+        <label text={t('detectedKeys')} align="start" style={{ 'margin-bottom': 5 }} />
         <container style={{ flex: 1, flexDirection: 'row' }}>
           <KeysTable yubiKeys={props.yubiKeys} setYubiKeys={props.setYubiKeys} />
         </container>

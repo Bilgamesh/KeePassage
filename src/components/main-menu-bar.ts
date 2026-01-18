@@ -11,6 +11,7 @@ import {
   openDatabase,
   showQrCode
 } from '@/data/db-orchestrator';
+import { t } from '@/data/i18n';
 import {
   appSettings,
   copyingEnabled,
@@ -33,36 +34,36 @@ import { getDatabaseWindow } from '@/windows/database-window';
 
 const rules = () => [
   {
-    labels: ['Recent Databases'],
+    labels: [t('recentDatabases')],
     enabled:
       appSettings().recent.length > 0 &&
       (mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX)
   },
   {
-    labels: ['New Database...', 'Open Database...'],
+    labels: [t('newDb...'), t('openDb...')],
     enabled: mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX
   },
   {
-    labels: ['Lock Database'],
+    labels: [t('lockDb')],
     enabled: unlockedDbIndex() !== null && mainPageIndex() === PAGE_INDEXES.DB_INDEX
   },
   {
-    labels: ['Entries', 'New Entry'],
+    labels: [t('entries'), t('newEntry')],
     enabled: mainPageIndex() === PAGE_INDEXES.DB_INDEX
   },
   {
     labels: [
-      'Edit Entry',
-      'Delete Entry',
-      'Copy Username',
-      'Copy Password',
-      'Show QR Code',
-      'Copy URL'
+      t('editEntry'),
+      t('deleteEntry'),
+      t('copyUsername'),
+      t('copyPassword'),
+      t('showQrCode'),
+      t('copyUrl')
     ],
     enabled: mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null
   },
   {
-    labels: ['Password Generator', 'Settings'],
+    labels: [t('passwordGenerator'), t('settings')],
     enabled: mainPageIndex() === PAGE_INDEXES.WELCOME || mainPageIndex() === PAGE_INDEXES.DB_INDEX
   }
 ];
@@ -88,10 +89,10 @@ function updateStatuses(menu: Menu | MenuBar) {
 function MainMenuBar(props: { window: Window }) {
   const menu = MenuBar.create([
     {
-      label: 'Database',
+      label: t('db'),
       submenu: [
         {
-          label: 'New Database...',
+          label: t('newDb...'),
           accelerator: 'CmdOrCtrl+Shift+N',
           onClick: async () => {
             if (
@@ -105,7 +106,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Open Database...',
+          label: t('openDb...'),
           accelerator: 'CmdOrCtrl+O',
           onClick: async () => {
             if (
@@ -127,7 +128,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Recent Databases',
+          label: t('recentDatabases'),
           submenu: [
             ...appSettings().recent.map((path) => ({
               label: path,
@@ -143,7 +144,7 @@ function MainMenuBar(props: { window: Window }) {
             })),
             { type: 'separator' },
             {
-              label: 'Clear history',
+              label: t('clearHistory'),
               onClick: async () => {
                 updateSettings((settings) => {
                   settings.recent.length = 0;
@@ -154,7 +155,7 @@ function MainMenuBar(props: { window: Window }) {
           ]
         },
         {
-          label: 'Lock Database',
+          label: t('lockDb'),
           accelerator: 'CmdOrCtrl+L',
           onClick: async () => {
             if (unlockedDbIndex() !== null) {
@@ -168,7 +169,7 @@ function MainMenuBar(props: { window: Window }) {
           type: 'separator'
         },
         {
-          label: 'Quit',
+          label: t('quit'),
           accelerator: 'CmdOrCtrl+Q',
           onClick: async (self) => {
             MessageLoop.quit();
@@ -178,10 +179,10 @@ function MainMenuBar(props: { window: Window }) {
       ]
     },
     {
-      label: 'Entries',
+      label: t('entries'),
       submenu: [
         {
-          label: 'New Entry',
+          label: t('newEntry'),
           accelerator: 'CmdOrCtrl+N',
           onClick: async () => {
             if (mainPageIndex() === PAGE_INDEXES.DB_INDEX) {
@@ -190,7 +191,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Edit Entry',
+          label: t('editEntry'),
           accelerator: 'CmdOrCtrl+E',
           onClick: async () => {
             if (mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null) {
@@ -199,7 +200,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Delete Entry',
+          label: t('deleteEntry'),
           accelerator: 'Delete',
           onClick: async () => {
             if (mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null) {
@@ -209,7 +210,7 @@ function MainMenuBar(props: { window: Window }) {
         },
         { type: 'separator' },
         {
-          label: 'Copy Username',
+          label: t('copyUsername'),
           accelerator: 'CmdOrCtrl+B',
           onClick: async () => {
             if (mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null) {
@@ -218,7 +219,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Copy Password',
+          label: t('copyPassword'),
           accelerator:
             mainPageIndex() === PAGE_INDEXES.DB_INDEX &&
             selectedEntry() !== null &&
@@ -236,7 +237,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Show QR Code',
+          label: t('showQrCode'),
           onClick: async () => {
             if (mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null) {
               showQrCode(props.window);
@@ -244,7 +245,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Copy URL',
+          label: t('copyUrl'),
           accelerator: 'CmdOrCtrl+U',
           onClick: async () => {
             if (mainPageIndex() === PAGE_INDEXES.DB_INDEX && selectedEntry() !== null) {
@@ -255,10 +256,10 @@ function MainMenuBar(props: { window: Window }) {
       ]
     },
     {
-      label: 'Tools',
+      label: t('tools'),
       submenu: [
         {
-          label: 'Password Generator',
+          label: t('passwordGenerator'),
           onClick: () => {
             if (
               mainPageIndex() === PAGE_INDEXES.WELCOME ||
@@ -269,7 +270,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Settings',
+          label: t('settings'),
           accelerator: 'CmdOrCtrl+,',
           onClick: () => {
             if (
@@ -283,14 +284,14 @@ function MainMenuBar(props: { window: Window }) {
       ]
     },
     {
-      label: 'Window',
+      label: t('window'),
       submenu: [{ role: 'minimize' }, { role: 'maximize' }]
     },
     {
-      label: 'View',
+      label: t('view'),
       submenu: [
         {
-          label: 'Always on Top',
+          label: t('alwaysOnTop'),
           type: 'checkbox',
           accelerator: 'CmdOrCtrl+Shift+A',
           checked: appSettings().alwaysOnTop,
@@ -302,7 +303,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Show Preview Panel',
+          label: t('showPreviewPanel'),
           type: 'checkbox',
           checked: appSettings().showPreview,
           onClick: async () => {
@@ -313,7 +314,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Show Menu Bar',
+          label: t('showMenubar'),
           type: 'checkbox',
           checked: appSettings().showMenuBar,
           onClick: async () => {
@@ -324,7 +325,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Show Toolbar',
+          label: t('showToolbar'),
           type: 'checkbox',
           checked: appSettings().showToolbar,
           onClick: async () => {
@@ -335,7 +336,7 @@ function MainMenuBar(props: { window: Window }) {
           }
         },
         {
-          label: 'Hide Usernames',
+          label: t('hideUserNames'),
           type: 'checkbox',
           checked: appSettings().hideUserNames,
           accelerator: 'CmdOrCtrl+Shift+B',
@@ -349,17 +350,17 @@ function MainMenuBar(props: { window: Window }) {
       ]
     },
     {
-      label: 'Help',
+      label: t('help'),
       submenu: [
         // { label: 'Check for Updates' },
         {
-          label: 'Report a Bug',
+          label: t('reportBug'),
           onClick: () => {
             open('https://github.com/Bilgamesh/KeePassage/issues');
           }
         },
         {
-          label: 'About',
+          label: t('about'),
           onClick: () => {
             open('https://github.com/Bilgamesh/KeePassage');
           }

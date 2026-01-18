@@ -11,7 +11,8 @@ const Settings = z.object({
   minimiseInsteadOfExit: z.boolean(),
   clipboardTimout: z.number().nullable(),
   dbTimeout: z.number().nullable(),
-  dbMinimiseLock: z.boolean()
+  dbMinimiseLock: z.boolean(),
+  language: z.string()
 });
 type Settings = z.infer<typeof Settings>;
 

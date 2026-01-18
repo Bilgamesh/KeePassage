@@ -1,9 +1,10 @@
-import { AttributedText, MessageBox, Window } from 'gui';
+import { AttributedText, MessageBox, Picker, Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
 
 import { Expand } from '@/components/expand';
 import { TimeoutEntry } from '@/components/timeout-entry';
 import { DEFAULT_SETTINGS, LARGE_BUTTON_STYLE, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
+import { dictionaries, t } from '@/data/i18n';
 import { appSettings, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
 import { updateSettings } from '@/service/config-service';
 
@@ -25,46 +26,56 @@ function openSettingsPage() {
 }
 
 function SettingsPage(props: { window: Window }) {
+  const languages = () => dictionaries.map((dict) => t(dict.languageCode as 'en'));
+  const currentLanguageIndex = () =>
+    dictionaries.findIndex((d) => d.languageCode === unsavedAppSettings().language);
+  let picker: Picker;
+
   createEffect(() => {
     const savedSettings = appSettings();
     setUnsavedAppSettings({ ...savedSettings });
+  });
+
+  createEffect(() => {
+    mainPageIndex();
+    picker.selectItemAt(currentLanguageIndex());
   });
 
   return (
     <container style={{ flex: 1, margin: 20 }}>
       <label
         style={{ 'margin-left': 5 }}
-        attributedText={AttributedText.create('Application Settings', {
+        attributedText={AttributedText.create(t('applicationSettings'), {
           align: 'start',
           font: TITLE_FONT
         })}
       />
-      <group title="User Interface" style={{ height: 180, 'margin-top': 10 }}>
+      <group title={t('userInterface')} style={{ height: 250, 'margin-top': 10 }}>
         <container>
           <container style={{ 'margin-left': 10 }}>
             <checkbox
-              title="Show toolbar"
+              title={t('showToolbar')}
               checked={unsavedAppSettings().showToolbar}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({ ...s, showToolbar: checkbox.isChecked() }));
               }}
             />
             <checkbox
-              title="Show menubar"
+              title={t('showMenubar')}
               checked={unsavedAppSettings().showMenuBar}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({ ...s, showMenuBar: checkbox.isChecked() }));
               }}
             />
             <checkbox
-              title="Show preview panel"
+              title={t('showPreviewPanel')}
               checked={unsavedAppSettings().showPreview}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({ ...s, showPreview: checkbox.isChecked() }));
               }}
             />
             <checkbox
-              title="Minimise instead of app exit"
+              title={t('minimiseInsteadOfExit')}
               checked={unsavedAppSettings().minimiseInsteadOfExit}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -74,37 +85,53 @@ function SettingsPage(props: { window: Window }) {
               }}
             />
             <checkbox
-              title="Show a system tray icon"
+              title={t('showTrayIcon')}
               checked={unsavedAppSettings().showTrayIcon}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({ ...s, showTrayIcon: checkbox.isChecked() }));
               }}
             />
             <checkbox
-              title="Always on top"
+              title={t('alwaysOnTop')}
               checked={unsavedAppSettings().alwaysOnTop}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({ ...s, alwaysOnTop: checkbox.isChecked() }));
               }}
             />
             <checkbox
-              title="Hide usernames"
+              title={t('hideUserNames')}
               checked={unsavedAppSettings().hideUserNames}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({ ...s, hideUserNames: checkbox.isChecked() }));
               }}
             />
+            <container style={{ 'margin-top': 10, flexDirection: 'row' }}>
+              <label text="Language: " />
+              <picker
+                ref={({ node }) => {
+                  picker = node;
+                }}
+                style={{ width: LARGE_BUTTON_STYLE.width! }}
+                selectedItemIndex={currentLanguageIndex()}
+                items={languages()}
+                onSelectionChange={(picker) => {
+                  const index = picker.getSelectedItemIndex();
+                  const dict = dictionaries[index]!;
+                  setUnsavedAppSettings((s) => ({ ...s, language: dict.languageCode }));
+                }}
+              />
+            </container>
           </container>
         </container>
       </group>
       <group
-        title="Timeouts"
+        title={t('timeouts')}
         style={{ height: process.platform === 'win32' ? 85 : 100, 'margin-top': 10 }}
       >
         <container>
           <container style={{ 'margin-left': 10 }}>
             <TimeoutEntry
-              title="Clear clipboard after"
+              title={t('clearClipboardAfter')}
               checkboxWidth={process.platform === 'win32' ? 200 : 250}
               entryWidth={50}
               style={{ 'margin-bottom': 5 }}
@@ -123,7 +150,7 @@ function SettingsPage(props: { window: Window }) {
               }}
             />
             <TimeoutEntry
-              title="Lock database after inactivity of"
+              title={t('lockDatabaseAfter')}
               checkboxWidth={process.platform === 'win32' ? 200 : 250}
               entryWidth={50}
               checked={unsavedAppSettings().dbTimeout !== null}
@@ -141,11 +168,11 @@ function SettingsPage(props: { window: Window }) {
           </container>
         </container>
       </group>
-      <group title="Lock Options" style={{ height: 50, 'margin-top': 10 }}>
+      <group title={t('lockOptions')} style={{ height: 50, 'margin-top': 10 }}>
         <container>
           <container style={{ 'margin-left': 10 }}>
             <checkbox
-              title="Lock database after minimising the window"
+              title={t('dbMinimiseLock')}
               checked={unsavedAppSettings().dbMinimiseLock}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -160,15 +187,15 @@ function SettingsPage(props: { window: Window }) {
       <Expand direction="column" />
       <container style={{ flexDirection: 'row' }}>
         <button
-          title="Reset settings to default"
+          title={t('resetSettings')}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             const msgBox = MessageBox.create();
             msgBox.setType('information');
-            msgBox.setTitle('Confirm reset');
-            msgBox.setText('Are you sure you want to reset all settings to default?');
-            msgBox.addButton('Cancel', -1);
-            msgBox.addButton('Reset', 1);
+            msgBox.setTitle(t('confirmReset'));
+            msgBox.setText(t('areYouSureReset'));
+            msgBox.addButton(t('cancel'), -1);
+            msgBox.addButton(t('reset'), 1);
             if (msgBox.runForWindow(props.window) === 1) {
               setMainPageIndex(previousPageIndex);
               updateSettings(() => DEFAULT_SETTINGS);
@@ -177,7 +204,7 @@ function SettingsPage(props: { window: Window }) {
         />
         <Expand direction="row" />
         <button
-          title="OK"
+          title={t('ok')}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             setMainPageIndex(previousPageIndex);
@@ -185,7 +212,7 @@ function SettingsPage(props: { window: Window }) {
           }}
         />
         <button
-          title="Cancel"
+          title={t('cancel')}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             setMainPageIndex(previousPageIndex);

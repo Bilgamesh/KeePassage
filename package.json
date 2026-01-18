@@ -22,6 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "@scure/base": "^2.0.0",
+    "@solid-primitives/i18n": "^2.2.1",
     "age-encryption": "^0.2.4",
     "gui": "^0.15.6",
     "libsodium-wrappers": "^0.7.15",
@@ -51,7 +52,7 @@
   },
   "overrides": {
     "yackage": {
-      "tar": "^7.5.1"
+      "tar": "^7.5.2"
     }
   }
 }

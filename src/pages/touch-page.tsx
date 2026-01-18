@@ -4,6 +4,7 @@ import { setTimeout } from 'timers/promises';
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
 import { DARK_MODE_FONT_COLOR, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
+import { t } from '@/data/i18n';
 import { isDark, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
 
 import touchImage from '@/assets/img/touch.png';
@@ -31,18 +32,15 @@ function TouchPage() {
       <Expand />
       <container style={{ flexDirection: 'row' }}>
         <Expand direction="row" />
-        <group title="User presence" style={{ width: 400, height: 400 }}>
+        <group title={t('userPresence')} style={{ width: 400, height: 400 }}>
           <container style={{ flex: 1 }}>
             <Expand />
             <container style={{ flexDirection: 'column' }}>
               <label
-                attributedText={AttributedText.create(
-                  'Tap your YubiKey sensor\nto complete the operation',
-                  {
-                    align: 'center',
-                    font: TITLE_FONT
-                  }
-                )}
+                attributedText={AttributedText.create(t('tapToComplete'), {
+                  align: 'center',
+                  font: TITLE_FONT
+                })}
                 style={{ 'margin-bottom': 50 }}
               />
               <Image
@@ -54,7 +52,7 @@ function TouchPage() {
                   : {})}
               />
               <button
-                title="Cancel"
+                title={t('cancel')}
                 style={{
                   height: 30,
                   width: 300,

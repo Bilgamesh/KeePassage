@@ -25,7 +25,8 @@ async function getSettings() {
   try {
     await initConfigFile();
     const file = await readFile(path);
-    return Settings.parse(JSON.parse(file.toString()));
+    const settings = { ...DEFAULT_SETTINGS, ...JSON.parse(file.toString()) };
+    return Settings.parse(settings);
   } catch (err) {
     console.error(`Failed to read settings: ${err}`);
     return DEFAULT_SETTINGS;

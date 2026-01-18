@@ -29,6 +29,7 @@ import { decrypt } from '@/service/pcsc-service';
 import { showError } from '@/utils/message-box-util';
 import { showQrCodeWindow } from '@/utils/qr-code-util';
 import { getMainWindow } from '@/windows/main-window';
+import { t } from './i18n';
 
 async function openDatabase(window: Window, path: string) {
   const previousPath = selectedDbPath();
@@ -95,13 +96,11 @@ async function saveNewDatabase(options: {
   const { dbName, description, mainWindow, selectedKeys, window } = options;
   if (selectedKeys().length === 1) {
     const msgBox = MessageBox.create();
-    msgBox.setTitle('Backup required');
+    msgBox.setTitle(t('backupRequired'));
     msgBox.setType('warning');
-    msgBox.setText(
-      'You have only selected 1 key. It is highly recommended to pair at least 2 keys so that one can serve as a backup.'
-    );
-    msgBox.addButton('Cancel', -1);
-    msgBox.addButton('Continue without backup', 1);
+    msgBox.setText(t('youHaveOnlySelected1'));
+    msgBox.addButton(t('cancel'), -1);
+    msgBox.addButton(t('continueWithoutBak'), 1);
     if (msgBox.runForWindow(window) !== 1) {
       return;
     }
@@ -111,7 +110,7 @@ async function saveNewDatabase(options: {
   dialog.setFilename(dbName());
   dialog.setFilters([
     {
-      description: 'KeePassage Database',
+      description: t('keepassageDb'),
       extensions: [DATABASE_EXTENSION]
     }
   ]);
@@ -145,9 +144,9 @@ async function getPassword(options: { entry: Entry; window: Window }) {
   if (!key) {
     showError(
       window,
-      `Please connect the correct YubiKey with one of the following serial numbers:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
+      `${t('pleaseConnectCorrectKey')}:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
       {
-        title: 'YubiKey Not Connected'
+        title: t('keyNotConnected')
       }
     );
     return null;
@@ -194,7 +193,7 @@ async function addNewEntry() {
 async function editEntry(window: Window) {
   const entry = selectedEntry();
   if (!entry) {
-    showError(window, `Please select an entry you would like to edit`, {
+    showError(window, t('pleaseSelectEntryToEdit'), {
       title: 'Entry Not Selected'
     });
     return;
@@ -220,7 +219,7 @@ async function editEntry(window: Window) {
 async function deleteEntry(window: Window) {
   const entry = selectedEntry();
   if (!entry) {
-    showError(window, `Please select an entry you would like to delete`, {
+    showError(window, t('pleaseSelectEntryToDelete'), {
       title: 'Entry Not Selected'
     });
     return;
@@ -228,17 +227,17 @@ async function deleteEntry(window: Window) {
   const db = unlockedDbIndex()!;
   const index = db.secrets.indexOf(entry);
   if (index === -1) {
-    showError(window, `Cannot delete this entry as it does not exist`, {
+    showError(window, t('cannotDeleteEntryDoesNotExist'), {
       title: 'Entry Not Selected'
     });
     return;
   }
   const msgBox = MessageBox.create();
-  msgBox.setTitle('Delete Entry');
-  msgBox.setText(`Are you sure you want to delete entry ${entry.title}?`);
+  msgBox.setTitle(t('deleteEntry'));
+  msgBox.setText(`${t('areYouSureDeleteEntry')} ${entry.title}?`);
   msgBox.setType('warning');
-  msgBox.addButton('Delete', 1);
-  msgBox.addButton('Cancel', -1);
+  msgBox.addButton(t('delete'), 1);
+  msgBox.addButton(t('cancel'), -1);
   if (msgBox.runForWindow(window) !== -1) {
     db.secrets.splice(index, 1);
     setUnlockedDbIndex({ ...db });
