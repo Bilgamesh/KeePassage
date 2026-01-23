@@ -26,7 +26,7 @@ function openSettingsPage() {
 }
 
 function SettingsPage(props: { window: Window }) {
-  const languages = () => dictionaries.map((dict) => t(dict.languageCode as 'en'));
+  const languages = dictionaries.map((dict) => t(dict.languageCode as 'en'));
   const currentLanguageIndex = () =>
     dictionaries.findIndex((d) => d.languageCode === unsavedAppSettings().language);
   let picker: Picker;
@@ -113,7 +113,7 @@ function SettingsPage(props: { window: Window }) {
                 }}
                 style={{ width: LARGE_BUTTON_STYLE.width! }}
                 selectedItemIndex={currentLanguageIndex()}
-                items={languages()}
+                items={languages}
                 onSelectionChange={(picker) => {
                   const index = picker.getSelectedItemIndex();
                   const dict = dictionaries[index]!;

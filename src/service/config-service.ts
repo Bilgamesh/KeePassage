@@ -2,6 +2,7 @@ import { readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
 
 import { DEFAULT_SETTINGS } from '@/data/constants';
+import { getSystemLocale } from '@/data/i18n';
 import { setAppSettings } from '@/data/shared-state';
 import { getRootDirname, isFile } from '@/renderer/package';
 import { Settings } from '@/schemas/settings-schema';
@@ -15,7 +16,8 @@ async function initConfigFile() {
   }
   const exists = isFile(path, { silent: true });
   if (!exists) {
-    await writeFile(path, JSON.stringify(DEFAULT_SETTINGS, null, 2));
+    const settings = { ...DEFAULT_SETTINGS, language: getSystemLocale() };
+    await writeFile(path, JSON.stringify(settings, null, 2));
   }
   isInit = true;
   setAppSettings(await getSettings());

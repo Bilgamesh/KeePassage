@@ -1,5 +1,6 @@
 import { flatten, type Flatten, translator } from '@solid-primitives/i18n';
 import { readdirSync } from 'fs';
+import { Locale } from 'gui';
 import { createRequire } from 'module';
 import { join } from 'path';
 
@@ -22,17 +23,29 @@ function getDictionaries() {
   const dicts = [];
   for (const name of names) {
     const dict = fetchDictionary(name);
-    dicts.push(dict);
+    dicts.push({ languageCode: name, content: dict });
   }
   return dicts;
 }
-
-const dictionaries = getDictionaries();
 
 function fetchDictionary(locale: string): Dictionary {
   const path = join(folder, `${locale}.json`);
   const dict: RawDictionary = require(path);
   return flatten(dict);
+}
+
+function sanitizeLocale(locale: string) {
+  return (
+    {
+      'pl-PL': 'pl',
+      'en-US': 'en',
+      'en-GB': 'en'
+    }[locale] || 'en'
+  );
+}
+
+function getSystemLocale() {
+  return sanitizeLocale(Locale.getCurrentIdentifier());
 }
 
 const t = translator(() => {
@@ -43,4 +56,6 @@ const t = translator(() => {
   return dict.content;
 });
 
-export { dictionaries, t };
+const dictionaries = getDictionaries();
+
+export { dictionaries, getSystemLocale, t };

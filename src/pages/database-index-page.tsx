@@ -5,7 +5,6 @@ import { DatabaseColumns } from '@/components/database-columns';
 import { DatabaseIndexContextMenu } from '@/components/database-index-context-menu';
 import { PreviewPanel } from '@/components/preview-panel';
 import { editEntry } from '@/data/db-orchestrator';
-import { t } from '@/data/i18n';
 import {
   appSettings,
   filter,
