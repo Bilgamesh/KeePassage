@@ -1,7 +1,7 @@
 {
   "en": "English",
   "pl": "Polish",
-  "hello": "Hello World",
+  "language": "Language",
   "welcomeTo": "Welcome to",
   "startStoring": "Start storing your passwords in a YubiKey-encrypted KeePassage database",
   "recentDatabases": "Recent databases",

@@ -1,5 +1,5 @@
 import { AttributedText, MessageBox, Picker, Window } from 'gui';
-import { createEffect, createSignal } from 'solid-js';
+import { createEffect, createMemo, createSignal } from 'solid-js';
 
 import { Expand } from '@/components/expand';
 import { TimeoutEntry } from '@/components/timeout-entry';
@@ -26,7 +26,7 @@ function openSettingsPage() {
 }
 
 function SettingsPage(props: { window: Window }) {
-  const languages = dictionaries.map((dict) => t(dict.languageCode as 'en'));
+  const languages = createMemo(() => dictionaries.map((dict) => t(dict.languageCode as 'en')));
   const currentLanguageIndex = () =>
     dictionaries.findIndex((d) => d.languageCode === unsavedAppSettings().language);
   let picker: Picker;
@@ -106,14 +106,14 @@ function SettingsPage(props: { window: Window }) {
               }}
             />
             <container style={{ 'margin-top': 10, flexDirection: 'row' }}>
-              <label text="Language: " />
+              <label text={`${t('language')}: `} />
               <picker
                 ref={({ node }) => {
                   picker = node;
                 }}
                 style={{ width: LARGE_BUTTON_STYLE.width! }}
                 selectedItemIndex={currentLanguageIndex()}
-                items={languages}
+                items={languages()}
                 onSelectionChange={(picker) => {
                   const index = picker.getSelectedItemIndex();
                   const dict = dictionaries[index]!;
