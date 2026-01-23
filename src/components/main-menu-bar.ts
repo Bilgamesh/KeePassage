@@ -285,7 +285,10 @@ function MainMenuBar(props: { window: Window }) {
     },
     {
       label: t('window'),
-      submenu: [{ role: 'minimize' }, { role: 'maximize' }]
+      submenu: [
+        { label: t('minimize'), role: 'minimize' },
+        { label: t('maximize'), role: 'maximize' }
+      ]
     },
     {
       label: t('view'),

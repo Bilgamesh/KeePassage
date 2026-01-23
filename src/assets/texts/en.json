@@ -101,5 +101,11 @@
   "areYouSureDeleteEntry": "Are you sure you want to delete entry",
   "unlockEntry": "Unlock entry",
   "unlockDb": "Unlock database",
-  "lockOptions": "Lock Options"
+  "lockOptions": "Lock Options",
+  "minimize": "Minimize",
+  "maximize": "Maximize",
+  "copy": "Copy",
+  "cut": "Cut",
+  "paste": "Paste",
+  "select_all": "Select all"
 }

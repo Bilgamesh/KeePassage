@@ -101,5 +101,11 @@
   "areYouSureDeleteEntry": "Czy na pewno chcesz usunąć wpis",
   "unlockEntry": "Odblokuj wpis",
   "unlockDb": "Odblokuj bazę danych",
-  "lockOptions": "Opcje blokowania"
+  "lockOptions": "Opcje blokowania",
+  "minimize": "Zminimalizuj",
+  "maximize": "Zmaksymalizuj",
+  "copy": "Kopiuj",
+  "cut": "Wytnij",
+  "paste": "Wklej",
+  "select_all": "Zaznacz wszystko"
 }
