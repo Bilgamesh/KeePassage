@@ -1,6 +1,6 @@
 <div align="center">
     <a href="https://github.com/Bilgamesh/KeePassage">
-        <img src="./res/img/logo.ico" alt="KeePassage Logo" width="80" height="80">
+        <img src="./src/assets/img/logo.ico" alt="KeePassage Logo" width="80" height="80">
     </a>
     <h1 align="center">KeePassage</h1>
 </div>
