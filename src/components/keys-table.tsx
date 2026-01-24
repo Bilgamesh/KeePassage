@@ -24,7 +24,7 @@ function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<Y
       label: t('serialNumber'),
       options: {
         type: 'text',
-        width: 80
+        width: 90
       }
     },
     {
@@ -38,14 +38,14 @@ function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<Y
       label: t('publicKey'),
       options: {
         type: 'text',
-        width: 400
+        width: 350
       }
     },
     {
       label: t('paired'),
       options: {
         type: 'checkbox',
-        width: 40
+        width: 70
       }
     }
   ] satisfies { label: string; options: TableColumnOptions }[];

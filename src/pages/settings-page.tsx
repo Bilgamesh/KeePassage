@@ -132,7 +132,7 @@ function SettingsPage(props: { window: Window }) {
           <container style={{ 'margin-left': 10 }}>
             <TimeoutEntry
               title={t('clearClipboardAfter')}
-              checkboxWidth={process.platform === 'win32' ? 200 : 250}
+              checkboxWidth={process.platform === 'win32' ? 250 : 300}
               entryWidth={50}
               style={{ 'margin-bottom': 5 }}
               checked={unsavedAppSettings().clipboardTimout !== null}
@@ -151,7 +151,7 @@ function SettingsPage(props: { window: Window }) {
             />
             <TimeoutEntry
               title={t('lockDatabaseAfter')}
-              checkboxWidth={process.platform === 'win32' ? 200 : 250}
+              checkboxWidth={process.platform === 'win32' ? 250 : 300}
               entryWidth={50}
               checked={unsavedAppSettings().dbTimeout !== null}
               value={unsavedAppSettings().dbTimeout || 0}

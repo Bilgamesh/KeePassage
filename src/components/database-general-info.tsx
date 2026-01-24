@@ -18,7 +18,7 @@ function DatabaseGeneralInfo(props: {
         />
       </container>
       <container style={{ flexDirection: 'row', 'margin-top': 20 }}>
-        <label text={t('dbName')} style={{ width: 100, 'margin-left': 10 }} align="start" />
+        <label text={t('dbName')} style={{ width: 120, 'margin-left': 10 }} align="start" />
         <entry
           style={{ flex: 1, 'margin-right': 10 }}
           text={props.dbName()}
@@ -28,7 +28,7 @@ function DatabaseGeneralInfo(props: {
         />
       </container>
       <container style={{ flexDirection: 'row', 'margin-top': 10 }}>
-        <label text={t('description')} style={{ width: 100, 'margin-left': 10 }} align="start" />
+        <label text={t('description')} style={{ width: 120, 'margin-left': 10 }} align="start" />
         <entry
           style={{ flex: 1, 'margin-right': 10 }}
           text={props.description()}
