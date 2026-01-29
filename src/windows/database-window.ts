@@ -1,12 +1,15 @@
 import { Container } from 'gui';
+import { createEffect } from 'solid-js';
 
-import { APP_NAME, MAX_SIZE, SUBWINDOW_MIN_SIZE } from '@/data/constants';
+import { MAX_SIZE, SUBWINDOW_MIN_SIZE } from '@/data/constants';
+import { t } from '@/data/i18n';
 import { createWindow, deleteWindow, getWindow } from '@/data/window-manager';
 
-const title = `Create a new ${APP_NAME} database`;
+const title = () => t('createNewKeePassageDb');
 
 function createDatabaseWindow() {
-  const win = createWindow(title);
+  let isClosed = false;
+  const win = createWindow(title());
   const contentView = Container.create();
   contentView.setStyle({ flex: 1 });
   win.setContentView(contentView);
@@ -18,18 +21,25 @@ function createDatabaseWindow() {
   win.setContentSizeConstraints(SUBWINDOW_MIN_SIZE, MAX_SIZE);
 
   win.onClose.connect(() => {
-    deleteWindow(title);
+    deleteWindow(title());
+    isClosed = true;
+  });
+
+  createEffect(() => {
+    if (!isClosed) {
+      win.setTitle(title());
+    }
   });
 
   return win;
 }
 
 function hasDatabaseWindow() {
-  return !!getWindow(title);
+  return !!getWindow(title());
 }
 
 function getDatabaseWindow() {
-  const win = getWindow(title);
+  const win = getWindow(title());
   if (win) {
     return win;
   }

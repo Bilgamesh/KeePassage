@@ -17,7 +17,7 @@ import yubiKeyImage from '@/assets/img/yubikey.png';
 function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
   const titles = (index: number) => [t('generalDbInfo'), t('pairKeys')][index];
   const [page, setPage] = createSignal(0);
-  const [dbName, setDbName] = createSignal('Passwords');
+  const [dbName, setDbName] = createSignal(t('passwords'));
   const [description, setDescription] = createSignal('');
   const [yubiKeys, setYubiKeys] = createSignal([] as YubiKey[]);
   const selectedKeys = () => yubiKeys().filter((key) => key.paired);
