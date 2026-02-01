@@ -1,5 +1,9 @@
+/*
+ Improves reactivity of text fields by avoiding re-renders when user is editing the field, even if signal value is updated.
+*/
+
 import type { Entry, TextEdit } from 'gui';
-import { Accessor, createEffect, createSignal } from 'solid-js';
+import { Accessor, createEffect } from 'solid-js';
 
 import { entry, textedit } from '@/renderer/types';
 
@@ -9,18 +13,22 @@ function ReactiveEntry(
     onTextChange: (text: string) => void;
   }
 ) {
-  const [value, setValue] = createSignal(props.text ? props.text() : '');
+  const initialValue = props.text ? props.text() : '';
+  let entry: Entry;
   let updateBlocked = false;
   createEffect(() => {
     const text = props.text();
     if (!updateBlocked) {
-      setValue(text);
+      entry.setText(text);
     }
   });
   return (
     <entry
       {...props}
-      text={value()}
+      ref={({ node }) => {
+        entry = node;
+      }}
+      text={initialValue}
       onTextChange={(entry) => {
         updateBlocked = true;
         props.onTextChange(entry.getText());
@@ -36,18 +44,22 @@ function ReactivePassword(
     onTextChange: (text: string) => void;
   }
 ) {
-  const [value, setValue] = createSignal(props.text ? props.text() : '');
+  const initialValue = props.text ? props.text() : '';
+  let entry: Entry;
   let updateBlocked = false;
   createEffect(() => {
     const text = props.text();
     if (!updateBlocked) {
-      setValue(text);
+      entry.setText(text);
     }
   });
   return (
     <password
       {...props}
-      text={value()}
+      ref={({ node }) => {
+        entry = node;
+      }}
+      text={initialValue}
       onTextChange={(entry) => {
         updateBlocked = true;
         props.onTextChange(entry.getText());
@@ -63,18 +75,22 @@ function ReactiveTextArea(
     onTextChange: (text: string) => void;
   }
 ) {
-  const [value, setValue] = createSignal(props.text ? props.text() : '');
+  let textEdit: TextEdit;
+  const initialValue = props.text ? props.text() : '';
   let updateBlocked = false;
   createEffect(() => {
     const text = props.text();
     if (!updateBlocked) {
-      setValue(text);
+      textEdit.setText(text);
     }
   });
   return (
     <textedit
       {...props}
-      text={value()}
+      ref={({ node }) => {
+        textEdit = node;
+      }}
+      text={initialValue}
       onTextChange={(entry) => {
         updateBlocked = true;
         props.onTextChange(entry.getText());

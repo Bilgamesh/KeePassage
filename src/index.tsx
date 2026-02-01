@@ -8,9 +8,11 @@ import { initConfigFile } from '@/service/config-service';
 import { SingleInstance } from '@/utils/single-instance-util';
 import { createMainWindow, getMainWindow } from '@/windows/main-window';
 
-function main() {
+async function main() {
   app.setName(APP_NAME);
   app.setID(APP_ID);
+
+  await initConfigFile();
 
   const window = createMainWindow();
 
@@ -20,8 +22,6 @@ function main() {
 
   spawnPcscDaemon({ respawnOnDeath: true });
   process.on('exit', killPcscDaemon);
-
-  initConfigFile();
 
   if (!process.versions['yode']) {
     MessageLoop.run();
