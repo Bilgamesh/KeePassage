@@ -18,7 +18,9 @@ class TextEdit extends View {
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'text':
-        this.node.setText(String(value));
+        if (this.node.getText() !== value) {
+          this.node.setText(String(value));
+        }
         break;
       case 'selectedRange':
         const { start, end } = <{ start: number; end: number }>value;

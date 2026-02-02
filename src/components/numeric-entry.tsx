@@ -68,12 +68,13 @@ function NumericEntry(props: {
         ref={({ node }) => {
           entry = node;
         }}
-        text={`${props.value || 1}`}
+        text={`${props.value ?? props.minValue ?? 1}`}
         style={{ ...(props.entryStyle || {}) }}
         onTextChange={(entry) => {
           const text = entry.getText();
           if (text === '') {
             setValue(props.minValue || 0);
+            entry.setText('');
             return;
           }
           if (isNaN(Number(text))) {
@@ -81,13 +82,14 @@ function NumericEntry(props: {
               `${Math.max(Math.min(value(), props.maxValue || Infinity), props.minValue || -Infinity)}`
             );
           } else {
-            setValue(
-              Math.max(
-                Math.min(Number(text), props.maxValue || Infinity),
-                props.minValue || -Infinity
-              )
+            const newValue = Math.max(
+              Math.min(Number(text), props.maxValue || Infinity),
+              props.minValue || -Infinity
             );
-            entry.setText(`${value()}`);
+            setValue(newValue);
+            if (entry.getText() !== `${newValue}`) {
+              entry.setText(`${value()}`);
+            }
           }
         }}
         onKeyDown={(entry, ev) => {

@@ -20,7 +20,6 @@ import clipboardIcon from '@/assets/icons/clipboard.png';
 import eyeOffIcon from '@/assets/icons/eye-off.png';
 import eyeIcon from '@/assets/icons/eye.png';
 import refreshIcon from '@/assets/icons/refresh.png';
-import { ReactiveEntry, ReactivePassword } from '@/components/reactive-textfields';
 import { t } from '@/data/i18n';
 
 const [password, setPassword] = createSignal('');
@@ -92,22 +91,22 @@ function PwGeneratorPage() {
         <container style={{ flex: 8 }}>
           <Expand direction="column" />
           <container style={{ flexDirection: 'row', 'margin-bottom': 25 }}>
-            <ReactiveEntry
+            <entry
               visible={visible()}
               font={PASSWORD_FONT}
               style={{ ...LARGE_ENTRY_STYLE, flex: 1 }}
-              text={password}
-              onTextChange={(text) => {
-                setPassword(text);
+              text={password()}
+              onTextChange={(entry) => {
+                setPassword(entry.getText());
               }}
             />
-            <ReactivePassword
+            <password
               visible={!visible()}
               font={PASSWORD_FONT}
               style={{ ...LARGE_ENTRY_STYLE, flex: 1 }}
-              text={password}
-              onTextChange={(text) => {
-                setPassword(text);
+              text={password()}
+              onTextChange={(entry) => {
+                setPassword(entry.getText());
               }}
             />
             <IconButton

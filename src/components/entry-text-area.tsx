@@ -1,7 +1,6 @@
 import { Accessor } from 'solid-js';
 import { TextContextMenu } from './text-context-menu';
 
-import { ReactiveTextArea } from '@/components/reactive-textfields';
 import { Style } from '@/renderer/types';
 
 function EntryTextArea(props: {
@@ -19,8 +18,8 @@ function EntryTextArea(props: {
         align="end"
         vAlign="start"
       />
-      <ReactiveTextArea
-        text={props.text || (() => '')}
+      <textedit
+        text={props.text ? props.text() : ''}
         style={{ flex: 1, 'margin-left': 10 }}
         onMouseDown={(textEdit, ev) => {
           if (ev.button === 2 && textEdit.hasFocus()) {
@@ -38,9 +37,9 @@ function EntryTextArea(props: {
           }
           return false;
         }}
-        onTextChange={(text) => {
+        onTextChange={(textedit) => {
           if (props.onTextChange) {
-            props.onTextChange(text);
+            props.onTextChange(textedit.getText());
           }
         }}
       />
