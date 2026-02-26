@@ -1,10 +1,14 @@
-import { Container, MessageLoop, Tray, Window } from 'gui';
+import { Container, MessageLoop, Tray, type Window } from 'gui';
 import { createEffect } from 'solid-js';
-
 import { AppIcon } from '@/components/app-icon';
 import { MainMenuBar } from '@/components/main-menu-bar';
 import { TrayMenu } from '@/components/tray-menu';
-import { APP_NAME, MAX_SIZE, MIN_SIZE, WINDOWS_APP_BACKGROUND_COLOR } from '@/data/constants';
+import {
+  APP_NAME,
+  MAX_SIZE,
+  MIN_SIZE,
+  WINDOWS_APP_BACKGROUND_COLOR,
+} from '@/data/constants';
 import { killPcscDaemon } from '@/data/pcsc-orchestrator';
 import { appSettings } from '@/data/shared-state';
 import { createWindow, deleteWindow, getWindow } from '@/data/window-manager';

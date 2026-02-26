@@ -1,7 +1,6 @@
-import { Entry } from 'gui';
+import type { Entry } from 'gui';
 import { createEffect, createSignal, on } from 'solid-js';
-
-import { Style } from '@/renderer/types';
+import type { Style } from '@/renderer/types';
 
 function NumericEntry(props: {
   entryStyle?: Style;
@@ -25,7 +24,7 @@ function NumericEntry(props: {
     'ArrowLeft',
     'ArrowRight',
     'Home',
-    'End'
+    'End',
   ] as const;
   const [value, setValue] = createSignal(props.value || 1);
   let entry: Entry;
@@ -38,15 +37,18 @@ function NumericEntry(props: {
           props.onValueChange(value);
         }
       },
-      { defer: true }
-    )
+      { defer: true },
+    ),
   );
 
   function increment() {
     const text = entry.getText();
     const number = Number(text);
     setValue(
-      Math.max(Math.min(number + 1, props.maxValue || Infinity), props.minValue || -Infinity)
+      Math.max(
+        Math.min(number + 1, props.maxValue || Infinity),
+        props.minValue || -Infinity,
+      ),
     );
     entry.setText(`${value()}`);
   }
@@ -56,7 +58,10 @@ function NumericEntry(props: {
     const number = Number(text);
     if (number > 0) {
       setValue(
-        Math.max(Math.min(number - 1, props.maxValue || Infinity), props.minValue || -Infinity)
+        Math.max(
+          Math.min(number - 1, props.maxValue || Infinity),
+          props.minValue || -Infinity,
+        ),
       );
       entry.setText(`${value()}`);
     }
@@ -77,14 +82,14 @@ function NumericEntry(props: {
             entry.setText('');
             return;
           }
-          if (isNaN(Number(text))) {
+          if (Number.isNaN(Number(text))) {
             entry.setText(
-              `${Math.max(Math.min(value(), props.maxValue || Infinity), props.minValue || -Infinity)}`
+              `${Math.max(Math.min(value(), props.maxValue || Infinity), props.minValue || -Infinity)}`,
             );
           } else {
             const newValue = Math.max(
               Math.min(Number(text), props.maxValue || Infinity),
-              props.minValue || -Infinity
+              props.minValue || -Infinity,
             );
             setValue(newValue);
             if (entry.getText() !== `${newValue}`) {
@@ -92,7 +97,7 @@ function NumericEntry(props: {
             }
           }
         }}
-        onKeyDown={(entry, ev) => {
+        onKeyDown={(_entry, ev) => {
           if (ev.key === 'ArrowUp') {
             increment();
           }

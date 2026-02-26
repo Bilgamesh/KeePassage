@@ -1,8 +1,7 @@
-import { type Container, Window } from 'gui';
+import type { Container, Window } from 'gui';
 import { createRenderer } from 'solid-js/universal';
-
 import { ElementFactory } from '@/renderer/element-factory';
-import { type View as ViewWrapper } from '@/renderer/elements/view';
+import type { View as ViewWrapper } from '@/renderer/elements/view';
 
 const elementFactory = new ElementFactory();
 
@@ -15,14 +14,14 @@ const renderer = createRenderer({
       return elementFactory.createElement('container');
     }
     throw new Error(
-      `Cannot add node "${text}". Text nodes are not supported. Try <label text="${text.replaceAll('"', '\\"')}" /> instead.`
+      `Cannot add node "${text}". Text nodes are not supported. Try <label text="${text.replaceAll('"', '\\"')}" /> instead.`,
     );
   },
-  replaceText(node: ViewWrapper | null, text: string): void {},
+  replaceText(_node: ViewWrapper | null, _text: string): void {},
   insertNode(
     parent: ViewWrapper | null,
     node: ViewWrapper | null,
-    anchor: ViewWrapper | null | undefined
+    anchor: ViewWrapper | null | undefined,
   ): void {
     if (node === null) {
       throw new Error('Cannot insert node "null".');
@@ -47,7 +46,7 @@ const renderer = createRenderer({
     }
     node.setProperty(name, value);
   },
-  isTextNode(node: ViewWrapper | null): boolean {
+  isTextNode(_node: ViewWrapper | null): boolean {
     return false;
   },
   getParentNode(node: ViewWrapper | null): ViewWrapper | null {
@@ -67,7 +66,9 @@ const renderer = createRenderer({
       throw new Error('Cannot get next sibling of node "null".');
     }
     if (node.parent === null) {
-      throw new Error(`Cannot get next sibling of node "${node.name}" with parent "null".`);
+      throw new Error(
+        `Cannot get next sibling of node "${node.name}" with parent "null".`,
+      );
     }
     let isNextSibling = false;
     for (const child of node.parent.getChildren()) {
@@ -79,7 +80,7 @@ const renderer = createRenderer({
       }
     }
     return null;
-  }
+  },
 });
 
 function render(code: () => ViewWrapper, window: Window): void {
@@ -89,7 +90,16 @@ function render(code: () => ViewWrapper, window: Window): void {
   }
 }
 
-export { ErrorBoundary, For, Index, Match, Show, Suspense, SuspenseList, Switch } from 'solid-js';
+export {
+  ErrorBoundary,
+  For,
+  Index,
+  Match,
+  Show,
+  Suspense,
+  SuspenseList,
+  Switch,
+} from 'solid-js';
 
 export const {
   effect,
@@ -102,7 +112,7 @@ export const {
   spread,
   setProp,
   mergeProps,
-  use
+  use,
 } = renderer;
 
 export { render };

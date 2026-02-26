@@ -1,7 +1,6 @@
-import { Accessor } from 'solid-js';
+import type { Accessor } from 'solid-js';
+import type { Style } from '@/renderer/types';
 import { TextContextMenu } from './text-context-menu';
-
-import { Style } from '@/renderer/types';
 
 function EntryTextArea(props: {
   title: string;
@@ -14,7 +13,9 @@ function EntryTextArea(props: {
     <container style={props.style || {}}>
       <label
         text={props.title}
-        style={{ width: props.titleWidth || (process.platform === 'win32' ? 70 : 80) }}
+        style={{
+          width: props.titleWidth || (process.platform === 'win32' ? 70 : 80),
+        }}
         align="end"
         vAlign="start"
       />
@@ -25,7 +26,7 @@ function EntryTextArea(props: {
           if (ev.button === 2 && textEdit.hasFocus()) {
             TextContextMenu({
               editable: true,
-              textEdit
+              textEdit,
             }).popup();
           } else {
             textEdit.focus();

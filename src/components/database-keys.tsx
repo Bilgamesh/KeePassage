@@ -1,11 +1,13 @@
-import { Accessor, Setter } from 'solid-js';
-
+import type { Accessor, Setter } from 'solid-js';
 import { KeysTable } from '@/components/keys-table';
 import { t } from '@/data/i18n';
 import type { YubiKey } from '@/schemas/yubikey-schema';
 import { open } from '@/utils/url-util';
 
-function DatabaseKeys(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<YubiKey[]> }) {
+function DatabaseKeys(props: {
+  yubiKeys: Accessor<YubiKey[]>;
+  setYubiKeys: Setter<YubiKey[]>;
+}) {
   return (
     <container style={{ flex: 1 }}>
       <label
@@ -31,9 +33,16 @@ function DatabaseKeys(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Sette
       />
 
       <container style={{ flex: 1, margin: 10 }}>
-        <label text={t('detectedKeys')} align="start" style={{ 'margin-bottom': 5 }} />
+        <label
+          text={t('detectedKeys')}
+          align="start"
+          style={{ 'margin-bottom': 5 }}
+        />
         <container style={{ flex: 1, flexDirection: 'row' }}>
-          <KeysTable yubiKeys={props.yubiKeys} setYubiKeys={props.setYubiKeys} />
+          <KeysTable
+            yubiKeys={props.yubiKeys}
+            setYubiKeys={props.setYubiKeys}
+          />
         </container>
       </container>
     </container>

@@ -1,7 +1,10 @@
-import { getRandomValues } from 'crypto';
+import { getRandomValues } from 'node:crypto';
 import { Clipboard } from 'gui';
 import { createSignal } from 'solid-js';
-
+import clipboardIcon from '@/assets/icons/clipboard.png';
+import eyeIcon from '@/assets/icons/eye.png';
+import eyeOffIcon from '@/assets/icons/eye-off.png';
+import refreshIcon from '@/assets/icons/refresh.png';
 import { Expand } from '@/components/expand';
 import { IconButton } from '@/components/icon-button';
 import { NumericEntry } from '@/components/numeric-entry';
@@ -11,16 +14,11 @@ import {
   LARGE_ENTRY_STYLE,
   PAGE_INDEXES,
   PASSWORD_FONT,
-  SMALL_BUTTON_STYLE
+  SMALL_BUTTON_STYLE,
 } from '@/data/constants';
+import { t } from '@/data/i18n';
 import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
 import { createListeners } from '@/utils/listen-util';
-
-import clipboardIcon from '@/assets/icons/clipboard.png';
-import eyeOffIcon from '@/assets/icons/eye-off.png';
-import eyeIcon from '@/assets/icons/eye.png';
-import refreshIcon from '@/assets/icons/refresh.png';
-import { t } from '@/data/i18n';
 
 const [password, setPassword] = createSignal('');
 const [passwordPolicy, setPasswordPolicy] = createSignal({
@@ -28,7 +26,7 @@ const [passwordPolicy, setPasswordPolicy] = createSignal({
   upperCase: true,
   numbers: true,
   symbols: true,
-  length: 32
+  length: 32,
 });
 let previousPageIndex: number = PAGE_INDEXES.WELCOME;
 let controller: AbortController;
@@ -40,7 +38,9 @@ async function getGeneratedPassword() {
   controller = new AbortController();
   openPasswordGenerator();
   try {
-    const password = await pwListeners.waitForValue({ signal: controller.signal });
+    const password = await pwListeners.waitForValue({
+      signal: controller.signal,
+    });
     setRequestInProgress(false);
     return password;
   } catch (err) {
@@ -112,7 +112,9 @@ function PwGeneratorPage() {
             <IconButton
               tooltip={t('previewPassword')}
               src={visible() ? eyeOffIcon : eyeIcon}
-              size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
+              size={{
+                ...(ENTRY_BUTTON_STYLE as { height: number; width: number }),
+              }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
               onClick={() => {
@@ -122,7 +124,9 @@ function PwGeneratorPage() {
             <IconButton
               tooltip={t('generateNew')}
               src={refreshIcon}
-              size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
+              size={{
+                ...(ENTRY_BUTTON_STYLE as { height: number; width: number }),
+              }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
               onClick={() => {
@@ -132,7 +136,9 @@ function PwGeneratorPage() {
             <IconButton
               tooltip={t('copyToClipboard')}
               src={clipboardIcon}
-              size={{ ...(ENTRY_BUTTON_STYLE as { height: number; width: number }) }}
+              size={{
+                ...(ENTRY_BUTTON_STYLE as { height: number; width: number }),
+              }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
               onClick={() => {
@@ -152,7 +158,10 @@ function PwGeneratorPage() {
               onValueChange={(slider) => {
                 setPasswordPolicy((v) => ({
                   ...v,
-                  length: Math.max(Math.min(Math.round(slider.getValue()), 128), 1)
+                  length: Math.max(
+                    Math.min(Math.round(slider.getValue()), 128),
+                    1,
+                  ),
                 }));
                 generate();
               }}
@@ -174,23 +183,41 @@ function PwGeneratorPage() {
                 <Expand direction="row" />
                 <button
                   title={`${passwordPolicy().upperCase ? '✓ ' : ''}A-Z`}
-                  style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10, 'margin-top': 5 }}
+                  style={{
+                    ...SMALL_BUTTON_STYLE,
+                    'margin-left': 10,
+                    'margin-top': 5,
+                  }}
                   onClick={() => {
-                    setPasswordPolicy((v) => ({ ...v, upperCase: !v.upperCase }));
+                    setPasswordPolicy((v) => ({
+                      ...v,
+                      upperCase: !v.upperCase,
+                    }));
                     generate();
                   }}
                 />
                 <button
                   title={`${passwordPolicy().lowerCase ? '✓ ' : ''}a-z`}
-                  style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10, 'margin-top': 5 }}
+                  style={{
+                    ...SMALL_BUTTON_STYLE,
+                    'margin-left': 10,
+                    'margin-top': 5,
+                  }}
                   onClick={() => {
-                    setPasswordPolicy((v) => ({ ...v, lowerCase: !v.lowerCase }));
+                    setPasswordPolicy((v) => ({
+                      ...v,
+                      lowerCase: !v.lowerCase,
+                    }));
                     generate();
                   }}
                 />
                 <button
                   title={`${passwordPolicy().numbers ? '✓ ' : ''}0-9`}
-                  style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10, 'margin-top': 5 }}
+                  style={{
+                    ...SMALL_BUTTON_STYLE,
+                    'margin-left': 10,
+                    'margin-top': 5,
+                  }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, numbers: !v.numbers }));
                     generate();
@@ -198,7 +225,11 @@ function PwGeneratorPage() {
                 />
                 <button
                   title={`${passwordPolicy().symbols ? '✓ ' : ''}/ * + & ...`}
-                  style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10, 'margin-top': 5 }}
+                  style={{
+                    ...SMALL_BUTTON_STYLE,
+                    'margin-left': 10,
+                    'margin-top': 5,
+                  }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, symbols: !v.symbols }));
                     generate();

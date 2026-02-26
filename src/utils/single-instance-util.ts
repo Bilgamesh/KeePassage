@@ -1,8 +1,8 @@
-import { EventEmitter } from 'events';
-import { unlinkSync } from 'fs';
-import { connect, createServer, type Server } from 'net';
-import { tmpdir } from 'os';
-import { join } from 'path';
+import { EventEmitter } from 'node:events';
+import { unlinkSync } from 'node:fs';
+import { connect, createServer, type Server } from 'node:net';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 class SingleInstance extends EventEmitter {
   private socketPath: string;
@@ -12,7 +12,7 @@ class SingleInstance extends EventEmitter {
     super();
 
     const defaultSocketPath =
-      process.platform == 'win32'
+      process.platform === 'win32'
         ? `\\\\.\\pipe\\${appName}-sock`
         : join(tmpdir(), `${appName}.sock`);
 
@@ -28,11 +28,11 @@ class SingleInstance extends EventEmitter {
         });
       });
 
-      client.on('error', (err) => {
+      client.on('error', (_err) => {
         try {
           unlinkSync(this.socketPath);
         } catch (err) {
-          if ((err as any).code !== 'ENOENT') {
+          if ((err as { code?: string }).code !== 'ENOENT') {
             throw err;
           }
         }

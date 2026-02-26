@@ -1,20 +1,26 @@
-import { AttributedText, Window } from 'gui';
+import { AttributedText, type Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
-
+import clipboardIcon from '@/assets/icons/clipboard.png';
+import eyeIcon from '@/assets/icons/eye.png';
+import eyeOffIcon from '@/assets/icons/eye-off.png';
+import qrcodeIcon from '@/assets/icons/qrcode.png';
 import { PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
 import { copyPassword, getPassword, showQrCode } from '@/data/db-orchestrator';
-import { appSettings, selectedEntry, setMainPageIndex } from '@/data/shared-state';
-import { Entry } from '@/schemas/database-schema';
+import { t } from '@/data/i18n';
+import {
+  appSettings,
+  selectedEntry,
+  setMainPageIndex,
+} from '@/data/shared-state';
+import type { Entry } from '@/schemas/database-schema';
 import { IconButton } from './icon-button';
 import { PreviewLine } from './preview-line';
 
-import clipboardIcon from '@/assets/icons/clipboard.png';
-import eyeOffIcon from '@/assets/icons/eye-off.png';
-import eyeIcon from '@/assets/icons/eye.png';
-import qrcodeIcon from '@/assets/icons/qrcode.png';
-import { t } from '@/data/i18n';
-
-function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }) {
+function PreviewPanel(props: {
+  window: Window;
+  visible?: boolean;
+  entry: Entry;
+}) {
   const [password, setPassword] = createSignal<string | null>(null);
 
   async function showPassword() {
@@ -29,7 +35,9 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
   });
 
   const displayedUserName = () =>
-    appSettings().hideUserNames ? props.entry.username.replaceAll(/./g, '*') : props.entry.username;
+    appSettings().hideUserNames
+      ? props.entry.username.replaceAll(/./g, '*')
+      : props.entry.username;
 
   return (
     <container
@@ -37,13 +45,13 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
       style={{
         flex: 1,
         margin: 20,
-        'margin-top': 0
+        'margin-top': 0,
       }}
     >
       <label
         attributedText={AttributedText.create(props.entry.title, {
           font: TITLE_FONT,
-          align: 'start'
+          align: 'start',
         })}
         style={{ 'margin-left': 10 }}
       />
@@ -57,7 +65,10 @@ function PreviewPanel(props: { window: Window; visible?: boolean; entry: Entry }
           <PreviewLine
             label={t('password')}
             value={password() === null ? '***' : password()!}
-            style={{ 'margin-top': 10, height: process.platform === 'win32' ? 22 : 35 }}
+            style={{
+              'margin-top': 10,
+              height: process.platform === 'win32' ? 22 : 35,
+            }}
           >
             <IconButton
               src={password() === null ? eyeIcon : eyeOffIcon}

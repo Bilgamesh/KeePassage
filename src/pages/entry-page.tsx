@@ -1,20 +1,26 @@
 import { createEffect, createSignal } from 'solid-js';
-
+import diceIcon from '@/assets/icons/dice-3.png';
+import eyeIcon from '@/assets/icons/eye.png';
+import eyeOffIcon from '@/assets/icons/eye-off.png';
 import { EntryLine } from '@/components/entry-line';
 import { EntryTextArea } from '@/components/entry-text-area';
 import { Expand } from '@/components/expand';
 import { IconButton } from '@/components/icon-button';
-import { LARGE_BUTTON_STYLE, PAGE_INDEXES, SMALL_ENTRY_STYLE } from '@/data/constants';
+import {
+  LARGE_BUTTON_STYLE,
+  PAGE_INDEXES,
+  SMALL_ENTRY_STYLE,
+} from '@/data/constants';
 import { t } from '@/data/i18n';
-import { mainPageIndex, setMainPageIndex, unlockedDbIndex } from '@/data/shared-state';
+import {
+  mainPageIndex,
+  setMainPageIndex,
+  unlockedDbIndex,
+} from '@/data/shared-state';
 import { getGeneratedPassword } from '@/pages/pw-generator-page';
-import { Entry } from '@/schemas/database-schema';
+import type { Entry } from '@/schemas/database-schema';
 import { encrypt } from '@/service/pcsc-service';
 import { createListeners } from '@/utils/listen-util';
-
-import diceIcon from '@/assets/icons/dice-3.png';
-import eyeOffIcon from '@/assets/icons/eye-off.png';
-import eyeIcon from '@/assets/icons/eye.png';
 
 let controller: AbortController;
 const [passwordVisible, setPasswordVisible] = createSignal(false);
@@ -24,7 +30,7 @@ const [password, setPassword] = createSignal('');
 const [url, setUrl] = createSignal('');
 const [tags, setTags] = createSignal('');
 const [notes, setNotes] = createSignal('');
-const [modified, setModified] = createSignal(new Date().getTime());
+const [modified, setModified] = createSignal(Date.now());
 
 const entryListeners = createListeners<Entry>();
 
@@ -36,11 +42,13 @@ function getRawEntry() {
     url: url(),
     tags: tags(),
     notes: notes(),
-    modified: modified()
+    modified: modified(),
   };
 }
 
-function restoreRawEntry(form: Omit<Entry, 'encryptedPayloads'> & { password: string }) {
+function restoreRawEntry(
+  form: Omit<Entry, 'encryptedPayloads'> & { password: string },
+) {
   setTitle(form.title);
   setUsername(form.username);
   setPassword(form.password);
@@ -58,7 +66,9 @@ async function requestEntry(password?: string, existingEntry?: Entry) {
     restoreRawEntry({ ...existingEntry, password });
   }
   try {
-    const entry = await entryListeners.waitForValue({ signal: controller.signal });
+    const entry = await entryListeners.waitForValue({
+      signal: controller.signal,
+    });
     return entry;
   } catch (err) {
     console.error(`Failed to get entry: ${err}`);
@@ -75,7 +85,7 @@ function EntryPage() {
     setUrl('');
     setTags('');
     setNotes('');
-    setModified(new Date().getTime());
+    setModified(Date.now());
   });
 
   async function onEntrySubmit() {
@@ -83,10 +93,14 @@ function EntryPage() {
     if (!unlockedDbIndex()) {
       throw new Error('No unlocked DB Index');
     }
-    for (const key of unlockedDbIndex()!.keys) {
-      const encryptedPayload = await encrypt({ password: password() }, key.publicKey, {
-        signal: controller.signal
-      });
+    for (const key of unlockedDbIndex()?.keys ?? []) {
+      const encryptedPayload = await encrypt(
+        { password: password() },
+        key.publicKey,
+        {
+          signal: controller.signal,
+        },
+      );
       encryptedPayloads.push(encryptedPayload);
     }
     entryListeners.notifyListeners({
@@ -96,14 +110,22 @@ function EntryPage() {
       url: url(),
       tags: tags(),
       notes: notes(),
-      modified: modified()
+      modified: modified(),
     });
   }
 
   return (
     <container style={{ flex: 1, margin: 20, 'margin-right': 40 }}>
-      <EntryLine title={`${t('title')}:`} text={title} onTextChange={setTitle} />
-      <EntryLine title={`${t('username')}:`} text={username} onTextChange={setUsername} />
+      <EntryLine
+        title={`${t('title')}:`}
+        text={title}
+        onTextChange={setTitle}
+      />
+      <EntryLine
+        title={`${t('username')}:`}
+        text={username}
+        onTextChange={setUsername}
+      />
       <EntryLine
         title={t('password')}
         text={password}
@@ -117,7 +139,7 @@ function EntryPage() {
           imageSize={{ height: 13, width: 13 }}
           style={{
             'margin-top': 0,
-            'margin-left': 4
+            'margin-left': 4,
           }}
           onClick={async () => {
             const oldEntry = getRawEntry();
@@ -132,7 +154,7 @@ function EntryPage() {
           imageSize={{ height: 13, width: 13 }}
           style={{
             'margin-top': 0,
-            'margin-left': 2
+            'margin-left': 2,
           }}
           onClick={() => {
             setPasswordVisible((v) => !v);
@@ -154,14 +176,14 @@ function EntryPage() {
           enabled={title().trim().length > 0}
           style={LARGE_BUTTON_STYLE}
           onClick={() => {
-            setModified(new Date().getTime());
+            setModified(Date.now());
             onEntrySubmit();
           }}
         />
         <button
           title={t('cancel')}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 20 }}
-          onClick={(button) => {
+          onClick={(_button) => {
             controller.abort('Cancel');
           }}
         />

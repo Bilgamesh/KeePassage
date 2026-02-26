@@ -1,10 +1,10 @@
-import fs from 'fs';
-import { cp, mkdir, readFile, writeFile } from 'fs/promises';
+import fs from 'node:fs';
+import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { join } from 'node:path';
 import getNode from 'get-node';
-import { createRequire } from 'module';
-import { join } from 'path';
 import rcedit from 'rcedit';
-// @ts-ignore
+// @ts-expect-error
 import { packageApp } from 'yackage';
 
 function logStep(message: string) {
@@ -18,7 +18,7 @@ async function copyModule(module: string) {
   await cp(
     join(import.meta.dirname, '..', 'node_modules', module),
     join(import.meta.dirname, '..', 'release', 'node_modules', module),
-    { recursive: true }
+    { recursive: true },
   );
   const end = performance.now();
   logStep(`✅ Copied ${module} in ${((end - start) / 1000).toFixed(2)}s`);
@@ -28,7 +28,7 @@ async function copyResources() {
   await cp(
     join(import.meta.dirname, '..', 'src', 'assets'),
     join(import.meta.dirname, '..', 'release', 'out', 'res'),
-    { recursive: true }
+    { recursive: true },
   );
 }
 
@@ -89,7 +89,13 @@ function detectAbi() {
     }
   } catch {}
 
-  if ((process.report?.getReport() as any).header.glibcVersionRuntime) {
+  if (
+    (
+      process.report?.getReport() as {
+        header: { glibcVersionRuntime: boolean };
+      }
+    ).header.glibcVersionRuntime
+  ) {
     return 'glibc';
   }
 
@@ -103,12 +109,12 @@ const appInfo = {
   main: 'index.cjs',
   unpack: '+(*.node)',
   build: {
-    minify: true
+    minify: true,
   },
   appId: 'keepassage',
   productName: 'KeePassage',
   description: 'KeePassage',
-  copyright: `Copyright © ${new Date().getFullYear()} KeePassage`
+  copyright: `Copyright © ${new Date().getFullYear()} KeePassage`,
 };
 
 logStep('🚀 Starting release build process...');
@@ -140,13 +146,13 @@ await writeFile(
         version: appInfo.version,
         copyright: appInfo.copyright,
         icons: {
-          win: '../src/assets/img/logo.ico'
-        }
-      }
+          win: '../src/assets/img/logo.ico',
+        },
+      },
     },
     null,
-    2
-  )
+    2,
+  ),
 );
 logStep('✅ Bundle and package.json ready.');
 
@@ -158,7 +164,7 @@ await packageApp(
   join(import.meta.dirname, '..', 'release'),
   appInfo,
   process.platform,
-  null
+  null,
 );
 const yackageEnd = performance.now();
 const yackageDuration = ((yackageEnd - yackageStart) / 1000).toFixed(2);
@@ -169,7 +175,7 @@ logStep(`✅ Yackage build finished in ${yackageDuration}s`);
 logStep('📥 Fetching Node binary...');
 const nodeFetchStart = performance.now();
 const { path: nodePath } = await getNode('local', {
-  output: join(import.meta.dirname, '..', 'release')
+  output: join(import.meta.dirname, '..', 'release'),
 });
 const nodeFetchEnd = performance.now();
 const nodeFetchDuration = ((nodeFetchEnd - nodeFetchStart) / 1000).toFixed(2);
@@ -178,8 +184,21 @@ logStep(`✅ Node fetched in ${nodeFetchDuration}s`);
 // === Step 5: Copy resources ===
 logStep('📦 Copying resources...');
 const daemonSrc = join(import.meta.dirname, '..', 'build', 'pcsc-daemon.cjs');
-const daemonDest = join(import.meta.dirname, '..', 'release', 'out', 'res', 'pcsc-daemon.cjs');
-const pcscSrc = join(import.meta.dirname, '..', 'node_modules', detectPcscPkg(), 'addon.node');
+const daemonDest = join(
+  import.meta.dirname,
+  '..',
+  'release',
+  'out',
+  'res',
+  'pcsc-daemon.cjs',
+);
+const pcscSrc = join(
+  import.meta.dirname,
+  '..',
+  'node_modules',
+  detectPcscPkg(),
+  'addon.node',
+);
 const pcscDest = join(
   import.meta.dirname,
   '..',
@@ -188,7 +207,7 @@ const pcscDest = join(
   'res',
   'node_modules',
   'pcsc-mini',
-  'addon.node'
+  'addon.node',
 );
 const nodeDest =
   join(import.meta.dirname, '..', 'release', 'out', 'res', 'bin', 'node') +
@@ -197,18 +216,22 @@ await Promise.all([
   cp(daemonSrc, daemonDest),
   cp(pcscSrc, pcscDest),
   cp(nodePath, nodeDest),
-  copyResources()
+  copyResources(),
 ]);
 
 // === Step 6: Patch PCSC Daemon ===
 logStep('🩹 Patching PCSC Daemon...');
 const code = (await readFile(daemonDest)).toString();
 const patched = code.replaceAll(
-  join(import.meta.dirname, '..', 'node_modules', 'pcsc-mini', 'build', 'addon.node').replaceAll(
-    '\\',
-    '\\\\'
-  ),
-  './node_modules/pcsc-mini/addon.node'
+  join(
+    import.meta.dirname,
+    '..',
+    'node_modules',
+    'pcsc-mini',
+    'build',
+    'addon.node',
+  ).replaceAll('\\', '\\\\'),
+  './node_modules/pcsc-mini/addon.node',
 );
 await writeFile(daemonDest, patched);
 
@@ -219,10 +242,10 @@ if (process.platform === 'win32') {
     'version-string': {
       FileDescription: `${appInfo.description} PCSC Daemon`,
       ProductName: `${appInfo.productName} PCSC Daemon`,
-      LegalCopyright: appInfo.copyright
+      LegalCopyright: appInfo.copyright,
     },
     'file-version': appInfo.version,
-    'product-version': appInfo.version
+    'product-version': appInfo.version,
   });
 }
 

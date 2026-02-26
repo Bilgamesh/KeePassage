@@ -1,5 +1,4 @@
 import { Slider as GuiSlider } from 'gui';
-
 import { View } from '@/renderer/elements/view';
 
 class Slider extends View {
@@ -23,10 +22,11 @@ class Slider extends View {
       case 'step':
         this.node.setStep(Number(value));
         break;
-      case 'range':
+      case 'range': {
         const { min, max } = <{ min: number; max: number }>value;
         this.node.setRange(min, max);
         break;
+      }
       case 'onValueChange':
         this.node.onValueChange.connect(value);
         break;

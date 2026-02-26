@@ -1,11 +1,13 @@
 import type { TableColumnOptions } from 'gui';
 import { SimpleTableModel } from 'gui';
-import { Accessor, createEffect, Setter } from 'solid-js';
-
+import { type Accessor, createEffect, type Setter } from 'solid-js';
 import { t } from '@/data/i18n';
 import type { YubiKey } from '@/schemas/yubikey-schema';
 
-function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<YubiKey[]> }) {
+function KeysTable(props: {
+  yubiKeys: Accessor<YubiKey[]>;
+  setYubiKeys: Setter<YubiKey[]>;
+}) {
   const dbTable = SimpleTableModel.create(4);
   const keys: string[] = [];
 
@@ -15,7 +17,12 @@ function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<Y
         continue;
       }
       keys.push(`${yubiKey.publicKey}`);
-      dbTable.addRow([`${yubiKey.serial}`, `${yubiKey.slot}`, yubiKey.publicKey, yubiKey.paired]);
+      dbTable.addRow([
+        `${yubiKey.serial}`,
+        `${yubiKey.slot}`,
+        yubiKey.publicKey,
+        yubiKey.paired,
+      ]);
     }
   });
 
@@ -24,30 +31,30 @@ function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<Y
       label: t('serialNumber'),
       options: {
         type: 'text',
-        width: 90
-      }
+        width: 90,
+      },
     },
     {
       label: t('slot'),
       options: {
         type: 'text',
-        width: 30
-      }
+        width: 30,
+      },
     },
     {
       label: t('publicKey'),
       options: {
         type: 'text',
-        width: 350
-      }
+        width: 350,
+      },
     },
     {
       label: t('paired'),
       options: {
         type: 'checkbox',
-        width: 70
-      }
-    }
+        width: 70,
+      },
+    },
   ] satisfies { label: string; options: TableColumnOptions }[];
 
   return (
@@ -57,7 +64,7 @@ function KeysTable(props: { yubiKeys: Accessor<YubiKey[]>; setYubiKeys: Setter<Y
         model={dbTable}
         columnsWithOptions={columns}
         hasBorder={true}
-        onToggleCheckbox={(table, column, row) => {
+        onToggleCheckbox={(_table, _column, row) => {
           const yubiKey = props.yubiKeys()[row]!;
           yubiKey.paired = !yubiKey.paired;
           props.setYubiKeys((keys) => [...keys]);

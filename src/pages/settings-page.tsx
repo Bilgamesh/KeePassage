@@ -1,14 +1,24 @@
-import { AttributedText, MessageBox, Picker, Window } from 'gui';
+import { AttributedText, MessageBox, type Picker, type Window } from 'gui';
 import { createEffect, createMemo, createSignal } from 'solid-js';
-
 import { Expand } from '@/components/expand';
 import { TimeoutEntry } from '@/components/timeout-entry';
-import { DEFAULT_SETTINGS, LARGE_BUTTON_STYLE, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
+import {
+  DEFAULT_SETTINGS,
+  LARGE_BUTTON_STYLE,
+  PAGE_INDEXES,
+  TITLE_FONT,
+} from '@/data/constants';
 import { dictionaries, t } from '@/data/i18n';
-import { appSettings, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
+import {
+  appSettings,
+  mainPageIndex,
+  setMainPageIndex,
+} from '@/data/shared-state';
 import { updateSettings } from '@/service/config-service';
 
-const [unsavedAppSettings, setUnsavedAppSettings] = createSignal({ ...appSettings() });
+const [unsavedAppSettings, setUnsavedAppSettings] = createSignal({
+  ...appSettings(),
+});
 
 let previousPageIndex: number = PAGE_INDEXES.WELCOME;
 
@@ -26,9 +36,13 @@ function openSettingsPage() {
 }
 
 function SettingsPage(props: { window: Window }) {
-  const languages = createMemo(() => dictionaries.map((dict) => t(dict.languageCode as 'en')));
+  const languages = createMemo(() =>
+    dictionaries.map((dict) => t(dict.languageCode as 'en')),
+  );
   const currentLanguageIndex = () =>
-    dictionaries.findIndex((d) => d.languageCode === unsavedAppSettings().language);
+    dictionaries.findIndex(
+      (d) => d.languageCode === unsavedAppSettings().language,
+    );
   let picker: Picker;
 
   createEffect(() => {
@@ -47,31 +61,43 @@ function SettingsPage(props: { window: Window }) {
         style={{ 'margin-left': 5 }}
         attributedText={AttributedText.create(t('applicationSettings'), {
           align: 'start',
-          font: TITLE_FONT
+          font: TITLE_FONT,
         })}
       />
-      <group title={t('userInterface')} style={{ height: 250, 'margin-top': 10 }}>
+      <group
+        title={t('userInterface')}
+        style={{ height: 250, 'margin-top': 10 }}
+      >
         <container>
           <container style={{ 'margin-left': 10 }}>
             <checkbox
               title={t('showToolbar')}
               checked={unsavedAppSettings().showToolbar}
               onClick={(checkbox) => {
-                setUnsavedAppSettings((s) => ({ ...s, showToolbar: checkbox.isChecked() }));
+                setUnsavedAppSettings((s) => ({
+                  ...s,
+                  showToolbar: checkbox.isChecked(),
+                }));
               }}
             />
             <checkbox
               title={t('showMenubar')}
               checked={unsavedAppSettings().showMenuBar}
               onClick={(checkbox) => {
-                setUnsavedAppSettings((s) => ({ ...s, showMenuBar: checkbox.isChecked() }));
+                setUnsavedAppSettings((s) => ({
+                  ...s,
+                  showMenuBar: checkbox.isChecked(),
+                }));
               }}
             />
             <checkbox
               title={t('showPreviewPanel')}
               checked={unsavedAppSettings().showPreview}
               onClick={(checkbox) => {
-                setUnsavedAppSettings((s) => ({ ...s, showPreview: checkbox.isChecked() }));
+                setUnsavedAppSettings((s) => ({
+                  ...s,
+                  showPreview: checkbox.isChecked(),
+                }));
               }}
             />
             <checkbox
@@ -80,7 +106,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  minimiseInsteadOfExit: checkbox.isChecked()
+                  minimiseInsteadOfExit: checkbox.isChecked(),
                 }));
               }}
             />
@@ -88,21 +114,30 @@ function SettingsPage(props: { window: Window }) {
               title={t('showTrayIcon')}
               checked={unsavedAppSettings().showTrayIcon}
               onClick={(checkbox) => {
-                setUnsavedAppSettings((s) => ({ ...s, showTrayIcon: checkbox.isChecked() }));
+                setUnsavedAppSettings((s) => ({
+                  ...s,
+                  showTrayIcon: checkbox.isChecked(),
+                }));
               }}
             />
             <checkbox
               title={t('alwaysOnTop')}
               checked={unsavedAppSettings().alwaysOnTop}
               onClick={(checkbox) => {
-                setUnsavedAppSettings((s) => ({ ...s, alwaysOnTop: checkbox.isChecked() }));
+                setUnsavedAppSettings((s) => ({
+                  ...s,
+                  alwaysOnTop: checkbox.isChecked(),
+                }));
               }}
             />
             <checkbox
               title={t('hideUserNames')}
               checked={unsavedAppSettings().hideUserNames}
               onClick={(checkbox) => {
-                setUnsavedAppSettings((s) => ({ ...s, hideUserNames: checkbox.isChecked() }));
+                setUnsavedAppSettings((s) => ({
+                  ...s,
+                  hideUserNames: checkbox.isChecked(),
+                }));
               }}
             />
             <container style={{ 'margin-top': 10, flexDirection: 'row' }}>
@@ -117,7 +152,10 @@ function SettingsPage(props: { window: Window }) {
                 onSelectionChange={(picker) => {
                   const index = picker.getSelectedItemIndex();
                   const dict = dictionaries[index]!;
-                  setUnsavedAppSettings((s) => ({ ...s, language: dict.languageCode }));
+                  setUnsavedAppSettings((s) => ({
+                    ...s,
+                    language: dict.languageCode,
+                  }));
                 }}
               />
             </container>
@@ -126,7 +164,10 @@ function SettingsPage(props: { window: Window }) {
       </group>
       <group
         title={t('timeouts')}
-        style={{ height: process.platform === 'win32' ? 85 : 100, 'margin-top': 10 }}
+        style={{
+          height: process.platform === 'win32' ? 85 : 100,
+          'margin-top': 10,
+        }}
       >
         <container>
           <container style={{ 'margin-left': 10 }}>
@@ -142,7 +183,7 @@ function SettingsPage(props: { window: Window }) {
                   ...s,
                   clipboardTimout: checked
                     ? s.clipboardTimout || DEFAULT_SETTINGS.clipboardTimout
-                    : null
+                    : null,
                 }));
               }}
               onValueChange={(value) => {
@@ -158,7 +199,9 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checked) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  dbTimeout: checked ? s.dbTimeout || DEFAULT_SETTINGS.dbTimeout : null
+                  dbTimeout: checked
+                    ? s.dbTimeout || DEFAULT_SETTINGS.dbTimeout
+                    : null,
                 }));
               }}
               onValueChange={(value) => {
@@ -177,7 +220,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  dbMinimiseLock: checkbox.isChecked()
+                  dbMinimiseLock: checkbox.isChecked(),
                 }));
               }}
             />

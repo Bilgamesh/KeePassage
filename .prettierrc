@@ -1,9 +1,0 @@
-{
-  "plugins": ["prettier-plugin-curly", "prettier-plugin-organize-imports"],
-  "singleQuote": true,
-  "arrowParens": "always",
-  "tabWidth": 2,
-  "semi": true,
-  "trailingComma": "none",
-  "printWidth": 100
-}

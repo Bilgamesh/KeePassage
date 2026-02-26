@@ -1,6 +1,10 @@
-import { MessageBox, Window } from 'gui';
+import { MessageBox, type Window } from 'gui';
 
-function showError(window: Window, error: unknown, options?: { title?: string }) {
+function showError(
+  window: Window,
+  error: unknown,
+  options?: { title?: string },
+) {
   const msgBox = MessageBox.create();
   msgBox.setType('error');
   msgBox.setTitle('Error');
@@ -8,8 +12,8 @@ function showError(window: Window, error: unknown, options?: { title?: string })
     msgBox.setText(`${error.message}\n${error.cause}`);
   } else if (typeof error === 'string') {
     msgBox.setText(error);
-  } else if (typeof (error as any)?.error === 'string') {
-    msgBox.setText((error as any).error);
+  } else if (typeof (error as { error: string })?.error === 'string') {
+    msgBox.setText((error as { error: string }).error);
   } else {
     msgBox.setText('Unknown error');
   }

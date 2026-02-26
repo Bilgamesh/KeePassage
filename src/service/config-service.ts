@@ -1,6 +1,5 @@
-import { readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
-
+import { readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { DEFAULT_SETTINGS } from '@/data/constants';
 import { getSystemLocale } from '@/data/i18n';
 import { setAppSettings } from '@/data/shared-state';
@@ -35,7 +34,9 @@ async function getSettings() {
   }
 }
 
-async function updateSettings(callback: (settings: Settings) => Promise<Settings> | Settings) {
+async function updateSettings(
+  callback: (settings: Settings) => Promise<Settings> | Settings,
+) {
   await initConfigFile();
   const settings = await getSettings();
   const updated = await callback(settings);

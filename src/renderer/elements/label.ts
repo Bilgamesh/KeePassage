@@ -1,5 +1,4 @@
-import { Label as GuiLabel, type AttributedText, type TextAlign } from 'gui';
-
+import { type AttributedText, Label as GuiLabel, type TextAlign } from 'gui';
 import { View } from '@/renderer/elements/view';
 
 class Label extends View {

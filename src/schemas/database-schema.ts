@@ -1,9 +1,8 @@
 import { z } from 'zod';
-
-import { YubiKey } from '@/schemas/yubikey-schema';
+import type { YubiKey } from '@/schemas/yubikey-schema';
 
 const Payload = z.object({
-  password: z.string()
+  password: z.string(),
 });
 type Payload = z.infer<typeof Payload>;
 
@@ -32,9 +31,9 @@ const DbFile = z.object({
     z.object({
       serial: z.number(),
       slot: z.number(),
-      publicKey: z.string()
-    })
-  )
+      publicKey: z.string(),
+    }),
+  ),
 });
 type DbFile = z.infer<typeof DbFile>;
 

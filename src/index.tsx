@@ -1,5 +1,4 @@
 import { app, MessageLoop } from 'gui';
-
 import { App } from '@/app';
 import { APP_ID, APP_NAME } from '@/data/constants';
 import { killPcscDaemon, spawnPcscDaemon } from '@/data/pcsc-orchestrator';
@@ -23,7 +22,7 @@ async function main() {
   spawnPcscDaemon({ respawnOnDeath: true });
   process.on('exit', killPcscDaemon);
 
-  if (!process.versions['yode']) {
+  if (!(process as { versions: { yode?: string } }).versions.yode) {
     MessageLoop.run();
     process.exit(0);
   }

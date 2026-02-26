@@ -1,6 +1,11 @@
-import { AttributedText, FileOpenDialog, SimpleTableModel, type Window } from 'gui';
+import {
+  AttributedText,
+  FileOpenDialog,
+  SimpleTableModel,
+  type Window,
+} from 'gui';
 import { createEffect, createSignal } from 'solid-js';
-
+import logoImage from '@/assets/img/logo.ico';
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
 import {
@@ -8,16 +13,17 @@ import {
   DATABASE_EXTENSION,
   LARGE_BUTTON_STYLE,
   TITLE_FONT,
-  VERSION
+  VERSION,
 } from '@/data/constants';
 import { openDatabase } from '@/data/db-orchestrator';
 import { t } from '@/data/i18n';
 import { appSettings } from '@/data/shared-state';
 import { DatabaseCreationPage } from '@/pages/database-creation-page';
 import { render } from '@/renderer';
-import { getDatabaseWindow, hasDatabaseWindow } from '@/windows/database-window';
-
-import logoImage from '@/assets/img/logo.ico';
+import {
+  getDatabaseWindow,
+  hasDatabaseWindow,
+} from '@/windows/database-window';
 
 function WelcomePage(props: { window: Window }) {
   const [dbTable, setDbTable] = createSignal(SimpleTableModel.create(1));
@@ -42,10 +48,13 @@ function WelcomePage(props: { window: Window }) {
         style={{ 'margin-bottom': 20 }}
       />
       <label
-        attributedText={AttributedText.create(`${t('welcomeTo')} ${APP_NAME} ${VERSION}`, {
-          align: 'center',
-          font: TITLE_FONT
-        })}
+        attributedText={AttributedText.create(
+          `${t('welcomeTo')} ${APP_NAME} ${VERSION}`,
+          {
+            align: 'center',
+            font: TITLE_FONT,
+          },
+        )}
       />
       <label visible={!recent().length} text={t('startStoring')} />
       <container style={{ flexDirection: 'row', 'margin-top': 20 }}>
@@ -55,7 +64,12 @@ function WelcomePage(props: { window: Window }) {
           style={LARGE_BUTTON_STYLE}
           onClick={() => {
             const win = getDatabaseWindow();
-            render(() => <DatabaseCreationPage window={win} mainWindow={props.window} />, win);
+            render(
+              () => (
+                <DatabaseCreationPage window={win} mainWindow={props.window} />
+              ),
+              win,
+            );
             win.activate();
           }}
         />
@@ -71,8 +85,8 @@ function WelcomePage(props: { window: Window }) {
             dialog.setFilters([
               {
                 description: 'KeePassage Database',
-                extensions: [DATABASE_EXTENSION]
-              }
+                extensions: [DATABASE_EXTENSION],
+              },
             ]);
             if (dialog.runForWindow(props.window)) {
               const path = dialog.getResult();
@@ -87,7 +101,10 @@ function WelcomePage(props: { window: Window }) {
         />
         <Expand />
       </container>
-      <container visible={recent().length > 0} style={{ flex: 1, flexDirection: 'row' }}>
+      <container
+        visible={recent().length > 0}
+        style={{ flex: 1, flexDirection: 'row' }}
+      >
         <Expand direction="row" />
         <container style={{ flexDirection: 'column', width: 440 }}>
           <label
@@ -100,15 +117,15 @@ function WelcomePage(props: { window: Window }) {
               {
                 label: '',
                 options: {
-                  type: 'text'
-                }
-              }
+                  type: 'text',
+                },
+              },
             ]}
             columnsVisible={false}
             style={{ flex: 4 }}
             hasBorder={true}
             model={dbTable()}
-            onRowActivate={async (table, row) => {
+            onRowActivate={async (_table, row) => {
               if (hasDatabaseWindow()) {
                 getDatabaseWindow().activate();
                 return;

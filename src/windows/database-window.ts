@@ -1,6 +1,5 @@
 import { Container } from 'gui';
 import { createEffect } from 'solid-js';
-
 import { MAX_SIZE, SUBWINDOW_MIN_SIZE } from '@/data/constants';
 import { t } from '@/data/i18n';
 import { createWindow, deleteWindow, getWindow } from '@/data/window-manager';

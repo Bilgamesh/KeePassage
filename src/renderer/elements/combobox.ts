@@ -1,5 +1,4 @@
 import { ComboBox as GuiComboBox } from 'gui';
-
 import { Picker } from '@/renderer/elements/picker';
 
 class ComboBox extends Picker {

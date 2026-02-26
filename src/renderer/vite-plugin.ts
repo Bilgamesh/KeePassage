@@ -1,5 +1,5 @@
-import { basename, join, resolve } from 'path';
-import { type Plugin } from 'vite';
+import { basename, join, resolve } from 'node:path';
+import type { Plugin } from 'vite';
 
 const yuePlugin: (config: {
   src: string;
@@ -8,7 +8,7 @@ const yuePlugin: (config: {
   output?: string;
 }) => Plugin = (config) => ({
   name: 'yue-plugin',
-  transform(_: any, id: string) {
+  transform(_: unknown, id: string) {
     config.assetsFolder = config.assetsFolder || join(config.src, 'assets');
     config.assetsFolder = resolve(config.assetsFolder);
     if (resolve(id).startsWith(config.assetsFolder)) {
@@ -26,14 +26,14 @@ const yuePlugin: (config: {
     return {
       resolve: {
         alias: {
-          '@': config.src
-        }
+          '@': config.src,
+        },
       },
       ssr: {
         noExternal: true,
         resolve: {
-          conditions: ['browser']
-        }
+          conditions: ['browser'],
+        },
       },
       build: {
         target: 'node22',
@@ -45,14 +45,14 @@ const yuePlugin: (config: {
           input: config.input,
           output: {
             format: 'cjs',
-            entryFileNames: config.output
+            entryFileNames: config.output,
           },
           external: ['gui'],
-          treeshake: true
-        }
-      }
+          treeshake: true,
+        },
+      },
     };
-  }
+  },
 });
 
 export default yuePlugin;

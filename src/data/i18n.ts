@@ -1,13 +1,15 @@
-import { flatten, type Flatten, translator } from '@solid-primitives/i18n';
-import { readdirSync } from 'fs';
+import { readdirSync } from 'node:fs';
+import { createRequire } from 'node:module';
+import { join } from 'node:path';
+import { type Flatten, flatten, translator } from '@solid-primitives/i18n';
 import { Locale } from 'gui';
-import { createRequire } from 'module';
-import { join } from 'path';
-
-import { checkIfPacked, getResourcePath, getRootDirname } from '@/renderer/package';
-
 import type * as en from '@/assets/texts/en.json';
 import { appSettings } from '@/data/shared-state';
+import {
+  checkIfPacked,
+  getResourcePath,
+  getRootDirname,
+} from '@/renderer/package';
 
 type RawDictionary = typeof en;
 type Dictionary = Flatten<RawDictionary>;
@@ -19,7 +21,9 @@ const folder = checkIfPacked()
   : join(getRootDirname(), 'src', 'assets', 'texts');
 
 function getDictionaries() {
-  const names = readdirSync(folder).map((file) => file.toLocaleLowerCase().replace('.json', ''));
+  const names = readdirSync(folder).map((file) =>
+    file.toLocaleLowerCase().replace('.json', ''),
+  );
   const dicts = [];
   for (const name of names) {
     const dict = fetchDictionary(name);
@@ -39,7 +43,7 @@ function sanitizeLocale(locale: string) {
     {
       'pl-PL': 'pl',
       'en-US': 'en',
-      'en-GB': 'en'
+      'en-GB': 'en',
     }[locale] || 'en'
   );
 }
@@ -49,7 +53,9 @@ function getSystemLocale() {
 }
 
 const t = translator(() => {
-  const dict = dictionaries.find((d) => d.languageCode === appSettings().language);
+  const dict = dictionaries.find(
+    (d) => d.languageCode === appSettings().language,
+  );
   if (!dict) {
     throw new Error('Attempted to translate with `null` dictionary');
   }

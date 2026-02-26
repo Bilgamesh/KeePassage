@@ -1,10 +1,12 @@
-import { AttributedText, View } from 'gui';
-
+import { AttributedText, type View } from 'gui';
 import { Space } from '@/components/space';
 import { TextContextMenu } from '@/components/text-context-menu';
-import { PREVIEW_LABEL_FONT, WINDOWS_APP_BACKGROUND_COLOR } from '@/data/constants';
+import {
+  PREVIEW_LABEL_FONT,
+  WINDOWS_APP_BACKGROUND_COLOR,
+} from '@/data/constants';
 import { setCopyingEnabled } from '@/data/shared-state';
-import { Style } from '@/renderer/types';
+import type { Style } from '@/renderer/types';
 
 let timeout: NodeJS.Timeout | null = null;
 
@@ -30,7 +32,7 @@ function PreviewLine(props: {
         attributedText={AttributedText.create(props.label, {
           font: PREVIEW_LABEL_FONT,
           align: 'end',
-          valign: props.last ? 'start' : 'center'
+          valign: props.last ? 'start' : 'center',
         })}
       />
       <Space height={1} width={10} />
@@ -38,18 +40,20 @@ function PreviewLine(props: {
       <textedit
         style={{ flex: 1 }}
         text={props.value}
-        {...(process.platform === 'win32' ? { backgroundColor: WINDOWS_APP_BACKGROUND_COLOR } : {})}
+        {...(process.platform === 'win32'
+          ? { backgroundColor: WINDOWS_APP_BACKGROUND_COLOR }
+          : {})}
         onMouseDown={(textEdit, ev) => {
           if (ev.button === 2 && textEdit.hasFocus()) {
             TextContextMenu({
               editable: false,
-              textEdit
+              textEdit,
             }).popup();
           } else {
             textEdit.focus();
           }
         }}
-        onKeyDown={(textedit, ev) => {
+        onKeyDown={(_textedit, ev) => {
           switch (ev.key) {
             case 'Control':
               preventPwCopy();

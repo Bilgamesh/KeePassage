@@ -1,6 +1,5 @@
 import { Image as GuiImage } from 'gui';
-
-import { Style } from '@/renderer/types';
+import type { Style } from '@/renderer/types';
 
 function Image(props: {
   src: string | null;

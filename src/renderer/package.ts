@@ -1,5 +1,5 @@
-import { lstatSync } from 'fs';
-import { join, sep } from 'path';
+import { lstatSync } from 'node:fs';
+import { join, sep } from 'node:path';
 
 let isInit = false;
 let dirname: string | null = null;
@@ -39,7 +39,9 @@ function isFile(path: string, options?: { silent?: boolean }) {
 function getRootDirname() {
   init();
   if (rootDirName === null) {
-    throw new Error('Cannot access rootDirName. FolderUtil must be initialized first.');
+    throw new Error(
+      'Cannot access rootDirName. FolderUtil must be initialized first.',
+    );
   }
   return rootDirName;
 }
@@ -47,7 +49,9 @@ function getRootDirname() {
 function getExecFileName() {
   init();
   if (dirname === null) {
-    throw new Error('Cannot resolve execFileName. FolderUtil must be initialized first.');
+    throw new Error(
+      'Cannot resolve execFileName. FolderUtil must be initialized first.',
+    );
   }
   return execFileName;
 }
@@ -86,5 +90,5 @@ export {
   getResourceFolder,
   getResourcePath,
   getRootDirname,
-  isFile
+  isFile,
 };

@@ -1,5 +1,4 @@
 import { Separator } from 'gui';
-
 import { View } from '@/renderer/elements/view';
 
 class HSeparator extends View {

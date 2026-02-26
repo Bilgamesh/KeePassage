@@ -1,5 +1,9 @@
-import { Button as GuiButton, type ButtonStyle, type ControlSize, type Image } from 'gui';
-
+import {
+  type ButtonStyle,
+  type ControlSize,
+  Button as GuiButton,
+  type Image,
+} from 'gui';
 import { View } from '@/renderer/elements/view';
 
 class Button extends View {

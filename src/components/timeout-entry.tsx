@@ -1,8 +1,7 @@
-import { Entry } from 'gui';
+import type { Entry } from 'gui';
 import { createEffect, createSignal, on } from 'solid-js';
-
 import { LARGE_ENTRY_STYLE } from '@/data/constants';
-import { Style } from '@/renderer/types';
+import type { Style } from '@/renderer/types';
 
 function TimeoutEntry(props: {
   title: string;
@@ -29,7 +28,7 @@ function TimeoutEntry(props: {
     'ArrowLeft',
     'ArrowRight',
     'Home',
-    'End'
+    'End',
   ] as const;
   const [seconds, setSeconds] = createSignal(props.value || 0);
   let entry: Entry;
@@ -43,8 +42,8 @@ function TimeoutEntry(props: {
           props.onValueChange(value);
         }
       },
-      { defer: true }
-    )
+      { defer: true },
+    ),
   );
 
   function increment() {
@@ -92,7 +91,7 @@ function TimeoutEntry(props: {
             entry.setText(`${seconds()} sec`);
           }
         }}
-        onKeyDown={(entry, ev) => {
+        onKeyDown={(_entry, ev) => {
           if (ev.key === 'ArrowUp') {
             increment();
           }

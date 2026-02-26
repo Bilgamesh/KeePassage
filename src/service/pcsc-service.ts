@@ -1,10 +1,9 @@
-import { randomUUID } from 'crypto';
-
+import { randomUUID } from 'node:crypto';
 import { sendAndWait } from '@/data/pcsc-orchestrator';
 import type {
   DecryptionDaemonResponse,
   DetectionDaemonResponse,
-  EncryptionDaemonResponse
+  EncryptionDaemonResponse,
 } from '@/schemas/daemon-message-schema';
 import { Payload } from '@/schemas/database-schema';
 
@@ -15,19 +14,19 @@ async function detectYubiKey(options?: {
   const resp = (await sendAndWait(
     {
       id: randomUUID(),
-      command: 'DETECT_YUBIKEYS'
+      command: 'DETECT_YUBIKEYS',
     },
-    { timeoutMs: options?.timeoutMs, signal: options?.signal }
+    { timeoutMs: options?.timeoutMs, signal: options?.signal },
   )) as DetectionDaemonResponse;
   if (resp.status !== 'DETECT_YUBIKEYS_SUCCESS') {
     throw new Error('Failed to detect YubiKey', {
-      cause: resp.error
+      cause: resp.error,
     });
   }
   return {
     publicKey: resp.publicKey,
     serial: resp.serial,
-    slot: resp.slot
+    slot: resp.slot,
   };
 }
 
@@ -37,16 +36,16 @@ async function encrypt(
   options?: {
     timeoutMs?: number | undefined;
     signal?: AbortSignal | undefined;
-  }
+  },
 ) {
   const resp = (await sendAndWait(
     {
       id: randomUUID(),
       command: 'AGE_ENCRYPT',
       body: JSON.stringify(payload),
-      publicKey: publicKey
+      publicKey: publicKey,
     },
-    { timeoutMs: options?.timeoutMs, signal: options?.signal }
+    { timeoutMs: options?.timeoutMs, signal: options?.signal },
   )) as EncryptionDaemonResponse;
   if (resp.status !== 'AGE_ENCRYPT_SUCCESS') {
     throw new Error('Failed to age encrypt', { cause: resp.error });
@@ -62,7 +61,7 @@ async function decrypt(
   options?: {
     timeoutMs?: number | undefined;
     signal?: AbortSignal | undefined;
-  }
+  },
 ) {
   const resp = (await sendAndWait(
     {
@@ -71,9 +70,9 @@ async function decrypt(
       pin,
       publicKey: publicKey,
       body: encrypted,
-      slot: slot
+      slot: slot,
     },
-    { timeoutMs: options?.timeoutMs, signal: options?.signal }
+    { timeoutMs: options?.timeoutMs, signal: options?.signal },
   )) as DecryptionDaemonResponse;
   if (resp.status !== 'AGE_DECRYPT_SUCCESS') {
     throw new Error('Failed to age decrypt', { cause: resp.error });

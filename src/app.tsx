@@ -1,5 +1,4 @@
 import { appearance, type Window } from 'gui';
-
 import { Router } from '@/components/router';
 import { Toolbar } from '@/components/toolbar';
 import { mainPageIndex, setDark } from '@/data/shared-state';
@@ -12,7 +11,9 @@ import { TouchPage } from '@/pages/touch-page';
 import { WelcomePage } from '@/pages/welcome-page';
 
 function App(props: { window: Window }) {
-  appearance.onColorSchemeChange.connect(() => setDark(appearance.isDarkScheme()));
+  appearance.onColorSchemeChange.connect(() =>
+    setDark(appearance.isDarkScheme()),
+  );
   return (
     <>
       <Toolbar window={props.window} />

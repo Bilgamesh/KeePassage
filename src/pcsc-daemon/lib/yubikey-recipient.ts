@@ -5,7 +5,7 @@ import { numberToBytesBE } from '@noble/curves/utils';
 import { hkdf } from '@noble/hashes/hkdf';
 import { sha256 } from '@noble/hashes/sha2';
 import { base64nopad, bech32 } from '@scure/base';
-import { Stanza, type Recipient } from 'age-encryption';
+import { type Recipient, Stanza } from 'age-encryption';
 
 const TAG_BYTES = 4;
 const EPK_BYTES = 33;
@@ -18,7 +18,10 @@ const STANZA_KEY_LABEL = new TextEncoder().encode(STANZA_TAG);
 
 function validatePublicKey(bytes: Uint8Array): WeierstrassPoint<bigint> | null {
   try {
-    if (bytes.length !== EPK_BYTES || (bytes[0] !== 0x02 && bytes[0] !== 0x03)) {
+    if (
+      bytes.length !== EPK_BYTES ||
+      (bytes[0] !== 0x02 && bytes[0] !== 0x03)
+    ) {
       return null;
     }
 
@@ -79,12 +82,18 @@ class YubiKeyRecipient implements Recipient {
     salt.set(ephemeralPublic);
     salt.set(this.publicKey, ephemeralPublic.length);
 
-    const key = hkdf(sha256, sharedSecret, salt, STANZA_KEY_LABEL, ENCRYPTED_FILE_KEY_BYTES);
+    const key = hkdf(
+      sha256,
+      sharedSecret,
+      salt,
+      STANZA_KEY_LABEL,
+      ENCRYPTED_FILE_KEY_BYTES,
+    );
 
     const stanzaArgs = [
       STANZA_TAG,
       base64nopad.encode(this.tag),
-      base64nopad.encode(ephemeralPublic)
+      base64nopad.encode(ephemeralPublic),
     ];
 
     if (this.serial) {

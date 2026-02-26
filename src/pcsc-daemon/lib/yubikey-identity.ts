@@ -3,8 +3,7 @@ import { p256 } from '@noble/curves/nist.js';
 import { hkdf } from '@noble/hashes/hkdf';
 import { sha256 } from '@noble/hashes/sha2';
 import { base64nopad, bech32 } from '@scure/base';
-import { Stanza, type Identity } from 'age-encryption';
-
+import type { Identity, Stanza } from 'age-encryption';
 import type { YubiKeyClient } from '@/pcsc-daemon/lib/yubikey-client';
 
 const ENCRYPTED_FILE_KEY_BYTES = 32;
@@ -18,7 +17,12 @@ class YubiKeyIdentity implements Identity {
   private slot: number;
   private yubiKey: YubiKeyClient;
 
-  constructor(config: { yubiKey: YubiKeyClient; pin: string; publicKey: string; slot: number }) {
+  constructor(config: {
+    yubiKey: YubiKeyClient;
+    pin: string;
+    publicKey: string;
+    slot: number;
+  }) {
     this.yubiKey = config.yubiKey;
     this.pin = config.pin;
     this.publicKey = config.publicKey;
@@ -78,10 +82,18 @@ class YubiKeyIdentity implements Identity {
 
     const ephemeralPublic = base64nopad.decode(stanza?.args[2]!);
     const recipientPublic = bech32.decodeToBytes(this.publicKey).bytes;
-    const salt = new Uint8Array(ephemeralPublic.length + recipientPublic.length);
+    const salt = new Uint8Array(
+      ephemeralPublic.length + recipientPublic.length,
+    );
     salt.set(ephemeralPublic);
     salt.set(recipientPublic, ephemeralPublic.length);
-    const key = hkdf(sha256, sharedSecret, salt, STANZA_KEY_LABEL, ENCRYPTED_FILE_KEY_BYTES);
+    const key = hkdf(
+      sha256,
+      sharedSecret,
+      salt,
+      STANZA_KEY_LABEL,
+      ENCRYPTED_FILE_KEY_BYTES,
+    );
 
     const nonce = new Uint8Array(NONCE_LENGTH);
 

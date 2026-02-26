@@ -1,5 +1,4 @@
 import { Browser as GuiBrowser } from 'gui';
-
 import { View } from '@/renderer/elements/view';
 
 class Browser extends View {
@@ -48,10 +47,13 @@ class Browser extends View {
           this.node.loadHTML(html, baseUrl || 'about:blank');
         }
         break;
-      case 'javaScript':
-        const { code, callback } = <{ code: string; callback?: Function }>value;
+      case 'javaScript': {
+        const { code, callback } = <{ code: string; callback?: () => void }>(
+          value
+        );
         this.node.executeJavaScript(code, callback || (() => {}));
         break;
+      }
       case 'userAgent':
         this.node.setUserAgent(String(value));
         break;

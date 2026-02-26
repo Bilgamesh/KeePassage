@@ -1,5 +1,8 @@
-import { type ScrollElasticity, type ScrollPolicy, TextEdit as GuiTextEdit } from 'gui';
-
+import {
+  TextEdit as GuiTextEdit,
+  type ScrollElasticity,
+  type ScrollPolicy,
+} from 'gui';
 import { View } from '@/renderer/elements/view';
 
 class TextEdit extends View {
@@ -22,20 +25,25 @@ class TextEdit extends View {
           this.node.setText(String(value));
         }
         break;
-      case 'selectedRange':
+      case 'selectedRange': {
         const { start, end } = <{ start: number; end: number }>value;
         this.node.selectRange(start, end);
         break;
-      case 'scrollbarPolicy':
-        const { hpolicy, vpolicy } = <{ hpolicy: ScrollPolicy; vpolicy: ScrollPolicy }>value;
+      }
+      case 'scrollbarPolicy': {
+        const { hpolicy, vpolicy } = <
+          { hpolicy: ScrollPolicy; vpolicy: ScrollPolicy }
+        >value;
         this.node.setScrollbarPolicy(hpolicy, vpolicy);
         break;
-      case 'scrollElasticity':
+      }
+      case 'scrollElasticity': {
         const { helasticity, velasticity } = <
           { helasticity: ScrollElasticity; velasticity: ScrollElasticity }
         >value;
         this.node.setScrollElasticity(helasticity, velasticity);
         break;
+      }
       case 'onTextChange':
         this.node.onTextChange.connect(value);
         break;

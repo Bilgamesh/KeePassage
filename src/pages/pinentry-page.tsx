@@ -1,10 +1,18 @@
-import { AttributedText, Entry } from 'gui';
+import { AttributedText, type Entry } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
-
 import { Expand } from '@/components/expand';
-import { APP_NAME, LARGE_BUTTON_STYLE, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
+import {
+  APP_NAME,
+  LARGE_BUTTON_STYLE,
+  PAGE_INDEXES,
+  TITLE_FONT,
+} from '@/data/constants';
 import { t } from '@/data/i18n';
-import { mainPageIndex, selectedDbPath, setMainPageIndex } from '@/data/shared-state';
+import {
+  mainPageIndex,
+  selectedDbPath,
+  setMainPageIndex,
+} from '@/data/shared-state';
 import { createListeners } from '@/utils/listen-util';
 
 type Pin = number | null;
@@ -36,7 +44,7 @@ async function requestPin(serial: number, entryName?: string) {
 }
 
 function PinentryPage() {
-  let [pin, setPin] = createSignal<Pin>(null);
+  const [pin, setPin] = createSignal<Pin>(null);
 
   function validatePin(pin: string) {
     if (pin.length > 8) {
@@ -59,7 +67,7 @@ function PinentryPage() {
           <label
             attributedText={AttributedText.create(purpose(), {
               align: 'start',
-              font: TITLE_FONT
+              font: TITLE_FONT,
             })}
             align="start"
           />
@@ -71,7 +79,10 @@ function PinentryPage() {
           <group title={t('pinEntry')} style={{ flex: 1 }}>
             <container style={{ height: 600 }}>
               <container style={{ margin: 20, height: 170 }}>
-                <label text={`${t('enterPinFor')} ${serial()}:`} align="start" />
+                <label
+                  text={`${t('enterPinFor')} ${serial()}:`}
+                  align="start"
+                />
                 <password
                   ref={(element) => {
                     entryNode = element.node;
@@ -79,7 +90,7 @@ function PinentryPage() {
                   style={{ 'margin-top': 5, 'margin-bottom': 30 }}
                   text={`${pin() || ''}`}
                   onTextChange={(entry) => {
-                    let text = entry.getText();
+                    const text = entry.getText();
                     if (text) {
                       if (validatePin(text)) {
                         setPin(Number(text));
@@ -90,7 +101,7 @@ function PinentryPage() {
                       setPin(null);
                     }
                   }}
-                  onKeyDown={(self, ev) => {
+                  onKeyDown={(_self, ev) => {
                     // Silence error sound by returning true
                     if (ev.key === 'Enter') {
                       if (process.platform === 'linux') {
@@ -113,7 +124,9 @@ function PinentryPage() {
                   }}
                 />
                 <Expand direction="column" />
-                <container style={{ flexDirection: 'row', 'margin-bottom': 10 }}>
+                <container
+                  style={{ flexDirection: 'row', 'margin-bottom': 10 }}
+                >
                   <Expand direction="row" />
                   <button
                     title={t('submit')}

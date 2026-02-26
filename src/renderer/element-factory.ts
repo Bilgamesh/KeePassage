@@ -17,9 +17,8 @@ import {
   Table,
   TextEdit,
   Vibrant,
-  View
+  type View,
 } from 'gui';
-
 import { Browser as BrowserWrapper } from '@/renderer/elements/browser';
 import { Button as ButtonWrapper } from '@/renderer/elements/button';
 import { Checkbox as CheckboxWrapper } from '@/renderer/elements/checkbox';
@@ -41,7 +40,7 @@ import { Tab as TabWrapper } from '@/renderer/elements/tab';
 import { Table as TableWrapper } from '@/renderer/elements/table';
 import { TextEdit as TextEditWrapper } from '@/renderer/elements/textedit';
 import { Vibrant as VibrantWrapper } from '@/renderer/elements/vibrant';
-import { type View as ViewWrapper } from '@/renderer/elements/view';
+import type { View as ViewWrapper } from '@/renderer/elements/view';
 import { VSeparator as VSeparatorWrapper } from '@/renderer/elements/vseparator';
 
 class ElementFactory {
@@ -86,7 +85,9 @@ class ElementFactory {
         return new registeredType.type();
       }
     }
-    throw new Error(`Cannot create element type ${type}. Type ${type} is not implemented.`);
+    throw new Error(
+      `Cannot create element type ${type}. Type ${type} is not implemented.`,
+    );
   }
 
   wrapNode(node: View) {

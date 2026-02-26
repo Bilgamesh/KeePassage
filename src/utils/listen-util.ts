@@ -25,13 +25,13 @@ function createListeners<T>() {
     signal?: AbortSignal | undefined;
   }) {
     return new Promise<T>((resolve, reject) => {
-      function onAbort(ev?: Event) {
+      function onAbort(_ev?: Event) {
         cleanup();
         reject(
           new DOMException('Operation aborted', {
             name: 'AbortError',
-            cause: options?.signal?.reason
-          })
+            cause: options?.signal?.reason,
+          }),
         );
       }
 
@@ -63,15 +63,21 @@ function createListeners<T>() {
     });
   }
 
-  return { addListener, removeListener, waitForValue, hasListener, notifyListeners };
+  return {
+    addListener,
+    removeListener,
+    waitForValue,
+    hasListener,
+    notifyListeners,
+  };
 }
 
 function createLineReader(onLine: (line: string) => void) {
   let buffer = '';
   return (chunk: string) => {
     buffer += chunk;
-    let idx;
-    while ((idx = buffer.indexOf('\n')) !== -1) {
+    while (buffer.indexOf('\n') !== -1) {
+      const idx = buffer.indexOf('\n');
       const line = buffer.slice(0, idx);
       buffer = buffer.slice(idx + 1);
       if (line.trim()) {

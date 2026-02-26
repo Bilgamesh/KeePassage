@@ -6,12 +6,12 @@
     "node": "~22"
   },
   "scripts": {
-    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format": "biome format --write && biome lint --write --unsafe && biome check --write",
     "build": "tsc && vite build --mode app && vite build --mode daemon",
     "start": "node ./scripts/yode.ts build/index.cjs",
     "dev:prepare": "rimraf build && shx mkdir build && shx touch build/index.cjs",
-    "dev": "npm run dev:prepare && concurrently --names \"TS,VITE,VITE:PCSC,YODE\" --prefix-colors \"cyan,magenta,magenta,green\" \"npm run watch:ts\" \"npm run watch:build:app\" \"npm run watch:build:daemon\" \"npm run watch:yode\"",
-    "watch:ts": "tsc --watch",
+    "dev": "npm run dev:prepare && concurrently --names TS,VITE,VITE:PCSC,YODE --prefix-colors cyan,magenta,magenta,green npm:watch:tsc npm:watch:build:app npm:watch:build:daemon npm:watch:yode",
+    "watch:tsc": "tsc --watch",
     "watch:build:app": "vite build --mode app --watch",
     "watch:build:daemon": "vite build --mode daemon --watch",
     "watch:yode": "node scripts/yode.ts --watch build/index.cjs",
@@ -32,6 +32,7 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
     "@tsconfig/node22": "^22.0.5",
     "@tsconfig/strictest": "^2.0.8",
     "@types/libsodium-wrappers": "^0.7.14",
@@ -40,9 +41,6 @@
     "concurrently": "^9.2.1",
     "fetch-yode": "^1.1.3",
     "get-node": "^15.0.4",
-    "prettier": "^3.7.4",
-    "prettier-plugin-curly": "^0.4.1",
-    "prettier-plugin-organize-imports": "^4.3.0",
     "rimraf": "^6.1.2",
     "shx": "^0.4.0",
     "typescript": "^5.9.3",

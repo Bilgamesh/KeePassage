@@ -1,13 +1,15 @@
+import { setTimeout } from 'node:timers/promises';
 import { AttributedText } from 'gui';
-import { setTimeout } from 'timers/promises';
-
+import touchImage from '@/assets/img/touch.png';
 import { Expand } from '@/components/expand';
 import { Image } from '@/components/image';
-import { DARK_MODE_FONT_COLOR, PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
+import {
+  DARK_MODE_FONT_COLOR,
+  PAGE_INDEXES,
+  TITLE_FONT,
+} from '@/data/constants';
 import { t } from '@/data/i18n';
 import { isDark, mainPageIndex, setMainPageIndex } from '@/data/shared-state';
-
-import touchImage from '@/assets/img/touch.png';
 
 let controller: AbortController;
 
@@ -39,7 +41,7 @@ function TouchPage() {
               <label
                 attributedText={AttributedText.create(t('tapToComplete'), {
                   align: 'center',
-                  font: TITLE_FONT
+                  font: TITLE_FONT,
                 })}
                 style={{ 'margin-bottom': 50 }}
               />
@@ -57,7 +59,7 @@ function TouchPage() {
                   height: 30,
                   width: 300,
                   'margin-left': 45,
-                  'margin-top': 100
+                  'margin-top': 100,
                 }}
                 onClick={() => {
                   controller.abort('Cancel');

@@ -1,5 +1,12 @@
 import { bech32 } from '@scure/base';
-import { type Card, CardDisposition, CardMode, Client, Err, ReaderStatus } from 'pcsc-mini';
+import {
+  type Card,
+  CardDisposition,
+  CardMode,
+  Client,
+  type Err,
+  ReaderStatus,
+} from 'pcsc-mini';
 
 const APDU_KEYS = {
   CLASS_BYTE: { STANDARD_COMMAND: 0x00 },
@@ -9,25 +16,25 @@ const APDU_KEYS = {
     PIN: 0x20,
     GENERAL_AUTHENTICATE: 0x87,
     GET_DATA: 0xcb,
-    GET_RESPONSE: 0xc0
+    GET_RESPONSE: 0xc0,
   },
   P1: {
     BY_AID: 0x04,
     BY_FID: 0x00,
     SERIAL: 0x10,
     P256ECDH: 0x11,
-    PUBLIC_KEY: 0x3f
+    PUBLIC_KEY: 0x3f,
   },
   P2: {
     FIRST: 0x00,
     PIN_SLOT: 0x80,
-    PUBLIC_KEY: 0xff
-  }
+    PUBLIC_KEY: 0xff,
+  },
 } as const;
 
 const SW_CODES = {
   OK: 0x9000,
-  MORE_DATA: 0x61
+  MORE_DATA: 0x61,
 } as const;
 
 const KEY_PREFIX = 'age1yubikey';
@@ -52,7 +59,7 @@ const RETIRED_SLOTS = [
   { index: 16, number: 17, objectId: 0x005fc11d, id: 0x92, name: 'R17' },
   { index: 17, number: 18, objectId: 0x005fc11e, id: 0x93, name: 'R18' },
   { index: 18, number: 19, objectId: 0x005fc11f, id: 0x94, name: 'R19' },
-  { index: 19, number: 20, objectId: 0x005fc120, id: 0x95, name: 'R20' }
+  { index: 19, number: 20, objectId: 0x005fc120, id: 0x95, name: 'R20' },
 ] as const;
 
 class YubiKeyClient {
@@ -64,12 +71,19 @@ class YubiKeyClient {
 
   private async transmit(
     header: { CLA: number; INS: number; P1: number; P2: number },
-    payload?: number[]
+    payload?: number[],
   ) {
     const resp = await this.card.transmit(
       payload
-        ? new Uint8Array([header.CLA, header.INS, header.P1, header.P2, payload.length, ...payload])
-        : new Uint8Array([header.CLA, header.INS, header.P1, header.P2])
+        ? new Uint8Array([
+            header.CLA,
+            header.INS,
+            header.P1,
+            header.P2,
+            payload.length,
+            ...payload,
+          ])
+        : new Uint8Array([header.CLA, header.INS, header.P1, header.P2]),
     );
     const sw = (resp[resp.length - 2]! << 8) | resp[resp.length - 1]!;
     return { sw, resp };
@@ -81,9 +95,9 @@ class YubiKeyClient {
         CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
         INS: APDU_KEYS.INSTRUCTION.SELECT,
         P1: APDU_KEYS.P1.BY_AID,
-        P2: APDU_KEYS.P2.FIRST
+        P2: APDU_KEYS.P2.FIRST,
       },
-      [0xa0, 0x00, 0x00, 0x05, 0x27, 0x20, 0x01]
+      [0xa0, 0x00, 0x00, 0x05, 0x27, 0x20, 0x01],
     );
     if (sw !== SW_CODES.OK) {
       throw new Error(`Select OTP failed: SW=${sw.toString(16)}`);
@@ -95,12 +109,13 @@ class YubiKeyClient {
       CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
       INS: APDU_KEYS.INSTRUCTION.GET_SERIAL,
       P1: APDU_KEYS.P1.SERIAL,
-      P2: APDU_KEYS.P2.FIRST
+      P2: APDU_KEYS.P2.FIRST,
     });
     if (sw !== SW_CODES.OK) {
       throw new Error(`Get serial number failed: SW=${sw.toString(16)}`);
     }
-    const serial = (resp[0]! << 24) | (resp[1]! << 16) | (resp[2]! << 8) | resp[3]!;
+    const serial =
+      (resp[0]! << 24) | (resp[1]! << 16) | (resp[2]! << 8) | resp[3]!;
     return serial >>> 0;
   }
 
@@ -110,9 +125,9 @@ class YubiKeyClient {
         CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
         INS: APDU_KEYS.INSTRUCTION.SELECT,
         P1: APDU_KEYS.P1.BY_AID,
-        P2: APDU_KEYS.P2.FIRST
+        P2: APDU_KEYS.P2.FIRST,
       },
-      [0xa0, 0x00, 0x00, 0x03, 0x08]
+      [0xa0, 0x00, 0x00, 0x03, 0x08],
     );
     if (sw !== SW_CODES.OK) {
       throw new Error(`Select PIV failed: SW=${sw.toString(16)}`);
@@ -136,9 +151,9 @@ class YubiKeyClient {
         CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
         INS: APDU_KEYS.INSTRUCTION.PIN,
         P1: APDU_KEYS.P1.BY_FID,
-        P2: APDU_KEYS.P2.PIN_SLOT
+        P2: APDU_KEYS.P2.PIN_SLOT,
       },
-      Array.from(pinBytes)
+      Array.from(pinBytes),
     );
     if (sw !== SW_CODES.OK) {
       throw new Error(`Verify PIN failed: SW=${sw.toString(16)}`);
@@ -162,9 +177,9 @@ class YubiKeyClient {
         CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
         INS: APDU_KEYS.INSTRUCTION.GENERAL_AUTHENTICATE,
         P1: APDU_KEYS.P1.P256ECDH,
-        P2: slot
+        P2: slot,
       },
-      tlv7c
+      tlv7c,
     );
     return resp;
   }
@@ -195,12 +210,12 @@ class YubiKeyClient {
         CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
         INS: APDU_KEYS.INSTRUCTION.GET_DATA,
         P1: APDU_KEYS.P1.PUBLIC_KEY,
-        P2: APDU_KEYS.P2.PUBLIC_KEY
+        P2: APDU_KEYS.P2.PUBLIC_KEY,
       },
-      [0x5c, 0x03, (slot >> 16) & 0xff, (slot >> 8) & 0xff, slot & 0xff]
+      [0x5c, 0x03, (slot >> 16) & 0xff, (slot >> 8) & 0xff, slot & 0xff],
     );
 
-    let data = [...resp.slice(0, -2)];
+    const data = [...resp.slice(0, -2)];
 
     while (true) {
       const sw1 = resp.at(-2)!;
@@ -214,7 +229,7 @@ class YubiKeyClient {
         APDU_KEYS.INSTRUCTION.GET_RESPONSE,
         APDU_KEYS.P1.BY_FID,
         APDU_KEYS.P2.FIRST,
-        le
+        le,
       ]);
       resp = await this.card.transmit(getResponse);
       data.push(...resp.slice(0, -2));
@@ -228,13 +243,16 @@ class YubiKeyClient {
 
     const prefix = yBytes[yBytes.length - 1]! % 2 === 0 ? 0x02 : 0x03;
 
-    return bech32.encodeFromBytes(KEY_PREFIX, new Uint8Array([prefix, ...xBytes]));
+    return bech32.encodeFromBytes(
+      KEY_PREFIX,
+      new Uint8Array([prefix, ...xBytes]),
+    );
   }
 }
 
 function withYubiKeyClient(
   callback: (yubiKey: YubiKeyClient) => Promise<void> | void,
-  onError: (error: Err | string) => Promise<void> | void
+  onError: (error: Err | string) => Promise<void> | void,
 ) {
   let started = false;
   const client = new Client()

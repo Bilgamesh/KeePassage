@@ -1,5 +1,4 @@
-import { Menu, MessageLoop, Window } from 'gui';
-
+import { Menu, MessageLoop, type Window } from 'gui';
 import { PAGE_INDEXES } from '@/data/constants';
 import { t } from '@/data/i18n';
 import {
@@ -7,10 +6,13 @@ import {
   setMainPageIndex,
   setSelectedDbPath,
   setUnlockedDbIndex,
-  unlockedDbIndex
+  unlockedDbIndex,
 } from '@/data/shared-state';
 
-function TrayMenu(props: { win: Window; toggleVisibility: (win: Window, show: boolean) => void }) {
+function TrayMenu(props: {
+  win: Window;
+  toggleVisibility: (win: Window, show: boolean) => void;
+}) {
   const menu = Menu.create([
     {
       label: t('toggleWindow'),
@@ -20,7 +22,7 @@ function TrayMenu(props: { win: Window; toggleVisibility: (win: Window, show: bo
         } else {
           props.toggleVisibility(props.win, false);
         }
-      }
+      },
     },
     {
       label: t('lockDb'),
@@ -28,19 +30,21 @@ function TrayMenu(props: { win: Window; toggleVisibility: (win: Window, show: bo
         setUnlockedDbIndex(null);
         setSelectedDbPath('');
         setMainPageIndex(PAGE_INDEXES.WELCOME);
-      }
+      },
     },
     {
       label: t('quit'),
       onClick: () => {
         MessageLoop.quit();
         process.exit(0);
-      }
-    }
+      },
+    },
   ]);
   menu
     .itemAt(1)
-    .setEnabled(unlockedDbIndex() !== null && mainPageIndex() === PAGE_INDEXES.DB_INDEX);
+    .setEnabled(
+      unlockedDbIndex() !== null && mainPageIndex() === PAGE_INDEXES.DB_INDEX,
+    );
   return menu;
 }
 

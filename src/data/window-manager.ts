@@ -1,5 +1,4 @@
 import { Window } from 'gui';
-
 import { AppIcon } from '@/components/app-icon';
 
 declare global {

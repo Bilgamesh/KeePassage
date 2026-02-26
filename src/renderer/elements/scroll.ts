@@ -1,11 +1,10 @@
 import {
+  Container,
+  Scroll as GuiScroll,
   type ScrollElasticity,
   type ScrollPolicy,
   type SizeF,
-  Container,
-  Scroll as GuiScroll
 } from 'gui';
-
 import { View } from '@/renderer/elements/view';
 
 const EMPTY_CHILD = Container.create();
@@ -25,15 +24,15 @@ class Scroll extends View {
     return element;
   }
 
-  override addChild(child: View, anchor: View | null | undefined): void {
+  override addChild(child: View, _anchor: View | null | undefined): void {
     if (child.parent !== null) {
       throw new Error(
-        `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`
+        `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`,
       );
     }
     if (this.children.length > 0) {
       throw new Error(
-        `Cannot add child node "${child.name}" under parent node "${this.name}". Parent node ${this.name} cannot have more than 1 child node.`
+        `Cannot add child node "${child.name}" under parent node "${this.name}". Parent node ${this.name} cannot have more than 1 child node.`,
       );
     }
     this.node.setContentView(child.node);
@@ -52,23 +51,30 @@ class Scroll extends View {
       case 'contentSize':
         this.node.setContentSize(<SizeF>value);
         break;
-      case 'scrollPosition':
-        const { horizon, vertical } = <{ horizon: number; vertical: number }>value;
+      case 'scrollPosition': {
+        const { horizon, vertical } = <{ horizon: number; vertical: number }>(
+          value
+        );
         this.node.setScrollPosition(horizon, vertical);
         break;
+      }
       case 'overlayScrollbar':
         this.node.setOverlayScrollbar(!!value);
         break;
-      case 'scrollbarPolicy':
-        const { hpolicy, vpolicy } = <{ hpolicy: ScrollPolicy; vpolicy: ScrollPolicy }>value;
+      case 'scrollbarPolicy': {
+        const { hpolicy, vpolicy } = <
+          { hpolicy: ScrollPolicy; vpolicy: ScrollPolicy }
+        >value;
         this.node.setScrollbarPolicy(hpolicy, vpolicy);
         break;
-      case 'scrollElasticity':
+      }
+      case 'scrollElasticity': {
         const { helasticity, velasticity } = <
           { helasticity: ScrollElasticity; velasticity: ScrollElasticity }
         >value;
         this.node.setScrollElasticity(helasticity, velasticity);
         break;
+      }
       case 'onScroll':
         this.node.onScroll.connect(value);
         break;

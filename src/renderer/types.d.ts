@@ -203,7 +203,7 @@ export interface browser<NodeType> extends view<NodeType> {
   html?: { html: string; baseUrl?: string } | string;
   userAgent?: string;
   magnifiable?: boolean;
-  javaScript?: { code: string; callback?: Function };
+  javaScript?: { code: string; callback?: () => void };
   onClose?: (self: NodeType) => void;
   onUpdateCommand?: (self: NodeType) => void;
   onChangeLoading?: (self: NodeType) => void;

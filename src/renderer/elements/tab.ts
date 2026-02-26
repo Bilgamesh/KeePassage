@@ -1,5 +1,4 @@
 import { Tab as GuiTab } from 'gui';
-
 import { View } from '@/renderer/elements/view';
 
 class Tab extends View {
@@ -17,10 +16,10 @@ class Tab extends View {
     return GuiTab.create();
   }
 
-  override addChild(child: View, anchor: View | null | undefined): void {
+  override addChild(child: View, _anchor: View | null | undefined): void {
     if (child.parent !== null) {
       throw new Error(
-        `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`
+        `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`,
       );
     }
     if (this.titles) {
@@ -38,7 +37,7 @@ class Tab extends View {
   private addFromQueue() {
     for (const [index, child] of this.queue.entries()) {
       this.children.push(child);
-      this.node.addPage(this.titles![index] || '', child.node);
+      this.node.addPage(this.titles?.[index] || '', child.node);
     }
     this.queue.length = 0;
   }
@@ -47,7 +46,7 @@ class Tab extends View {
     const index = this.children.indexOf(child);
     if (index === -1) {
       throw new Error(
-        `Cannot remove child node "${child.name}" from parent "${this.name}". Child not found.`
+        `Cannot remove child node "${child.name}" from parent "${this.name}". Child not found.`,
       );
     }
     this.node.removePage(child.node);

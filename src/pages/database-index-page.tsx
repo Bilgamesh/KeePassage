@@ -1,6 +1,6 @@
-import { SimpleTableModel, Window } from 'gui';
-import { setTimeout } from 'timers/promises';
-
+import { setTimeout } from 'node:timers/promises';
+import { SimpleTableModel, type Window } from 'gui';
+import { Show } from 'solid-js';
 import { DatabaseColumns } from '@/components/database-columns';
 import { DatabaseIndexContextMenu } from '@/components/database-index-context-menu';
 import { PreviewPanel } from '@/components/preview-panel';
@@ -10,14 +10,14 @@ import {
   filter,
   selectedEntry,
   setSelectedEntry,
-  unlockedDbIndex
+  unlockedDbIndex,
 } from '@/data/shared-state';
-import { Entry } from '@/schemas/database-schema';
-import { Show } from 'solid-js';
+import type { Entry } from '@/schemas/database-schema';
 
 function DatabaseIndexPage(props: { window: Window }) {
   const sorter = (a: Entry, b: Entry) => a.title.localeCompare(b.title);
-  const entries = () => (unlockedDbIndex()?.secrets || []).filter(filter().run).sort(sorter);
+  const entries = () =>
+    (unlockedDbIndex()?.secrets || []).filter(filter().run).sort(sorter);
   const model = () => {
     const tableModel = SimpleTableModel.create(5);
     for (const entry of entries()) {
@@ -29,7 +29,7 @@ function DatabaseIndexPage(props: { window: Window }) {
         displayedUserName,
         entry.url,
         entry.notes,
-        new Date(entry.modified).toLocaleString()
+        new Date(entry.modified).toLocaleString(),
       ]);
     }
     return tableModel;
@@ -51,7 +51,7 @@ function DatabaseIndexPage(props: { window: Window }) {
             const index = self.getSelectedRow();
             setSelectedEntry(entries()[index] || null);
           }}
-          onMouseDown={async (self, event) => {
+          onMouseDown={async (_self, event) => {
             if (event.button === 2) {
               await setTimeout(10);
               DatabaseIndexContextMenu({ window: props.window }).popup();
@@ -70,7 +70,7 @@ function DatabaseIndexPage(props: { window: Window }) {
             title: '',
             url: '',
             username: '',
-            modified: 0
+            modified: 0,
           }
         }
       />

@@ -1,5 +1,8 @@
-import { Table as GuiTable, type TableColumnOptions, type TableModel } from 'gui';
-
+import {
+  Table as GuiTable,
+  type TableColumnOptions,
+  type TableModel,
+} from 'gui';
 import { View } from '@/renderer/elements/view';
 
 class Table extends View {
@@ -30,7 +33,9 @@ class Table extends View {
         }
         break;
       case 'columnsWithOptions':
-        for (const { label, options } of <{ label: string; options: TableColumnOptions }[]>value) {
+        for (const { label, options } of <
+          { label: string; options: TableColumnOptions }[]
+        >value) {
           if (!this.columns.includes(label)) {
             this.columns.push(label);
             this.node.addColumnWithOptions(label, options);

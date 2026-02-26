@@ -1,5 +1,8 @@
-import { Vibrant as GuiVibrant, type VibrantBlendingMode, type VibrantMaterial } from 'gui';
-
+import {
+  Vibrant as GuiVibrant,
+  type VibrantBlendingMode,
+  type VibrantMaterial,
+} from 'gui';
 import { Container } from '@/renderer/elements/container';
 
 class Vibrant extends Container {
@@ -13,7 +16,9 @@ class Vibrant extends Container {
 
   protected override createElement() {
     if (process.platform !== 'darwin') {
-      throw new Error('Cannot create element "vibrant". This element is only supported on macOS.');
+      throw new Error(
+        'Cannot create element "vibrant". This element is only supported on macOS.',
+      );
     }
     return GuiVibrant.create();
   }
