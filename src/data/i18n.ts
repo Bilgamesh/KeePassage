@@ -3,13 +3,13 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 import { type Flatten, flatten, translator } from '@solid-primitives/i18n';
 import { Locale } from 'gui';
-import type * as en from '@/assets/texts/en.json';
-import { appSettings } from '@/data/shared-state';
+import type * as en from '#/assets/texts/en.json';
+import { appSettings } from '#/data/shared-state';
 import {
   checkIfPacked,
   getResourcePath,
   getRootDirname
-} from '@/renderer/package';
+} from '#/renderer/package';
 
 type RawDictionary = typeof en;
 type Dictionary = Flatten<RawDictionary>;

@@ -1,5 +1,5 @@
 import { Window } from 'gui';
-import { AppIcon } from '@/components/app-icon';
+import { AppIcon } from '#/components/app-icon';
 
 declare global {
   var windowMap: Map<string, Window>;

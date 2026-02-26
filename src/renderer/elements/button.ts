@@ -4,7 +4,7 @@ import {
   Button as GuiButton,
   type Image
 } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class Button extends View {
   override node: GuiButton;

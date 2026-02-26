@@ -2,14 +2,14 @@ import { Decrypter, Encrypter } from 'age-encryption';
 import {
   RETIRED_SLOTS,
   withYubiKeyClient
-} from '@/pcsc-daemon/lib/yubikey-client';
-import { YubiKeyIdentity } from '@/pcsc-daemon/lib/yubikey-identity';
-import { YubiKeyRecipient } from '@/pcsc-daemon/lib/yubikey-recipient';
+} from '#/pcsc-daemon/lib/yubikey-client';
+import { YubiKeyIdentity } from '#/pcsc-daemon/lib/yubikey-identity';
+import { YubiKeyRecipient } from '#/pcsc-daemon/lib/yubikey-recipient';
 import {
   DaemonMessage,
   type DaemonResponse
-} from '@/schemas/daemon-message-schema';
-import { createLineReader } from '@/utils/listen-util';
+} from '#/schemas/daemon-message-schema';
+import { createLineReader } from '#/utils/listen-util';
 
 process.title = `KeePassage PCSC Daemon`;
 

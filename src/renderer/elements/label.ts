@@ -1,5 +1,5 @@
 import { type AttributedText, Label as GuiLabel, type TextAlign } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class Label extends View {
   override node: GuiLabel;

@@ -1,18 +1,18 @@
 import { setTimeout } from 'node:timers/promises';
 import { SimpleTableModel, type Window } from 'gui';
 import { Show } from 'solid-js';
-import { DatabaseColumns } from '@/components/database-columns';
-import { DatabaseIndexContextMenu } from '@/components/database-index-context-menu';
-import { PreviewPanel } from '@/components/preview-panel';
-import { editEntry } from '@/data/db-orchestrator';
+import { DatabaseColumns } from '#/components/database-columns';
+import { DatabaseIndexContextMenu } from '#/components/database-index-context-menu';
+import { PreviewPanel } from '#/components/preview-panel';
+import { editEntry } from '#/data/db-orchestrator';
 import {
   appSettings,
   filter,
   selectedEntry,
   setSelectedEntry,
   unlockedDbIndex
-} from '@/data/shared-state';
-import type { Entry } from '@/schemas/database-schema';
+} from '#/data/shared-state';
+import type { Entry } from '#/schemas/database-schema';
 
 function DatabaseIndexPage(props: { window: Window }) {
   const sorter = (a: Entry, b: Entry) => a.title.localeCompare(b.title);

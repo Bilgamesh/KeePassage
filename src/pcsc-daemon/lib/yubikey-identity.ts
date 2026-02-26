@@ -4,7 +4,7 @@ import { hkdf } from '@noble/hashes/hkdf';
 import { sha256 } from '@noble/hashes/sha2';
 import { base64nopad, bech32 } from '@scure/base';
 import type { Identity, Stanza } from 'age-encryption';
-import type { YubiKeyClient } from '@/pcsc-daemon/lib/yubikey-client';
+import type { YubiKeyClient } from '#/pcsc-daemon/lib/yubikey-client';
 
 const ENCRYPTED_FILE_KEY_BYTES = 32;
 const STANZA_TAG = 'piv-p256';

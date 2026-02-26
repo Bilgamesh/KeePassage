@@ -1,5 +1,5 @@
 import { Entry as GuiEntry } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class Entry extends View {
   override node: GuiEntry;

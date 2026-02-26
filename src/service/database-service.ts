@@ -1,9 +1,9 @@
 import { readFile, writeFile } from 'node:fs/promises';
-import { DATABASE_EXTENSION } from '@/data/constants';
-import { DbFile, type DbIndex } from '@/schemas/database-schema';
-import type { YubiKey } from '@/schemas/yubikey-schema';
-import { decryptIndex, encryptIndex } from '@/service/index-encryptor';
-import { decrypt, detectYubiKey, encrypt } from '@/service/pcsc-service';
+import { DATABASE_EXTENSION } from '#/data/constants';
+import { DbFile, type DbIndex } from '#/schemas/database-schema';
+import type { YubiKey } from '#/schemas/yubikey-schema';
+import { decryptIndex, encryptIndex } from '#/service/index-encryptor';
+import { decrypt, detectYubiKey, encrypt } from '#/service/pcsc-service';
 
 async function writeDatabase(path: string, dbFile: DbFile) {
   const stringified = JSON.stringify(dbFile);

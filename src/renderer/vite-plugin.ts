@@ -13,7 +13,7 @@ const yuePlugin: (config: {
     config.assetsFolder = resolve(config.assetsFolder);
     if (resolve(id).startsWith(config.assetsFolder)) {
       return `
-      import { checkIfPacked, getResourcePath } from '@/renderer/package';
+      import { checkIfPacked, getResourcePath } from '#/renderer/package';
       const relativePath = \`${id.split(basename(config.assetsFolder))[1]}\`;
       const path = checkIfPacked() ? getResourcePath(relativePath) : \`${id}\`;
       export default path;
@@ -26,7 +26,7 @@ const yuePlugin: (config: {
     return {
       resolve: {
         alias: {
-          '@': config.src
+          '#': config.src
         }
       },
       ssr: {

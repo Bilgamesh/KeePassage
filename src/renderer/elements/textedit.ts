@@ -3,7 +3,7 @@ import {
   type ScrollElasticity,
   type ScrollPolicy
 } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class TextEdit extends View {
   override node: GuiTextEdit;

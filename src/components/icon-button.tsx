@@ -1,7 +1,7 @@
 import { type Button, Image } from 'gui';
-import { DARK_MODE_FONT_COLOR, DISABLED_COLOR } from '@/data/constants';
-import { isDark } from '@/data/shared-state';
-import type { Style } from '@/renderer/types';
+import { DARK_MODE_FONT_COLOR, DISABLED_COLOR } from '#/data/constants';
+import { isDark } from '#/data/shared-state';
+import type { Style } from '#/renderer/types';
 
 function IconButton(props: {
   src: string;

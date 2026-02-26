@@ -1,6 +1,6 @@
 import type { View } from 'gui';
 import type { Accessor } from 'solid-js';
-import { SMALL_ENTRY_STYLE } from '@/data/constants';
+import { SMALL_ENTRY_STYLE } from '#/data/constants';
 
 function EntryLine(props: {
   title: string;

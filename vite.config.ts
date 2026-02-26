@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => ({
     solidPlugin({
       solid: {
         generate: 'universal',
-        moduleName: '@/renderer'
+        moduleName: '#/renderer'
       }
     }),
     yuePlugin({

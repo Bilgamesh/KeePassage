@@ -1,6 +1,6 @@
 import { AttributedText } from 'gui';
 import type { Accessor, Setter } from 'solid-js';
-import { t } from '@/data/i18n';
+import { t } from '#/data/i18n';
 
 function DatabaseGeneralInfo(props: {
   dbName: Accessor<string>;

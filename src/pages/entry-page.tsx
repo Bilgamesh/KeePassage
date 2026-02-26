@@ -1,26 +1,26 @@
 import { createEffect, createSignal } from 'solid-js';
-import diceIcon from '@/assets/icons/dice-3.png';
-import eyeIcon from '@/assets/icons/eye.png';
-import eyeOffIcon from '@/assets/icons/eye-off.png';
-import { EntryLine } from '@/components/entry-line';
-import { EntryTextArea } from '@/components/entry-text-area';
-import { Expand } from '@/components/expand';
-import { IconButton } from '@/components/icon-button';
+import diceIcon from '#/assets/icons/dice-3.png';
+import eyeIcon from '#/assets/icons/eye.png';
+import eyeOffIcon from '#/assets/icons/eye-off.png';
+import { EntryLine } from '#/components/entry-line';
+import { EntryTextArea } from '#/components/entry-text-area';
+import { Expand } from '#/components/expand';
+import { IconButton } from '#/components/icon-button';
 import {
   LARGE_BUTTON_STYLE,
   PAGE_INDEXES,
   SMALL_ENTRY_STYLE
-} from '@/data/constants';
-import { t } from '@/data/i18n';
+} from '#/data/constants';
+import { t } from '#/data/i18n';
 import {
   mainPageIndex,
   setMainPageIndex,
   unlockedDbIndex
-} from '@/data/shared-state';
-import { getGeneratedPassword } from '@/pages/pw-generator-page';
-import type { Entry } from '@/schemas/database-schema';
-import { encrypt } from '@/service/pcsc-service';
-import { createListeners } from '@/utils/listen-util';
+} from '#/data/shared-state';
+import { getGeneratedPassword } from '#/pages/pw-generator-page';
+import type { Entry } from '#/schemas/database-schema';
+import { encrypt } from '#/service/pcsc-service';
+import { createListeners } from '#/utils/listen-util';
 
 let controller: AbortController;
 const [passwordVisible, setPasswordVisible] = createSignal(false);

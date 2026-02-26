@@ -1,6 +1,6 @@
 import { Clipboard, FileSaveDialog, MessageBox, type Window } from 'gui';
 import type { Accessor } from 'solid-js';
-import { DATABASE_EXTENSION, PAGE_INDEXES } from '@/data/constants';
+import { DATABASE_EXTENSION, PAGE_INDEXES } from '#/data/constants';
 import {
   appSettings,
   mainPageIndex,
@@ -10,24 +10,24 @@ import {
   setSelectedDbPath,
   setUnlockedDbIndex,
   unlockedDbIndex
-} from '@/data/shared-state';
-import { requestEntry } from '@/pages/entry-page';
-import { requestPin } from '@/pages/pinentry-page';
-import { requestTouch } from '@/pages/touch-page';
-import type { Entry } from '@/schemas/database-schema';
-import type { YubiKey } from '@/schemas/yubikey-schema';
-import { updateSettings } from '@/service/config-service';
+} from '#/data/shared-state';
+import { requestEntry } from '#/pages/entry-page';
+import { requestPin } from '#/pages/pinentry-page';
+import { requestTouch } from '#/pages/touch-page';
+import type { Entry } from '#/schemas/database-schema';
+import type { YubiKey } from '#/schemas/yubikey-schema';
+import { updateSettings } from '#/service/config-service';
 import {
   addDatabase,
   getMatchingKey,
   loadDatabase,
   saveDatabase,
   unlockDatabase
-} from '@/service/database-service';
-import { decrypt } from '@/service/pcsc-service';
-import { showError } from '@/utils/message-box-util';
-import { showQrCodeWindow } from '@/utils/qr-code-util';
-import { getMainWindow } from '@/windows/main-window';
+} from '#/service/database-service';
+import { decrypt } from '#/service/pcsc-service';
+import { showError } from '#/utils/message-box-util';
+import { showQrCodeWindow } from '#/utils/qr-code-util';
+import { getMainWindow } from '#/windows/main-window';
 import { t } from './i18n';
 
 async function openDatabase(window: Window, path: string) {

@@ -1,5 +1,5 @@
 import { Browser as GuiBrowser } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class Browser extends View {
   override node: GuiBrowser;

@@ -1,18 +1,18 @@
 import { AttributedText, type Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
-import clipboardIcon from '@/assets/icons/clipboard.png';
-import eyeIcon from '@/assets/icons/eye.png';
-import eyeOffIcon from '@/assets/icons/eye-off.png';
-import qrcodeIcon from '@/assets/icons/qrcode.png';
-import { PAGE_INDEXES, TITLE_FONT } from '@/data/constants';
-import { copyPassword, getPassword, showQrCode } from '@/data/db-orchestrator';
-import { t } from '@/data/i18n';
+import clipboardIcon from '#/assets/icons/clipboard.png';
+import eyeIcon from '#/assets/icons/eye.png';
+import eyeOffIcon from '#/assets/icons/eye-off.png';
+import qrcodeIcon from '#/assets/icons/qrcode.png';
+import { PAGE_INDEXES, TITLE_FONT } from '#/data/constants';
+import { copyPassword, getPassword, showQrCode } from '#/data/db-orchestrator';
+import { t } from '#/data/i18n';
 import {
   appSettings,
   selectedEntry,
   setMainPageIndex
-} from '@/data/shared-state';
-import type { Entry } from '@/schemas/database-schema';
+} from '#/data/shared-state';
+import type { Entry } from '#/schemas/database-schema';
 import { IconButton } from './icon-button';
 import { PreviewLine } from './preview-line';
 

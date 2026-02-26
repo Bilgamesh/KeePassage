@@ -1,16 +1,16 @@
 import { AttributedText, type Window } from 'gui';
 import { createSignal } from 'solid-js';
-import yubiKeyImage from '@/assets/img/yubikey.png';
-import { DatabaseGeneralInfo } from '@/components/database-general-info';
-import { DatabaseKeys } from '@/components/database-keys';
-import { Expand } from '@/components/expand';
-import { Image } from '@/components/image';
-import { Router } from '@/components/router';
-import { TITLE_FONT } from '@/data/constants';
-import { saveNewDatabase } from '@/data/db-orchestrator';
-import { t } from '@/data/i18n';
-import { monitorYubiKeys } from '@/data/pcsc-orchestrator';
-import type { YubiKey } from '@/schemas/yubikey-schema';
+import yubiKeyImage from '#/assets/img/yubikey.png';
+import { DatabaseGeneralInfo } from '#/components/database-general-info';
+import { DatabaseKeys } from '#/components/database-keys';
+import { Expand } from '#/components/expand';
+import { Image } from '#/components/image';
+import { Router } from '#/components/router';
+import { TITLE_FONT } from '#/data/constants';
+import { saveNewDatabase } from '#/data/db-orchestrator';
+import { t } from '#/data/i18n';
+import { monitorYubiKeys } from '#/data/pcsc-orchestrator';
+import type { YubiKey } from '#/schemas/yubikey-schema';
 
 function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
   const titles = (index: number) => [t('generalDbInfo'), t('pairKeys')][index];

@@ -1,5 +1,5 @@
 import { Picker as GuiPicker } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class Picker extends View {
   override node: GuiPicker;

@@ -1,6 +1,6 @@
 import type { Container, View } from 'gui';
 import { type Accessor, children, createEffect } from 'solid-js';
-import type { View as ViewWrapper } from '@/renderer/elements/view';
+import type { View as ViewWrapper } from '#/renderer/elements/view';
 
 function Router(props: {
   children: View[];

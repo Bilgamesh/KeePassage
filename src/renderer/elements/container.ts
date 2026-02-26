@@ -1,5 +1,5 @@
 import { Container as GuiContainer, Scroll } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class Container extends View {
   override node: GuiContainer;

@@ -1,13 +1,13 @@
 import { Menu, MessageLoop, type Window } from 'gui';
-import { PAGE_INDEXES } from '@/data/constants';
-import { t } from '@/data/i18n';
+import { PAGE_INDEXES } from '#/data/constants';
+import { t } from '#/data/i18n';
 import {
   mainPageIndex,
   setMainPageIndex,
   setSelectedDbPath,
   setUnlockedDbIndex,
   unlockedDbIndex
-} from '@/data/shared-state';
+} from '#/data/shared-state';
 
 function TrayMenu(props: {
   win: Window;

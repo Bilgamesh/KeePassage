@@ -1,5 +1,5 @@
 import { Separator } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class VSeparator extends View {
   override node: Separator;

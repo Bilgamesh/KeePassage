@@ -6,26 +6,26 @@ import {
   type Window
 } from 'gui';
 import { createEffect } from 'solid-js';
-import copyIcon from '@/assets/icons/copy.png';
-import diceIcon from '@/assets/icons/dice-3.png';
-import editIcon from '@/assets/icons/edit.png';
-import folderIcon from '@/assets/icons/folder.png';
-import linkIcon from '@/assets/icons/link.png';
-import lockIcon from '@/assets/icons/lock.png';
-import userIcon from '@/assets/icons/person.png';
-import qrcodeIcon from '@/assets/icons/qrcode.png';
-import searchIcon from '@/assets/icons/search.png';
-import settingsIcon from '@/assets/icons/settings.png';
-import plusIcon from '@/assets/icons/square-plus.png';
-import trashIcon from '@/assets/icons/trash.png';
-import { IconButton } from '@/components/icon-button';
-import { Image } from '@/components/image';
+import copyIcon from '#/assets/icons/copy.png';
+import diceIcon from '#/assets/icons/dice-3.png';
+import editIcon from '#/assets/icons/edit.png';
+import folderIcon from '#/assets/icons/folder.png';
+import linkIcon from '#/assets/icons/link.png';
+import lockIcon from '#/assets/icons/lock.png';
+import userIcon from '#/assets/icons/person.png';
+import qrcodeIcon from '#/assets/icons/qrcode.png';
+import searchIcon from '#/assets/icons/search.png';
+import settingsIcon from '#/assets/icons/settings.png';
+import plusIcon from '#/assets/icons/square-plus.png';
+import trashIcon from '#/assets/icons/trash.png';
+import { IconButton } from '#/components/icon-button';
+import { Image } from '#/components/image';
 import {
   DARK_MODE_FONT_COLOR,
   DATABASE_EXTENSION,
   PAGE_INDEXES,
   SMALL_ENTRY_STYLE
-} from '@/data/constants';
+} from '#/data/constants';
 import {
   addNewEntry,
   copyPassword,
@@ -35,8 +35,8 @@ import {
   editEntry,
   openDatabase,
   showQrCode
-} from '@/data/db-orchestrator';
-import { t } from '@/data/i18n';
+} from '#/data/db-orchestrator';
+import { t } from '#/data/i18n';
 import {
   appSettings,
   isDark,
@@ -47,9 +47,9 @@ import {
   setSelectedDbPath,
   setUnlockedDbIndex,
   unlockedDbIndex
-} from '@/data/shared-state';
-import { openPasswordGenerator } from '@/pages/pw-generator-page';
-import { openSettingsPage } from '@/pages/settings-page';
+} from '#/data/shared-state';
+import { openPasswordGenerator } from '#/pages/pw-generator-page';
+import { openSettingsPage } from '#/pages/settings-page';
 
 function Toolbar(props: { window: Window }) {
   function updateFilter(text: string) {

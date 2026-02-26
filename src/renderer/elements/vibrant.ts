@@ -3,7 +3,7 @@ import {
   type VibrantBlendingMode,
   type VibrantMaterial
 } from 'gui';
-import { Container } from '@/renderer/elements/container';
+import { Container } from '#/renderer/elements/container';
 
 class Vibrant extends Container {
   override node: GuiVibrant;

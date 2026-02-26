@@ -1,19 +1,19 @@
 import { AttributedText, type Entry } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
-import { Expand } from '@/components/expand';
+import { Expand } from '#/components/expand';
 import {
   APP_NAME,
   LARGE_BUTTON_STYLE,
   PAGE_INDEXES,
   TITLE_FONT
-} from '@/data/constants';
-import { t } from '@/data/i18n';
+} from '#/data/constants';
+import { t } from '#/data/i18n';
 import {
   mainPageIndex,
   selectedDbPath,
   setMainPageIndex
-} from '@/data/shared-state';
-import { createListeners } from '@/utils/listen-util';
+} from '#/data/shared-state';
+import { createListeners } from '#/utils/listen-util';
 
 type Pin = number | null;
 

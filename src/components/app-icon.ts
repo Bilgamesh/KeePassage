@@ -1,5 +1,5 @@
 import { Image } from 'gui';
-import logo from '@/assets/img/logo.ico';
+import logo from '#/assets/img/logo.ico';
 
 function AppIcon() {
   return Image.createFromPath(logo).resize(

@@ -1,8 +1,8 @@
 import type { Accessor, Setter } from 'solid-js';
-import { KeysTable } from '@/components/keys-table';
-import { t } from '@/data/i18n';
-import type { YubiKey } from '@/schemas/yubikey-schema';
-import { open } from '@/utils/url-util';
+import { KeysTable } from '#/components/keys-table';
+import { t } from '#/data/i18n';
+import type { YubiKey } from '#/schemas/yubikey-schema';
+import { open } from '#/utils/url-util';
 
 function DatabaseKeys(props: {
   yubiKeys: Accessor<YubiKey[]>;

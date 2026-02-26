@@ -1,13 +1,13 @@
 import { getRandomValues } from 'node:crypto';
 import { Clipboard } from 'gui';
 import { createSignal } from 'solid-js';
-import clipboardIcon from '@/assets/icons/clipboard.png';
-import eyeIcon from '@/assets/icons/eye.png';
-import eyeOffIcon from '@/assets/icons/eye-off.png';
-import refreshIcon from '@/assets/icons/refresh.png';
-import { Expand } from '@/components/expand';
-import { IconButton } from '@/components/icon-button';
-import { NumericEntry } from '@/components/numeric-entry';
+import clipboardIcon from '#/assets/icons/clipboard.png';
+import eyeIcon from '#/assets/icons/eye.png';
+import eyeOffIcon from '#/assets/icons/eye-off.png';
+import refreshIcon from '#/assets/icons/refresh.png';
+import { Expand } from '#/components/expand';
+import { IconButton } from '#/components/icon-button';
+import { NumericEntry } from '#/components/numeric-entry';
 import {
   ENTRY_BUTTON_STYLE,
   LARGE_BUTTON_STYLE,
@@ -15,10 +15,10 @@ import {
   PAGE_INDEXES,
   PASSWORD_FONT,
   SMALL_BUTTON_STYLE
-} from '@/data/constants';
-import { t } from '@/data/i18n';
-import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
-import { createListeners } from '@/utils/listen-util';
+} from '#/data/constants';
+import { t } from '#/data/i18n';
+import { mainPageIndex, setMainPageIndex } from '#/data/shared-state';
+import { createListeners } from '#/utils/listen-util';
 
 const [password, setPassword] = createSignal('');
 const [passwordPolicy, setPasswordPolicy] = createSignal({

@@ -1,6 +1,6 @@
 import { Font } from 'gui';
-import type { Style } from '@/renderer/types';
-import type { Settings } from '@/schemas/settings-schema';
+import type { Style } from '#/renderer/types';
+import type { Settings } from '#/schemas/settings-schema';
 
 export const APP_NAME = 'KeePassage';
 export const APP_ID = 'keepassage';

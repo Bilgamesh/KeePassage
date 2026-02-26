@@ -1,20 +1,20 @@
 import { AttributedText, MessageBox, type Picker, type Window } from 'gui';
 import { createEffect, createMemo, createSignal } from 'solid-js';
-import { Expand } from '@/components/expand';
-import { TimeoutEntry } from '@/components/timeout-entry';
+import { Expand } from '#/components/expand';
+import { TimeoutEntry } from '#/components/timeout-entry';
 import {
   DEFAULT_SETTINGS,
   LARGE_BUTTON_STYLE,
   PAGE_INDEXES,
   TITLE_FONT
-} from '@/data/constants';
-import { dictionaries, t } from '@/data/i18n';
+} from '#/data/constants';
+import { dictionaries, t } from '#/data/i18n';
 import {
   appSettings,
   mainPageIndex,
   setMainPageIndex
-} from '@/data/shared-state';
-import { updateSettings } from '@/service/config-service';
+} from '#/data/shared-state';
+import { updateSettings } from '#/service/config-service';
 
 const [unsavedAppSettings, setUnsavedAppSettings] = createSignal({
   ...appSettings()

@@ -5,25 +5,25 @@ import {
   type Window
 } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
-import logoImage from '@/assets/img/logo.ico';
-import { Expand } from '@/components/expand';
-import { Image } from '@/components/image';
+import logoImage from '#/assets/img/logo.ico';
+import { Expand } from '#/components/expand';
+import { Image } from '#/components/image';
 import {
   APP_NAME,
   DATABASE_EXTENSION,
   LARGE_BUTTON_STYLE,
   TITLE_FONT,
   VERSION
-} from '@/data/constants';
-import { openDatabase } from '@/data/db-orchestrator';
-import { t } from '@/data/i18n';
-import { appSettings } from '@/data/shared-state';
-import { DatabaseCreationPage } from '@/pages/database-creation-page';
-import { render } from '@/renderer';
+} from '#/data/constants';
+import { openDatabase } from '#/data/db-orchestrator';
+import { t } from '#/data/i18n';
+import { appSettings } from '#/data/shared-state';
+import { DatabaseCreationPage } from '#/pages/database-creation-page';
+import { render } from '#/renderer';
 import {
   getDatabaseWindow,
   hasDatabaseWindow
-} from '@/windows/database-window';
+} from '#/windows/database-window';
 
 function WelcomePage(props: { window: Window }) {
   const [dbTable, setDbTable] = createSignal(SimpleTableModel.create(1));

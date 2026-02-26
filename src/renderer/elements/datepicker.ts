@@ -1,5 +1,5 @@
 import { DatePicker as GuiDatePicker } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class DatePicker extends View {
   override node: GuiDatePicker;

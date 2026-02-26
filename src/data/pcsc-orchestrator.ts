@@ -7,13 +7,13 @@ import {
   getBinExecPath,
   getResourcePath,
   getRootDirname
-} from '@/renderer/package';
+} from '#/renderer/package';
 import {
   type DaemonMessage,
   DaemonResponse
-} from '@/schemas/daemon-message-schema';
-import type { YubiKey } from '@/schemas/yubikey-schema';
-import { createLineReader, createListeners } from '@/utils/listen-util';
+} from '#/schemas/daemon-message-schema';
+import type { YubiKey } from '#/schemas/yubikey-schema';
+import { createLineReader, createListeners } from '#/utils/listen-util';
 
 const pcscDaemonFilePath = checkIfPacked()
   ? getResourcePath('pcsc-daemon.cjs')

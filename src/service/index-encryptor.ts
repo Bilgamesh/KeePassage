@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import sodium from 'libsodium-wrappers';
-import type { DbIndex } from '@/schemas/database-schema';
+import type { DbIndex } from '#/schemas/database-schema';
 
 function generateIndexKeyString() {
   const bytes = randomBytes(32);

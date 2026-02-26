@@ -1,5 +1,5 @@
-import { t } from '@/data/i18n';
-import type { TableColumn } from '@/renderer/types';
+import { t } from '#/data/i18n';
+import type { TableColumn } from '#/renderer/types';
 
 function DatabaseColumns() {
   const columns: TableColumn[] = [

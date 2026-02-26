@@ -6,7 +6,7 @@ import {
   MessageLoop,
   type Window
 } from 'gui';
-import { DATABASE_EXTENSION, PAGE_INDEXES } from '@/data/constants';
+import { DATABASE_EXTENSION, PAGE_INDEXES } from '#/data/constants';
 import {
   addNewEntry,
   copyPassword,
@@ -16,8 +16,8 @@ import {
   editEntry,
   openDatabase,
   showQrCode
-} from '@/data/db-orchestrator';
-import { t } from '@/data/i18n';
+} from '#/data/db-orchestrator';
+import { t } from '#/data/i18n';
 import {
   appSettings,
   copyingEnabled,
@@ -28,15 +28,15 @@ import {
   setSelectedDbPath,
   setUnlockedDbIndex,
   unlockedDbIndex
-} from '@/data/shared-state';
-import { DatabaseCreationPage } from '@/pages/database-creation-page';
-import { openPasswordGenerator } from '@/pages/pw-generator-page';
-import { openSettingsPage } from '@/pages/settings-page';
-import { render } from '@/renderer';
-import type { MenuItemOptions } from '@/renderer/types';
-import { updateSettings } from '@/service/config-service';
-import { open } from '@/utils/url-util';
-import { getDatabaseWindow } from '@/windows/database-window';
+} from '#/data/shared-state';
+import { DatabaseCreationPage } from '#/pages/database-creation-page';
+import { openPasswordGenerator } from '#/pages/pw-generator-page';
+import { openSettingsPage } from '#/pages/settings-page';
+import { render } from '#/renderer';
+import type { MenuItemOptions } from '#/renderer/types';
+import { updateSettings } from '#/service/config-service';
+import { open } from '#/utils/url-util';
+import { getDatabaseWindow } from '#/windows/database-window';
 
 const rules = () => [
   {

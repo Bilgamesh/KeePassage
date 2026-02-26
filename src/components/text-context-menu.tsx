@@ -1,6 +1,6 @@
 import { Clipboard, Menu, type TextEdit } from 'gui';
-import { t } from '@/data/i18n';
-import type { MenuItemOptions } from '@/renderer/types';
+import { t } from '#/data/i18n';
+import type { MenuItemOptions } from '#/renderer/types';
 
 function TextContextMenu(props: { editable?: boolean; textEdit: TextEdit }) {
   if (props.editable) {

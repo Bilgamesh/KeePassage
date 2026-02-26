@@ -1,5 +1,5 @@
 import { ProgressBar as GuiProgressBar } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class ProgressBar extends View {
   override node: GuiProgressBar;

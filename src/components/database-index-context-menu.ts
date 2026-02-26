@@ -7,10 +7,10 @@ import {
   deleteEntry,
   editEntry,
   showQrCode
-} from '@/data/db-orchestrator';
-import { t } from '@/data/i18n';
-import { selectedEntry } from '@/data/shared-state';
-import type { MenuItemOptions } from '@/renderer/types';
+} from '#/data/db-orchestrator';
+import { t } from '#/data/i18n';
+import { selectedEntry } from '#/data/shared-state';
+import type { MenuItemOptions } from '#/renderer/types';
 
 function DatabaseIndexContextMenu(props: { window: Window }) {
   if (!selectedEntry()) {

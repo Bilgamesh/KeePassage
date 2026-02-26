@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { YubiKey } from '@/schemas/yubikey-schema';
+import type { YubiKey } from '#/schemas/yubikey-schema';
 
 const Payload = z.object({
   password: z.string()

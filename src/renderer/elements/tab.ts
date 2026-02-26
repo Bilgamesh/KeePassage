@@ -1,5 +1,5 @@
 import { Tab as GuiTab } from 'gui';
-import { View } from '@/renderer/elements/view';
+import { View } from '#/renderer/elements/view';
 
 class Tab extends View {
   override node: GuiTab;

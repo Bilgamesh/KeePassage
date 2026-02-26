@@ -1,10 +1,10 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { DEFAULT_SETTINGS } from '@/data/constants';
-import { getSystemLocale } from '@/data/i18n';
-import { setAppSettings } from '@/data/shared-state';
-import { getRootDirname, isFile } from '@/renderer/package';
-import { Settings } from '@/schemas/settings-schema';
+import { DEFAULT_SETTINGS } from '#/data/constants';
+import { getSystemLocale } from '#/data/i18n';
+import { setAppSettings } from '#/data/shared-state';
+import { getRootDirname, isFile } from '#/renderer/package';
+import { Settings } from '#/schemas/settings-schema';
 
 const path = join(getRootDirname(), 'settings.json');
 let isInit = false;
