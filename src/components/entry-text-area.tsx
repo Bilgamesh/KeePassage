@@ -14,7 +14,7 @@ function EntryTextArea(props: {
       <label
         text={props.title}
         style={{
-          width: props.titleWidth || (process.platform === 'win32' ? 70 : 80),
+          width: props.titleWidth || (process.platform === 'win32' ? 70 : 80)
         }}
         align="end"
         vAlign="start"
@@ -26,7 +26,7 @@ function EntryTextArea(props: {
           if (ev.button === 2 && textEdit.hasFocus()) {
             TextContextMenu({
               editable: true,
-              textEdit,
+              textEdit
             }).popup();
           } else {
             textEdit.focus();

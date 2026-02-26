@@ -24,7 +24,7 @@ function NumericEntry(props: {
     'ArrowLeft',
     'ArrowRight',
     'Home',
-    'End',
+    'End'
   ] as const;
   const [value, setValue] = createSignal(props.value || 1);
   let entry: Entry;
@@ -37,8 +37,8 @@ function NumericEntry(props: {
           props.onValueChange(value);
         }
       },
-      { defer: true },
-    ),
+      { defer: true }
+    )
   );
 
   function increment() {
@@ -47,8 +47,8 @@ function NumericEntry(props: {
     setValue(
       Math.max(
         Math.min(number + 1, props.maxValue || Infinity),
-        props.minValue || -Infinity,
-      ),
+        props.minValue || -Infinity
+      )
     );
     entry.setText(`${value()}`);
   }
@@ -60,8 +60,8 @@ function NumericEntry(props: {
       setValue(
         Math.max(
           Math.min(number - 1, props.maxValue || Infinity),
-          props.minValue || -Infinity,
-        ),
+          props.minValue || -Infinity
+        )
       );
       entry.setText(`${value()}`);
     }
@@ -84,12 +84,12 @@ function NumericEntry(props: {
           }
           if (Number.isNaN(Number(text))) {
             entry.setText(
-              `${Math.max(Math.min(value(), props.maxValue || Infinity), props.minValue || -Infinity)}`,
+              `${Math.max(Math.min(value(), props.maxValue || Infinity), props.minValue || -Infinity)}`
             );
           } else {
             const newValue = Math.max(
               Math.min(Number(text), props.maxValue || Infinity),
-              props.minValue || -Infinity,
+              props.minValue || -Infinity
             );
             setValue(newValue);
             if (entry.getText() !== `${newValue}`) {

@@ -26,7 +26,7 @@ class Container extends View {
   override addChild(child: View, anchor: View | null | undefined): void {
     if (child.parent !== null) {
       throw new Error(
-        `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`,
+        `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`
       );
     }
     if (!anchor) {
@@ -37,7 +37,7 @@ class Container extends View {
       const anchorIndex = this.children.indexOf(anchor);
       if (anchorIndex === -1) {
         throw new Error(
-          `Cannot add child node "${child.name}" under parent node "${this.name}". Could not find anchor node ${anchor.name}.`,
+          `Cannot add child node "${child.name}" under parent node "${this.name}". Could not find anchor node ${anchor.name}.`
         );
       }
       this.node.addChildViewAt(child.node, anchorIndex);
@@ -51,7 +51,7 @@ class Container extends View {
     const index = this.children.indexOf(child);
     if (index === -1) {
       throw new Error(
-        `Cannot remove child node "${child.name}" from parent "${this.name}". Child not found.`,
+        `Cannot remove child node "${child.name}" from parent "${this.name}". Child not found.`
       );
     }
     this.children.splice(index, 1);

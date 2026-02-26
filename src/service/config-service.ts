@@ -35,7 +35,7 @@ async function getSettings() {
 }
 
 async function updateSettings(
-  callback: (settings: Settings) => Promise<Settings> | Settings,
+  callback: (settings: Settings) => Promise<Settings> | Settings
 ) {
   await initConfigFile();
   const settings = await getSettings();

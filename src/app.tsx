@@ -12,7 +12,7 @@ import { WelcomePage } from '@/pages/welcome-page';
 
 function App(props: { window: Window }) {
   appearance.onColorSchemeChange.connect(() =>
-    setDark(appearance.isDarkScheme()),
+    setDark(appearance.isDarkScheme())
   );
   return (
     <>

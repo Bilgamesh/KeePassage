@@ -7,7 +7,7 @@ import {
   APP_NAME,
   MAX_SIZE,
   MIN_SIZE,
-  WINDOWS_APP_BACKGROUND_COLOR,
+  WINDOWS_APP_BACKGROUND_COLOR
 } from '@/data/constants';
 import { killPcscDaemon } from '@/data/pcsc-orchestrator';
 import { appSettings } from '@/data/shared-state';

@@ -17,7 +17,7 @@ import {
   Table,
   TextEdit,
   Vibrant,
-  type View,
+  type View
 } from 'gui';
 import { Browser as BrowserWrapper } from '@/renderer/elements/browser';
 import { Button as ButtonWrapper } from '@/renderer/elements/button';
@@ -86,7 +86,7 @@ class ElementFactory {
       }
     }
     throw new Error(
-      `Cannot create element type ${type}. Type ${type} is not implemented.`,
+      `Cannot create element type ${type}. Type ${type} is not implemented.`
     );
   }
 

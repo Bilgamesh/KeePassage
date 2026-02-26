@@ -14,7 +14,7 @@ async function deriveMasterKey(text: string) {
   return sodium.crypto_generichash(
     sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES,
     input,
-    Buffer.from('keepassage:master-key'),
+    Buffer.from('keepassage:master-key')
   );
 }
 
@@ -25,7 +25,7 @@ async function encryptIndex(indexObject: DbIndex) {
 
   const plaintext = Buffer.from(JSON.stringify(indexObject), 'utf8');
   const nonce = sodium.randombytes_buf(
-    sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES,
+    sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES
   );
   const ad = Buffer.from(`keepassage:index:v${indexObject.version}`);
   const ciphertext = sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
@@ -33,29 +33,29 @@ async function encryptIndex(indexObject: DbIndex) {
     ad,
     null,
     nonce,
-    masterKeyBuffer,
+    masterKeyBuffer
   );
   const data = Buffer.from(
     JSON.stringify({
       nonce: Buffer.from(nonce).toString('base64'),
       ad: ad.toString('base64'),
-      data: Buffer.from(ciphertext).toString('base64'),
-    }),
+      data: Buffer.from(ciphertext).toString('base64')
+    })
   ).toString('base64');
   return {
     indexKey,
-    encrypted: data,
+    encrypted: data
   };
 }
 
 async function decryptIndex(
   encrypted: string,
-  indexKey: string,
+  indexKey: string
 ): Promise<DbIndex> {
   await sodium.ready;
   const masterKeyBuffer = await deriveMasterKey(indexKey);
   const data = JSON.parse(
-    Buffer.from(encrypted, 'base64').toString('utf-8'),
+    Buffer.from(encrypted, 'base64').toString('utf-8')
   ) as {
     nonce: string;
     ad: string;
@@ -70,7 +70,7 @@ async function decryptIndex(
     ciphertext,
     ad,
     nonce,
-    masterKeyBuffer,
+    masterKeyBuffer
   );
   return JSON.parse(Buffer.from(plaintext).toString('utf-8'));
 }

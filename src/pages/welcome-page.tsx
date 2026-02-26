@@ -2,7 +2,7 @@ import {
   AttributedText,
   FileOpenDialog,
   SimpleTableModel,
-  type Window,
+  type Window
 } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
 import logoImage from '@/assets/img/logo.ico';
@@ -13,7 +13,7 @@ import {
   DATABASE_EXTENSION,
   LARGE_BUTTON_STYLE,
   TITLE_FONT,
-  VERSION,
+  VERSION
 } from '@/data/constants';
 import { openDatabase } from '@/data/db-orchestrator';
 import { t } from '@/data/i18n';
@@ -22,7 +22,7 @@ import { DatabaseCreationPage } from '@/pages/database-creation-page';
 import { render } from '@/renderer';
 import {
   getDatabaseWindow,
-  hasDatabaseWindow,
+  hasDatabaseWindow
 } from '@/windows/database-window';
 
 function WelcomePage(props: { window: Window }) {
@@ -52,8 +52,8 @@ function WelcomePage(props: { window: Window }) {
           `${t('welcomeTo')} ${APP_NAME} ${VERSION}`,
           {
             align: 'center',
-            font: TITLE_FONT,
-          },
+            font: TITLE_FONT
+          }
         )}
       />
       <label visible={!recent().length} text={t('startStoring')} />
@@ -68,7 +68,7 @@ function WelcomePage(props: { window: Window }) {
               () => (
                 <DatabaseCreationPage window={win} mainWindow={props.window} />
               ),
-              win,
+              win
             );
             win.activate();
           }}
@@ -85,8 +85,8 @@ function WelcomePage(props: { window: Window }) {
             dialog.setFilters([
               {
                 description: 'KeePassage Database',
-                extensions: [DATABASE_EXTENSION],
-              },
+                extensions: [DATABASE_EXTENSION]
+              }
             ]);
             if (dialog.runForWindow(props.window)) {
               const path = dialog.getResult();
@@ -117,9 +117,9 @@ function WelcomePage(props: { window: Window }) {
               {
                 label: '',
                 options: {
-                  type: 'text',
-                },
-              },
+                  type: 'text'
+                }
+              }
             ]}
             columnsVisible={false}
             style={{ flex: 4 }}

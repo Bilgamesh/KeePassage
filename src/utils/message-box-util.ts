@@ -3,7 +3,7 @@ import { MessageBox, type Window } from 'gui';
 function showError(
   window: Window,
   error: unknown,
-  options?: { title?: string },
+  options?: { title?: string }
 ) {
   const msgBox = MessageBox.create();
   msgBox.setType('error');

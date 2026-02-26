@@ -9,12 +9,12 @@ export const [selectedDbPath, setSelectedDbPath] = createSignal('');
 export const [unlockedDbIndex, setUnlockedDbIndex] =
   createSignal<DbIndex | null>(null);
 export const [selectedEntry, setSelectedEntry] = createSignal<Entry | null>(
-  null,
+  null
 );
 export const [filter, setFilter] = createSignal<{
   run: (entry: Entry) => boolean;
 }>({
-  run: () => true,
+  run: () => true
 });
 export const [copyingEnabled, setCopyingEnabled] = createSignal(true);
 export const [isDark, setDark] = createSignal(appearance.isDarkScheme());

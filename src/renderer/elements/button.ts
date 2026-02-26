@@ -2,7 +2,7 @@ import {
   type ButtonStyle,
   type ControlSize,
   Button as GuiButton,
-  type Image,
+  type Image
 } from 'gui';
 import { View } from '@/renderer/elements/view';
 

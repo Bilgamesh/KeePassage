@@ -83,7 +83,7 @@ class YubiKeyIdentity implements Identity {
     const ephemeralPublic = base64nopad.decode(stanza?.args[2]!);
     const recipientPublic = bech32.decodeToBytes(this.publicKey).bytes;
     const salt = new Uint8Array(
-      ephemeralPublic.length + recipientPublic.length,
+      ephemeralPublic.length + recipientPublic.length
     );
     salt.set(ephemeralPublic);
     salt.set(recipientPublic, ephemeralPublic.length);
@@ -92,7 +92,7 @@ class YubiKeyIdentity implements Identity {
       sharedSecret,
       salt,
       STANZA_KEY_LABEL,
-      ENCRYPTED_FILE_KEY_BYTES,
+      ENCRYPTED_FILE_KEY_BYTES
     );
 
     const nonce = new Uint8Array(NONCE_LENGTH);

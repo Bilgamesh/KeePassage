@@ -21,7 +21,7 @@ function KeysTable(props: {
         `${yubiKey.serial}`,
         `${yubiKey.slot}`,
         yubiKey.publicKey,
-        yubiKey.paired,
+        yubiKey.paired
       ]);
     }
   });
@@ -31,30 +31,30 @@ function KeysTable(props: {
       label: t('serialNumber'),
       options: {
         type: 'text',
-        width: 90,
-      },
+        width: 90
+      }
     },
     {
       label: t('slot'),
       options: {
         type: 'text',
-        width: 30,
-      },
+        width: 30
+      }
     },
     {
       label: t('publicKey'),
       options: {
         type: 'text',
-        width: 350,
-      },
+        width: 350
+      }
     },
     {
       label: t('paired'),
       options: {
         type: 'checkbox',
-        width: 70,
-      },
-    },
+        width: 70
+      }
+    }
   ] satisfies { label: string; options: TableColumnOptions }[];
 
   return (

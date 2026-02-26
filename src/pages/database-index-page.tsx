@@ -10,7 +10,7 @@ import {
   filter,
   selectedEntry,
   setSelectedEntry,
-  unlockedDbIndex,
+  unlockedDbIndex
 } from '@/data/shared-state';
 import type { Entry } from '@/schemas/database-schema';
 
@@ -29,7 +29,7 @@ function DatabaseIndexPage(props: { window: Window }) {
         displayedUserName,
         entry.url,
         entry.notes,
-        new Date(entry.modified).toLocaleString(),
+        new Date(entry.modified).toLocaleString()
       ]);
     }
     return tableModel;
@@ -70,7 +70,7 @@ function DatabaseIndexPage(props: { window: Window }) {
             title: '',
             url: '',
             username: '',
-            modified: 0,
+            modified: 0
           }
         }
       />

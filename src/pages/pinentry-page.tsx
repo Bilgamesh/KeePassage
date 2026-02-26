@@ -5,13 +5,13 @@ import {
   APP_NAME,
   LARGE_BUTTON_STYLE,
   PAGE_INDEXES,
-  TITLE_FONT,
+  TITLE_FONT
 } from '@/data/constants';
 import { t } from '@/data/i18n';
 import {
   mainPageIndex,
   selectedDbPath,
-  setMainPageIndex,
+  setMainPageIndex
 } from '@/data/shared-state';
 import { createListeners } from '@/utils/listen-util';
 
@@ -67,7 +67,7 @@ function PinentryPage() {
           <label
             attributedText={AttributedText.create(purpose(), {
               align: 'start',
-              font: TITLE_FONT,
+              font: TITLE_FONT
             })}
             align="start"
           />

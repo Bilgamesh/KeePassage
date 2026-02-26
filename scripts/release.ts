@@ -18,7 +18,7 @@ async function copyModule(module: string) {
   await cp(
     join(import.meta.dirname, '..', 'node_modules', module),
     join(import.meta.dirname, '..', 'release', 'node_modules', module),
-    { recursive: true },
+    { recursive: true }
   );
   const end = performance.now();
   logStep(`✅ Copied ${module} in ${((end - start) / 1000).toFixed(2)}s`);
@@ -28,7 +28,7 @@ async function copyResources() {
   await cp(
     join(import.meta.dirname, '..', 'src', 'assets'),
     join(import.meta.dirname, '..', 'release', 'out', 'res'),
-    { recursive: true },
+    { recursive: true }
   );
 }
 
@@ -109,12 +109,12 @@ const appInfo = {
   main: 'index.cjs',
   unpack: '+(*.node)',
   build: {
-    minify: true,
+    minify: true
   },
   appId: 'keepassage',
   productName: 'KeePassage',
   description: 'KeePassage',
-  copyright: `Copyright © ${new Date().getFullYear()} KeePassage`,
+  copyright: `Copyright © ${new Date().getFullYear()} KeePassage`
 };
 
 logStep('🚀 Starting release build process...');
@@ -146,13 +146,13 @@ await writeFile(
         version: appInfo.version,
         copyright: appInfo.copyright,
         icons: {
-          win: '../src/assets/img/logo.ico',
-        },
-      },
+          win: '../src/assets/img/logo.ico'
+        }
+      }
     },
     null,
-    2,
-  ),
+    2
+  )
 );
 logStep('✅ Bundle and package.json ready.');
 
@@ -164,7 +164,7 @@ await packageApp(
   join(import.meta.dirname, '..', 'release'),
   appInfo,
   process.platform,
-  null,
+  null
 );
 const yackageEnd = performance.now();
 const yackageDuration = ((yackageEnd - yackageStart) / 1000).toFixed(2);
@@ -175,7 +175,7 @@ logStep(`✅ Yackage build finished in ${yackageDuration}s`);
 logStep('📥 Fetching Node binary...');
 const nodeFetchStart = performance.now();
 const { path: nodePath } = await getNode('local', {
-  output: join(import.meta.dirname, '..', 'release'),
+  output: join(import.meta.dirname, '..', 'release')
 });
 const nodeFetchEnd = performance.now();
 const nodeFetchDuration = ((nodeFetchEnd - nodeFetchStart) / 1000).toFixed(2);
@@ -190,14 +190,14 @@ const daemonDest = join(
   'release',
   'out',
   'res',
-  'pcsc-daemon.cjs',
+  'pcsc-daemon.cjs'
 );
 const pcscSrc = join(
   import.meta.dirname,
   '..',
   'node_modules',
   detectPcscPkg(),
-  'addon.node',
+  'addon.node'
 );
 const pcscDest = join(
   import.meta.dirname,
@@ -207,7 +207,7 @@ const pcscDest = join(
   'res',
   'node_modules',
   'pcsc-mini',
-  'addon.node',
+  'addon.node'
 );
 const nodeDest =
   join(import.meta.dirname, '..', 'release', 'out', 'res', 'bin', 'node') +
@@ -216,7 +216,7 @@ await Promise.all([
   cp(daemonSrc, daemonDest),
   cp(pcscSrc, pcscDest),
   cp(nodePath, nodeDest),
-  copyResources(),
+  copyResources()
 ]);
 
 // === Step 6: Patch PCSC Daemon ===
@@ -229,9 +229,9 @@ const patched = code.replaceAll(
     'node_modules',
     'pcsc-mini',
     'build',
-    'addon.node',
+    'addon.node'
   ).replaceAll('\\', '\\\\'),
-  './node_modules/pcsc-mini/addon.node',
+  './node_modules/pcsc-mini/addon.node'
 );
 await writeFile(daemonDest, patched);
 
@@ -242,10 +242,10 @@ if (process.platform === 'win32') {
     'version-string': {
       FileDescription: `${appInfo.description} PCSC Daemon`,
       ProductName: `${appInfo.productName} PCSC Daemon`,
-      LegalCopyright: appInfo.copyright,
+      LegalCopyright: appInfo.copyright
     },
     'file-version': appInfo.version,
-    'product-version': appInfo.version,
+    'product-version': appInfo.version
   });
 }
 

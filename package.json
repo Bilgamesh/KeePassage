@@ -6,7 +6,7 @@
     "node": "~22"
   },
   "scripts": {
-    "format": "biome format --write && biome lint --write --unsafe && biome check --write",
+    "format": "biome format --write && biome lint --write && biome check --write",
     "build": "tsc && vite build --mode app && vite build --mode daemon",
     "start": "node ./scripts/yode.ts build/index.cjs",
     "dev:prepare": "rimraf build && shx mkdir build && shx touch build/index.cjs",

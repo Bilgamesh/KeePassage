@@ -87,13 +87,13 @@ class YubiKeyRecipient implements Recipient {
       sharedSecret,
       salt,
       STANZA_KEY_LABEL,
-      ENCRYPTED_FILE_KEY_BYTES,
+      ENCRYPTED_FILE_KEY_BYTES
     );
 
     const stanzaArgs = [
       STANZA_TAG,
       base64nopad.encode(this.tag),
-      base64nopad.encode(ephemeralPublic),
+      base64nopad.encode(ephemeralPublic)
     ];
 
     if (this.serial) {

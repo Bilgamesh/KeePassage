@@ -4,7 +4,7 @@ const YubiKey = z.object({
   serial: z.number(),
   slot: z.number(),
   publicKey: z.string(),
-  paired: z.boolean(),
+  paired: z.boolean()
 });
 type YubiKey = z.infer<typeof YubiKey>;
 

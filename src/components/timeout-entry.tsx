@@ -28,7 +28,7 @@ function TimeoutEntry(props: {
     'ArrowLeft',
     'ArrowRight',
     'Home',
-    'End',
+    'End'
   ] as const;
   const [seconds, setSeconds] = createSignal(props.value || 0);
   let entry: Entry;
@@ -42,8 +42,8 @@ function TimeoutEntry(props: {
           props.onValueChange(value);
         }
       },
-      { defer: true },
-    ),
+      { defer: true }
+    )
   );
 
   function increment() {

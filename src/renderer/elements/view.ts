@@ -3,7 +3,7 @@ import {
   Cursor,
   type CursorType,
   type Font,
-  type View as GuiView,
+  type View as GuiView
 } from 'gui';
 
 class View {
@@ -18,13 +18,13 @@ class View {
 
   addChild(child: View, _anchor: View | null | undefined): void {
     throw new Error(
-      `Cannot add child node "${child.name}" under parent node "${this.name}". Node type "${this.name}" cannot have children`,
+      `Cannot add child node "${child.name}" under parent node "${this.name}". Node type "${this.name}" cannot have children`
     );
   }
 
   removeChild(child: View): void {
     throw new Error(
-      `Cannot remove child node "${child.name}" from parent "${this.name}". Node type "${this.name}" cannot have children`,
+      `Cannot remove child node "${child.name}" from parent "${this.name}". Node type "${this.name}" cannot have children`
     );
   }
 
@@ -102,7 +102,7 @@ class View {
         break;
       default:
         throw new Error(
-          `Property "${name}" is not supported for element type "${this.name}"`,
+          `Property "${name}" is not supported for element type "${this.name}"`
         );
     }
   }

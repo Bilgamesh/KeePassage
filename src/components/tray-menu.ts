@@ -6,7 +6,7 @@ import {
   setMainPageIndex,
   setSelectedDbPath,
   setUnlockedDbIndex,
-  unlockedDbIndex,
+  unlockedDbIndex
 } from '@/data/shared-state';
 
 function TrayMenu(props: {
@@ -22,7 +22,7 @@ function TrayMenu(props: {
         } else {
           props.toggleVisibility(props.win, false);
         }
-      },
+      }
     },
     {
       label: t('lockDb'),
@@ -30,20 +30,20 @@ function TrayMenu(props: {
         setUnlockedDbIndex(null);
         setSelectedDbPath('');
         setMainPageIndex(PAGE_INDEXES.WELCOME);
-      },
+      }
     },
     {
       label: t('quit'),
       onClick: () => {
         MessageLoop.quit();
         process.exit(0);
-      },
-    },
+      }
+    }
   ]);
   menu
     .itemAt(1)
     .setEnabled(
-      unlockedDbIndex() !== null && mainPageIndex() === PAGE_INDEXES.DB_INDEX,
+      unlockedDbIndex() !== null && mainPageIndex() === PAGE_INDEXES.DB_INDEX
     );
   return menu;
 }

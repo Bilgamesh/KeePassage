@@ -12,7 +12,7 @@ const Settings = z.object({
   clipboardTimout: z.number().nullable(),
   dbTimeout: z.number().nullable(),
   dbMinimiseLock: z.boolean(),
-  language: z.string(),
+  language: z.string()
 });
 type Settings = z.infer<typeof Settings>;
 

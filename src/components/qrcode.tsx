@@ -8,7 +8,7 @@ function QRCode(props: { code: string; window: Window }) {
         attributedText={AttributedText.create(props.code, {
           font: PASSWORD_FONT,
           align: 'center',
-          wrap: false,
+          wrap: false
         })}
       />
     </container>

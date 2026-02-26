@@ -29,7 +29,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
         addKey(key);
       }
     },
-    { immediate: true },
+    { immediate: true }
   );
   props.window.onClose.connect(cleanup);
 
@@ -44,14 +44,14 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
           style={{
             flex: 1,
             flexDirection: 'column',
-            'margin-right': 20,
+            'margin-right': 20
           }}
         >
           <label
             style={{ 'margin-left': 10 }}
             attributedText={AttributedText.create(titles(page()) || '404', {
               font: TITLE_FONT,
-              align: 'start',
+              align: 'start'
             })}
           />
           <group title={t('dbCreation')} style={{ flex: 3 }}>
@@ -69,7 +69,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
             style={{
               flexDirection: 'row',
               'margin-top': 10,
-              'margin-bottom': 10,
+              'margin-bottom': 10
             }}
           >
             <Expand />
@@ -86,7 +86,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
               style={{
                 height: 30,
                 width: 100,
-                'margin-left': 10,
+                'margin-left': 10
               }}
               onClick={() => {
                 if (page() !== 1) {
@@ -97,7 +97,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                     description,
                     selectedKeys,
                     window: props.window,
-                    mainWindow: props.mainWindow,
+                    mainWindow: props.mainWindow
                   });
                 }
               }}

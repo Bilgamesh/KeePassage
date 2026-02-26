@@ -10,14 +10,14 @@ function TextContextMenu(props: { editable?: boolean; textEdit: TextEdit }) {
         role: 'copy',
         onClick: () => {
           props.textEdit.copy();
-        },
+        }
       },
       {
         label: t('cut'),
         role: 'cut',
         onClick: () => {
           props.textEdit.cut();
-        },
+        }
       },
       {
         label: t('paste'),
@@ -25,15 +25,15 @@ function TextContextMenu(props: { editable?: boolean; textEdit: TextEdit }) {
         enabled: !!Clipboard.get().getText(),
         onClick: () => {
           props.textEdit.paste();
-        },
+        }
       },
       {
         label: t('select_all'),
         role: 'select-all',
         onClick: () => {
           props.textEdit.selectAll();
-        },
-      },
+        }
+      }
     ] as MenuItemOptions[]);
   } else {
     return Menu.create([
@@ -42,15 +42,15 @@ function TextContextMenu(props: { editable?: boolean; textEdit: TextEdit }) {
         role: 'copy',
         onClick: () => {
           props.textEdit.copy();
-        },
+        }
       },
       {
         label: t('select_all'),
         role: 'select-all',
         onClick: () => {
           props.textEdit.selectAll();
-        },
-      },
+        }
+      }
     ] as MenuItemOptions[]);
   }
 }

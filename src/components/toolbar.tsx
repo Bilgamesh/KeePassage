@@ -3,7 +3,7 @@ import {
   Event,
   FileOpenDialog,
   type KeyEvent,
-  type Window,
+  type Window
 } from 'gui';
 import { createEffect } from 'solid-js';
 import copyIcon from '@/assets/icons/copy.png';
@@ -24,7 +24,7 @@ import {
   DARK_MODE_FONT_COLOR,
   DATABASE_EXTENSION,
   PAGE_INDEXES,
-  SMALL_ENTRY_STYLE,
+  SMALL_ENTRY_STYLE
 } from '@/data/constants';
 import {
   addNewEntry,
@@ -34,7 +34,7 @@ import {
   deleteEntry,
   editEntry,
   openDatabase,
-  showQrCode,
+  showQrCode
 } from '@/data/db-orchestrator';
 import { t } from '@/data/i18n';
 import {
@@ -46,7 +46,7 @@ import {
   setMainPageIndex,
   setSelectedDbPath,
   setUnlockedDbIndex,
-  unlockedDbIndex,
+  unlockedDbIndex
 } from '@/data/shared-state';
 import { openPasswordGenerator } from '@/pages/pw-generator-page';
 import { openSettingsPage } from '@/pages/settings-page';
@@ -63,7 +63,7 @@ function Toolbar(props: { window: Window }) {
           entry.tags.toLowerCase().includes(text) ||
           entry.url.toLowerCase().includes(text)
         );
-      },
+      }
     });
   }
   let searchBar: Entry;
@@ -104,8 +104,8 @@ function Toolbar(props: { window: Window }) {
             dialog.setFilters([
               {
                 description: 'KeePassage Database',
-                extensions: [DATABASE_EXTENSION],
-              },
+                extensions: [DATABASE_EXTENSION]
+              }
             ]);
             if (dialog.runForWindow(props.window)) {
               const path = dialog.getResult();
@@ -250,7 +250,7 @@ function Toolbar(props: { window: Window }) {
             'margin-left': 2,
             'margin-right': 20,
             'margin-top': 14,
-            ...SMALL_ENTRY_STYLE,
+            ...SMALL_ENTRY_STYLE
           }}
           onKeyDown={(self, ev) => {
             if (ev.key === 'Enter') {

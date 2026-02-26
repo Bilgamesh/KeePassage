@@ -30,8 +30,8 @@ function createListeners<T>() {
         reject(
           new DOMException('Operation aborted', {
             name: 'AbortError',
-            cause: options?.signal?.reason,
-          }),
+            cause: options?.signal?.reason
+          })
         );
       }
 
@@ -68,7 +68,7 @@ function createListeners<T>() {
     removeListener,
     waitForValue,
     hasListener,
-    notifyListeners,
+    notifyListeners
   };
 }
 

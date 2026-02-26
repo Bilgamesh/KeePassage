@@ -1,7 +1,7 @@
 import {
   TextEdit as GuiTextEdit,
   type ScrollElasticity,
-  type ScrollPolicy,
+  type ScrollPolicy
 } from 'gui';
 import { View } from '@/renderer/elements/view';
 

@@ -21,9 +21,9 @@ function IconButton(props: {
     const image = Image.createFromPath(props.src).resize(
       {
         height: props.imageSize?.height || 20,
-        width: props.imageSize?.width || 20,
+        width: props.imageSize?.width || 20
       },
-      4,
+      4
     );
     if (!props.enabled) {
       return image.tint(DISABLED_COLOR);
@@ -46,7 +46,7 @@ function IconButton(props: {
         width: props.size?.width || 40,
         'margin-left': 10,
         'margin-top': 5,
-        ...(props.style || {}),
+        ...(props.style || {})
       }}
       image={image()}
       tooltip={props.tooltip || ''}

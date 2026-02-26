@@ -40,7 +40,7 @@ function getRootDirname() {
   init();
   if (rootDirName === null) {
     throw new Error(
-      'Cannot access rootDirName. FolderUtil must be initialized first.',
+      'Cannot access rootDirName. FolderUtil must be initialized first.'
     );
   }
   return rootDirName;
@@ -50,7 +50,7 @@ function getExecFileName() {
   init();
   if (dirname === null) {
     throw new Error(
-      'Cannot resolve execFileName. FolderUtil must be initialized first.',
+      'Cannot resolve execFileName. FolderUtil must be initialized first.'
     );
   }
   return execFileName;
@@ -90,5 +90,5 @@ export {
   getResourceFolder,
   getResourcePath,
   getRootDirname,
-  isFile,
+  isFile
 };

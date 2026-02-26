@@ -1,7 +1,7 @@
 import {
   Table as GuiTable,
   type TableColumnOptions,
-  type TableModel,
+  type TableModel
 } from 'gui';
 import { View } from '@/renderer/elements/view';
 

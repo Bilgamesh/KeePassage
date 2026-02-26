@@ -8,7 +8,7 @@ import { appSettings } from '@/data/shared-state';
 import {
   checkIfPacked,
   getResourcePath,
-  getRootDirname,
+  getRootDirname
 } from '@/renderer/package';
 
 type RawDictionary = typeof en;
@@ -22,7 +22,7 @@ const folder = checkIfPacked()
 
 function getDictionaries() {
   const names = readdirSync(folder).map((file) =>
-    file.toLocaleLowerCase().replace('.json', ''),
+    file.toLocaleLowerCase().replace('.json', '')
   );
   const dicts = [];
   for (const name of names) {
@@ -43,7 +43,7 @@ function sanitizeLocale(locale: string) {
     {
       'pl-PL': 'pl',
       'en-US': 'en',
-      'en-GB': 'en',
+      'en-GB': 'en'
     }[locale] || 'en'
   );
 }
@@ -54,7 +54,7 @@ function getSystemLocale() {
 
 const t = translator(() => {
   const dict = dictionaries.find(
-    (d) => d.languageCode === appSettings().language,
+    (d) => d.languageCode === appSettings().language
   );
   if (!dict) {
     throw new Error('Attempted to translate with `null` dictionary');

@@ -9,7 +9,7 @@ import {
   setMainPageIndex,
   setSelectedDbPath,
   setUnlockedDbIndex,
-  unlockedDbIndex,
+  unlockedDbIndex
 } from '@/data/shared-state';
 import { requestEntry } from '@/pages/entry-page';
 import { requestPin } from '@/pages/pinentry-page';
@@ -22,7 +22,7 @@ import {
   getMatchingKey,
   loadDatabase,
   saveDatabase,
-  unlockDatabase,
+  unlockDatabase
 } from '@/service/database-service';
 import { decrypt } from '@/service/pcsc-service';
 import { showError } from '@/utils/message-box-util';
@@ -41,8 +41,8 @@ async function openDatabase(window: Window, path: string) {
       window,
       `Please connect the correct YubiKey with one of the following serial numbers:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
       {
-        title: 'YubiKey Not Connected',
-      },
+        title: 'YubiKey Not Connected'
+      }
     );
     return;
   }
@@ -60,9 +60,9 @@ async function openDatabase(window: Window, path: string) {
         encryptedIndexKey: key.encryptedIndexKey,
         publicKey: key.publicKey,
         slot: key.slot,
-        pin,
+        pin
       },
-      { signal },
+      { signal }
     );
     setUnlockedDbIndex({ ...index });
     setMainPageIndex(PAGE_INDEXES.DB_INDEX);
@@ -110,8 +110,8 @@ async function saveNewDatabase(options: {
   dialog.setFilters([
     {
       description: t('keepassageDb'),
-      extensions: [DATABASE_EXTENSION],
-    },
+      extensions: [DATABASE_EXTENSION]
+    }
   ]);
 
   if (dialog.runForWindow(window)) {
@@ -120,7 +120,7 @@ async function saveNewDatabase(options: {
       keys: selectedKeys(),
       name: dbName(),
       description: description(),
-      path,
+      path
     });
     await updateSettings((settings) => {
       const index = settings.recent.indexOf(path);
@@ -145,8 +145,8 @@ async function getPassword(options: { entry: Entry; window: Window }) {
       window,
       `${t('pleaseConnectCorrectKey')}:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
       {
-        title: t('keyNotConnected'),
-      },
+        title: t('keyNotConnected')
+      }
     );
     return null;
   }
@@ -162,7 +162,7 @@ async function getPassword(options: { entry: Entry; window: Window }) {
       pin,
       key.publicKey,
       key.slot,
-      { signal },
+      { signal }
     );
     return password;
   } catch (err) {
@@ -184,7 +184,7 @@ async function addNewEntry() {
     });
     saveDatabase({
       db: unlockedDbIndex()!,
-      path: selectedDbPath(),
+      path: selectedDbPath()
     });
   }
 }
@@ -193,7 +193,7 @@ async function editEntry(window: Window) {
   const entry = selectedEntry();
   if (!entry) {
     showError(window, t('pleaseSelectEntryToEdit'), {
-      title: 'Entry Not Selected',
+      title: 'Entry Not Selected'
     });
     return;
   }
@@ -219,7 +219,7 @@ async function deleteEntry(window: Window) {
   const entry = selectedEntry();
   if (!entry) {
     showError(window, t('pleaseSelectEntryToDelete'), {
-      title: 'Entry Not Selected',
+      title: 'Entry Not Selected'
     });
     return;
   }
@@ -227,7 +227,7 @@ async function deleteEntry(window: Window) {
   const index = db.secrets.indexOf(entry);
   if (index === -1) {
     showError(window, t('cannotDeleteEntryDoesNotExist'), {
-      title: 'Entry Not Selected',
+      title: 'Entry Not Selected'
     });
     return;
   }
@@ -340,5 +340,5 @@ export {
   openDatabase,
   refreshDbLock,
   saveNewDatabase,
-  showQrCode,
+  showQrCode
 };

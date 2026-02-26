@@ -14,7 +14,7 @@ import {
   LARGE_ENTRY_STYLE,
   PAGE_INDEXES,
   PASSWORD_FONT,
-  SMALL_BUTTON_STYLE,
+  SMALL_BUTTON_STYLE
 } from '@/data/constants';
 import { t } from '@/data/i18n';
 import { mainPageIndex, setMainPageIndex } from '@/data/shared-state';
@@ -26,7 +26,7 @@ const [passwordPolicy, setPasswordPolicy] = createSignal({
   upperCase: true,
   numbers: true,
   symbols: true,
-  length: 32,
+  length: 32
 });
 let previousPageIndex: number = PAGE_INDEXES.WELCOME;
 let controller: AbortController;
@@ -39,7 +39,7 @@ async function getGeneratedPassword() {
   openPasswordGenerator();
   try {
     const password = await pwListeners.waitForValue({
-      signal: controller.signal,
+      signal: controller.signal
     });
     setRequestInProgress(false);
     return password;
@@ -113,7 +113,7 @@ function PwGeneratorPage() {
               tooltip={t('previewPassword')}
               src={visible() ? eyeOffIcon : eyeIcon}
               size={{
-                ...(ENTRY_BUTTON_STYLE as { height: number; width: number }),
+                ...(ENTRY_BUTTON_STYLE as { height: number; width: number })
               }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
@@ -125,7 +125,7 @@ function PwGeneratorPage() {
               tooltip={t('generateNew')}
               src={refreshIcon}
               size={{
-                ...(ENTRY_BUTTON_STYLE as { height: number; width: number }),
+                ...(ENTRY_BUTTON_STYLE as { height: number; width: number })
               }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
@@ -137,7 +137,7 @@ function PwGeneratorPage() {
               tooltip={t('copyToClipboard')}
               src={clipboardIcon}
               size={{
-                ...(ENTRY_BUTTON_STYLE as { height: number; width: number }),
+                ...(ENTRY_BUTTON_STYLE as { height: number; width: number })
               }}
               imageSize={{ height: 15, width: 15 }}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
@@ -160,8 +160,8 @@ function PwGeneratorPage() {
                   ...v,
                   length: Math.max(
                     Math.min(Math.round(slider.getValue()), 128),
-                    1,
-                  ),
+                    1
+                  )
                 }));
                 generate();
               }}
@@ -186,12 +186,12 @@ function PwGeneratorPage() {
                   style={{
                     ...SMALL_BUTTON_STYLE,
                     'margin-left': 10,
-                    'margin-top': 5,
+                    'margin-top': 5
                   }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({
                       ...v,
-                      upperCase: !v.upperCase,
+                      upperCase: !v.upperCase
                     }));
                     generate();
                   }}
@@ -201,12 +201,12 @@ function PwGeneratorPage() {
                   style={{
                     ...SMALL_BUTTON_STYLE,
                     'margin-left': 10,
-                    'margin-top': 5,
+                    'margin-top': 5
                   }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({
                       ...v,
-                      lowerCase: !v.lowerCase,
+                      lowerCase: !v.lowerCase
                     }));
                     generate();
                   }}
@@ -216,7 +216,7 @@ function PwGeneratorPage() {
                   style={{
                     ...SMALL_BUTTON_STYLE,
                     'margin-left': 10,
-                    'margin-top': 5,
+                    'margin-top': 5
                   }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, numbers: !v.numbers }));
@@ -228,7 +228,7 @@ function PwGeneratorPage() {
                   style={{
                     ...SMALL_BUTTON_STYLE,
                     'margin-left': 10,
-                    'margin-top': 5,
+                    'margin-top': 5
                   }}
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, symbols: !v.symbols }));

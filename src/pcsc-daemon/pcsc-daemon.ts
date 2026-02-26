@@ -1,13 +1,13 @@
 import { Decrypter, Encrypter } from 'age-encryption';
 import {
   RETIRED_SLOTS,
-  withYubiKeyClient,
+  withYubiKeyClient
 } from '@/pcsc-daemon/lib/yubikey-client';
 import { YubiKeyIdentity } from '@/pcsc-daemon/lib/yubikey-identity';
 import { YubiKeyRecipient } from '@/pcsc-daemon/lib/yubikey-recipient';
 import {
   DaemonMessage,
-  type DaemonResponse,
+  type DaemonResponse
 } from '@/schemas/daemon-message-schema';
 import { createLineReader } from '@/utils/listen-util';
 
@@ -35,7 +35,7 @@ process.stdin.on(
               payload.publicKey,
               payload.body,
               payload.pin,
-              payload.slot,
+              payload.slot
             );
             break;
           default:
@@ -46,10 +46,10 @@ process.stdin.on(
       send({
         status: 'GENERAL_ERROR',
         id: '',
-        error: 'Failed to parse App Request',
+        error: 'Failed to parse App Request'
       });
     }
-  }),
+  })
 );
 
 function send(obj: DaemonResponse) {
@@ -72,14 +72,14 @@ function detectYubiKeys(requestId: string) {
                 status: 'DETECT_YUBIKEYS_SUCCESS',
                 serial: serial,
                 slot: number,
-                publicKey,
+                publicKey
               });
             }
           } catch (err) {
             send({
               id: requestId,
               status: 'DETECT_YUBIKEYS_ERROR',
-              error: `${err}`,
+              error: `${err}`
             });
           }
         }
@@ -87,7 +87,7 @@ function detectYubiKeys(requestId: string) {
         send({
           id: requestId,
           status: 'DETECT_YUBIKEYS_ERROR',
-          error: `${err}`,
+          error: `${err}`
         });
       }
     },
@@ -95,36 +95,36 @@ function detectYubiKeys(requestId: string) {
       send({
         id: requestId,
         status: 'DETECT_YUBIKEYS_ERROR',
-        error: `${error}`,
+        error: `${error}`
       });
-    },
+    }
   );
 }
 
 async function ageEncrypt(
   requestId: string,
   publicKey: string,
-  message: string,
+  message: string
 ) {
   try {
     const encrypter = new Encrypter();
     encrypter.addRecipient(
       new YubiKeyRecipient({
-        publicKey,
-      }),
+        publicKey
+      })
     );
     const ciphertext = await encrypter.encrypt(message);
     const result = Buffer.from(ciphertext).toString('base64');
     send({
       id: requestId,
       status: 'AGE_ENCRYPT_SUCCESS',
-      body: result,
+      body: result
     });
   } catch (err) {
     send({
       id: requestId,
       status: 'AGE_ENCRYPT_ERROR',
-      error: `${err}`,
+      error: `${err}`
     });
   }
 }
@@ -134,14 +134,14 @@ async function ageDecrypt(
   publicKey: string,
   encrypted: string,
   pin: number,
-  slot: number,
+  slot: number
 ) {
   const slotId = RETIRED_SLOTS.find((rs) => rs.number === slot)?.id;
   if (slotId === undefined) {
     send({
       id: requestId,
       status: 'AGE_DECRYPT_ERROR',
-      error: `Invalid slot: ${slot}`,
+      error: `Invalid slot: ${slot}`
     });
     return;
   }
@@ -154,23 +154,23 @@ async function ageDecrypt(
           yubiKey: client,
           pin: `${pin}`,
           publicKey: publicKey,
-          slot: slotId,
-        }),
+          slot: slotId
+        })
       );
       const ciphertext = new Uint8Array(Buffer.from(encrypted, 'base64'));
       const decrypted = await decrypter.decrypt(ciphertext, 'text');
       send({
         id: requestId,
         status: 'AGE_DECRYPT_SUCCESS',
-        body: decrypted,
+        body: decrypted
       });
     },
     (error) => {
       send({
         id: requestId,
         status: 'AGE_DECRYPT_ERROR',
-        error: `${error}`,
+        error: `${error}`
       });
-    },
+    }
   );
 }

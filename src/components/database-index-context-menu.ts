@@ -6,7 +6,7 @@ import {
   copyUsername,
   deleteEntry,
   editEntry,
-  showQrCode,
+  showQrCode
 } from '@/data/db-orchestrator';
 import { t } from '@/data/i18n';
 import { selectedEntry } from '@/data/shared-state';
@@ -19,8 +19,8 @@ function DatabaseIndexContextMenu(props: { window: Window }) {
         label: t('newEntry...'),
         onClick: (_self) => {
           addNewEntry();
-        },
-      },
+        }
+      }
     ] as MenuItemOptions[]);
   } else {
     return Menu.create([
@@ -28,45 +28,45 @@ function DatabaseIndexContextMenu(props: { window: Window }) {
         label: t('copyUsername'),
         onClick: () => {
           copyUsername();
-        },
+        }
       },
       {
         label: t('copyPassword'),
         onClick: () => {
           copyPassword(props.window);
-        },
+        }
       },
       {
         label: t('showQrCode'),
         onClick: () => {
           showQrCode(props.window);
-        },
+        }
       },
       {
         label: t('copyUrl'),
         onClick: () => {
           copyUrl();
-        },
+        }
       },
       { type: 'separator' },
       {
         label: t('editEntry'),
         onClick: () => {
           editEntry(props.window);
-        },
+        }
       },
       {
         label: t('deleteEntry'),
         onClick: () => {
           deleteEntry(props.window);
-        },
+        }
       },
       {
         label: t('newEntry'),
         onClick: () => {
           addNewEntry();
-        },
-      },
+        }
+      }
     ] as MenuItemOptions[]);
   }
 }

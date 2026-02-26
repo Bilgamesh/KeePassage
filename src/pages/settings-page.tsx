@@ -6,18 +6,18 @@ import {
   DEFAULT_SETTINGS,
   LARGE_BUTTON_STYLE,
   PAGE_INDEXES,
-  TITLE_FONT,
+  TITLE_FONT
 } from '@/data/constants';
 import { dictionaries, t } from '@/data/i18n';
 import {
   appSettings,
   mainPageIndex,
-  setMainPageIndex,
+  setMainPageIndex
 } from '@/data/shared-state';
 import { updateSettings } from '@/service/config-service';
 
 const [unsavedAppSettings, setUnsavedAppSettings] = createSignal({
-  ...appSettings(),
+  ...appSettings()
 });
 
 let previousPageIndex: number = PAGE_INDEXES.WELCOME;
@@ -37,11 +37,11 @@ function openSettingsPage() {
 
 function SettingsPage(props: { window: Window }) {
   const languages = createMemo(() =>
-    dictionaries.map((dict) => t(dict.languageCode as 'en')),
+    dictionaries.map((dict) => t(dict.languageCode as 'en'))
   );
   const currentLanguageIndex = () =>
     dictionaries.findIndex(
-      (d) => d.languageCode === unsavedAppSettings().language,
+      (d) => d.languageCode === unsavedAppSettings().language
     );
   let picker: Picker;
 
@@ -61,7 +61,7 @@ function SettingsPage(props: { window: Window }) {
         style={{ 'margin-left': 5 }}
         attributedText={AttributedText.create(t('applicationSettings'), {
           align: 'start',
-          font: TITLE_FONT,
+          font: TITLE_FONT
         })}
       />
       <group
@@ -76,7 +76,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  showToolbar: checkbox.isChecked(),
+                  showToolbar: checkbox.isChecked()
                 }));
               }}
             />
@@ -86,7 +86,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  showMenuBar: checkbox.isChecked(),
+                  showMenuBar: checkbox.isChecked()
                 }));
               }}
             />
@@ -96,7 +96,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  showPreview: checkbox.isChecked(),
+                  showPreview: checkbox.isChecked()
                 }));
               }}
             />
@@ -106,7 +106,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  minimiseInsteadOfExit: checkbox.isChecked(),
+                  minimiseInsteadOfExit: checkbox.isChecked()
                 }));
               }}
             />
@@ -116,7 +116,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  showTrayIcon: checkbox.isChecked(),
+                  showTrayIcon: checkbox.isChecked()
                 }));
               }}
             />
@@ -126,7 +126,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  alwaysOnTop: checkbox.isChecked(),
+                  alwaysOnTop: checkbox.isChecked()
                 }));
               }}
             />
@@ -136,7 +136,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  hideUserNames: checkbox.isChecked(),
+                  hideUserNames: checkbox.isChecked()
                 }));
               }}
             />
@@ -154,7 +154,7 @@ function SettingsPage(props: { window: Window }) {
                   const dict = dictionaries[index]!;
                   setUnsavedAppSettings((s) => ({
                     ...s,
-                    language: dict.languageCode,
+                    language: dict.languageCode
                   }));
                 }}
               />
@@ -166,7 +166,7 @@ function SettingsPage(props: { window: Window }) {
         title={t('timeouts')}
         style={{
           height: process.platform === 'win32' ? 85 : 100,
-          'margin-top': 10,
+          'margin-top': 10
         }}
       >
         <container>
@@ -183,7 +183,7 @@ function SettingsPage(props: { window: Window }) {
                   ...s,
                   clipboardTimout: checked
                     ? s.clipboardTimout || DEFAULT_SETTINGS.clipboardTimout
-                    : null,
+                    : null
                 }));
               }}
               onValueChange={(value) => {
@@ -201,7 +201,7 @@ function SettingsPage(props: { window: Window }) {
                   ...s,
                   dbTimeout: checked
                     ? s.dbTimeout || DEFAULT_SETTINGS.dbTimeout
-                    : null,
+                    : null
                 }));
               }}
               onValueChange={(value) => {
@@ -220,7 +220,7 @@ function SettingsPage(props: { window: Window }) {
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
-                  dbMinimiseLock: checkbox.isChecked(),
+                  dbMinimiseLock: checkbox.isChecked()
                 }));
               }}
             />

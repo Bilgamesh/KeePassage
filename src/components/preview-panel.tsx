@@ -10,7 +10,7 @@ import { t } from '@/data/i18n';
 import {
   appSettings,
   selectedEntry,
-  setMainPageIndex,
+  setMainPageIndex
 } from '@/data/shared-state';
 import type { Entry } from '@/schemas/database-schema';
 import { IconButton } from './icon-button';
@@ -45,13 +45,13 @@ function PreviewPanel(props: {
       style={{
         flex: 1,
         margin: 20,
-        'margin-top': 0,
+        'margin-top': 0
       }}
     >
       <label
         attributedText={AttributedText.create(props.entry.title, {
           font: TITLE_FONT,
-          align: 'start',
+          align: 'start'
         })}
         style={{ 'margin-left': 10 }}
       />
@@ -67,7 +67,7 @@ function PreviewPanel(props: {
             value={password() === null ? '***' : password()!}
             style={{
               'margin-top': 10,
-              height: process.platform === 'win32' ? 22 : 35,
+              height: process.platform === 'win32' ? 22 : 35
             }}
           >
             <IconButton

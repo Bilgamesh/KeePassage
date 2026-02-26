@@ -19,25 +19,25 @@ export const PAGE_INDEXES = {
   DB_INDEX: 3,
   ENTRY: 4,
   SETTINGS: 5,
-  GENERATOR: 6,
+  GENERATOR: 6
 } as const;
 export const SMALL_BUTTON_STYLE: Style = {
   height: 30,
-  width: 80,
+  width: 80
 };
 export const LARGE_BUTTON_STYLE: Style = {
   height: 30,
-  width: 140,
+  width: 140
 };
 export const ENTRY_BUTTON_STYLE: Style = {
   height: 25,
-  width: 25,
+  width: 25
 };
 export const SMALL_ENTRY_STYLE: Style = {
-  height: 20,
+  height: 20
 };
 export const LARGE_ENTRY_STYLE: Style = {
-  height: 25,
+  height: 25
 };
 export const PASSWORD_FONT = Font.create('Consolas', 18, 'normal', 'normal');
 export const TITLE_FONT = Font.create('Arial', 18, 'bold', 'normal');
@@ -55,5 +55,5 @@ export const DEFAULT_SETTINGS: Settings = {
   clipboardTimout: 10,
   dbTimeout: 900,
   dbMinimiseLock: false,
-  language: 'en',
+  language: 'en'
 };

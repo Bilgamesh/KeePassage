@@ -26,14 +26,14 @@ const yuePlugin: (config: {
     return {
       resolve: {
         alias: {
-          '@': config.src,
-        },
+          '@': config.src
+        }
       },
       ssr: {
         noExternal: true,
         resolve: {
-          conditions: ['browser'],
-        },
+          conditions: ['browser']
+        }
       },
       build: {
         target: 'node22',
@@ -45,14 +45,14 @@ const yuePlugin: (config: {
           input: config.input,
           output: {
             format: 'cjs',
-            entryFileNames: config.output,
+            entryFileNames: config.output
           },
           external: ['gui'],
-          treeshake: true,
-        },
-      },
+          treeshake: true
+        }
+      }
     };
-  },
+  }
 });
 
 export default yuePlugin;

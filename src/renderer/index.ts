@@ -14,14 +14,14 @@ const renderer = createRenderer({
       return elementFactory.createElement('container');
     }
     throw new Error(
-      `Cannot add node "${text}". Text nodes are not supported. Try <label text="${text.replaceAll('"', '\\"')}" /> instead.`,
+      `Cannot add node "${text}". Text nodes are not supported. Try <label text="${text.replaceAll('"', '\\"')}" /> instead.`
     );
   },
   replaceText(_node: ViewWrapper | null, _text: string): void {},
   insertNode(
     parent: ViewWrapper | null,
     node: ViewWrapper | null,
-    anchor: ViewWrapper | null | undefined,
+    anchor: ViewWrapper | null | undefined
   ): void {
     if (node === null) {
       throw new Error('Cannot insert node "null".');
@@ -67,7 +67,7 @@ const renderer = createRenderer({
     }
     if (node.parent === null) {
       throw new Error(
-        `Cannot get next sibling of node "${node.name}" with parent "null".`,
+        `Cannot get next sibling of node "${node.name}" with parent "null".`
       );
     }
     let isNextSibling = false;
@@ -80,7 +80,7 @@ const renderer = createRenderer({
       }
     }
     return null;
-  },
+  }
 });
 
 function render(code: () => ViewWrapper, window: Window): void {
@@ -98,7 +98,7 @@ export {
   Show,
   Suspense,
   SuspenseList,
-  Switch,
+  Switch
 } from 'solid-js';
 
 export const {
@@ -112,7 +112,7 @@ export const {
   spread,
   setProp,
   mergeProps,
-  use,
+  use
 } = renderer;
 
 export { render };

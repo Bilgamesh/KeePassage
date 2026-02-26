@@ -9,13 +9,13 @@ import { IconButton } from '@/components/icon-button';
 import {
   LARGE_BUTTON_STYLE,
   PAGE_INDEXES,
-  SMALL_ENTRY_STYLE,
+  SMALL_ENTRY_STYLE
 } from '@/data/constants';
 import { t } from '@/data/i18n';
 import {
   mainPageIndex,
   setMainPageIndex,
-  unlockedDbIndex,
+  unlockedDbIndex
 } from '@/data/shared-state';
 import { getGeneratedPassword } from '@/pages/pw-generator-page';
 import type { Entry } from '@/schemas/database-schema';
@@ -42,12 +42,12 @@ function getRawEntry() {
     url: url(),
     tags: tags(),
     notes: notes(),
-    modified: modified(),
+    modified: modified()
   };
 }
 
 function restoreRawEntry(
-  form: Omit<Entry, 'encryptedPayloads'> & { password: string },
+  form: Omit<Entry, 'encryptedPayloads'> & { password: string }
 ) {
   setTitle(form.title);
   setUsername(form.username);
@@ -67,7 +67,7 @@ async function requestEntry(password?: string, existingEntry?: Entry) {
   }
   try {
     const entry = await entryListeners.waitForValue({
-      signal: controller.signal,
+      signal: controller.signal
     });
     return entry;
   } catch (err) {
@@ -98,8 +98,8 @@ function EntryPage() {
         { password: password() },
         key.publicKey,
         {
-          signal: controller.signal,
-        },
+          signal: controller.signal
+        }
       );
       encryptedPayloads.push(encryptedPayload);
     }
@@ -110,7 +110,7 @@ function EntryPage() {
       url: url(),
       tags: tags(),
       notes: notes(),
-      modified: modified(),
+      modified: modified()
     });
   }
 
@@ -139,7 +139,7 @@ function EntryPage() {
           imageSize={{ height: 13, width: 13 }}
           style={{
             'margin-top': 0,
-            'margin-left': 4,
+            'margin-left': 4
           }}
           onClick={async () => {
             const oldEntry = getRawEntry();
@@ -154,7 +154,7 @@ function EntryPage() {
           imageSize={{ height: 13, width: 13 }}
           style={{
             'margin-top': 0,
-            'margin-left': 2,
+            'margin-left': 2
           }}
           onClick={() => {
             setPasswordVisible((v) => !v);

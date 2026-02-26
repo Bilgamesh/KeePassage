@@ -18,7 +18,7 @@ function EntryLine(props: {
       <label
         text={props.title}
         style={{
-          width: props.titleWidth || (process.platform === 'win32' ? 70 : 80),
+          width: props.titleWidth || (process.platform === 'win32' ? 70 : 80)
         }}
         align="end"
       />
@@ -29,7 +29,7 @@ function EntryLine(props: {
           flex: 1,
           'margin-left': 10,
           'margin-right': 0,
-          ...SMALL_ENTRY_STYLE,
+          ...SMALL_ENTRY_STYLE
         }}
         onKeyDown={(self, ev) => {
           if (ev.key === 'Enter') {
@@ -53,7 +53,7 @@ function EntryLine(props: {
           flex: 1,
           'margin-left': 10,
           'margin-right': 0,
-          ...SMALL_ENTRY_STYLE,
+          ...SMALL_ENTRY_STYLE
         }}
         onKeyDown={(self, ev) => {
           if (ev.key === 'Enter') {

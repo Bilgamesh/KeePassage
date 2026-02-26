@@ -25,7 +25,7 @@ async function addDatabase(config: {
     name: config.name,
     description: config.description,
     secrets: [],
-    keys: config.keys,
+    keys: config.keys
   });
   const encryptedIndexKeys: string[] = [];
 
@@ -40,8 +40,8 @@ async function addDatabase(config: {
     s: config.keys.map((k) => ({
       serial: k.serial,
       slot: k.slot,
-      publicKey: k.publicKey,
-    })),
+      publicKey: k.publicKey
+    }))
   };
 
   await writeDatabase(config.path, dbFile);
@@ -50,7 +50,7 @@ async function addDatabase(config: {
 async function getMatchingKey(dbFile: DbFile, timeoutMs?: number) {
   try {
     const { publicKey, serial, slot } = await detectYubiKey({
-      timeoutMs,
+      timeoutMs
     });
     for (let i = 0; i < dbFile.s.length; i++) {
       const { publicKey: requiredKey } = dbFile.s[i]!;
@@ -60,7 +60,7 @@ async function getMatchingKey(dbFile: DbFile, timeoutMs?: number) {
           serial,
           slot,
           publicKey,
-          index: i,
+          index: i
         };
       }
     }
@@ -79,14 +79,14 @@ async function unlockDatabase(
     publicKey: string;
     slot: number;
   },
-  options?: { signal?: AbortSignal },
+  options?: { signal?: AbortSignal }
 ) {
   const { password: indexKey } = await decrypt(
     key.encryptedIndexKey,
     key.pin,
     key.publicKey,
     key.slot,
-    options,
+    options
   );
   return await decryptIndex(dbFile.i, indexKey);
 }
@@ -104,7 +104,7 @@ async function saveDatabase(config: { db: DbIndex; path: string }) {
     name: config.db.name,
     description: config.db.description,
     secrets: config.db.secrets,
-    keys: config.db.keys,
+    keys: config.db.keys
   });
   const encryptedIndexKeys: string[] = [];
 
@@ -119,8 +119,8 @@ async function saveDatabase(config: { db: DbIndex; path: string }) {
     s: config.db.keys.map((k) => ({
       serial: k.serial,
       slot: k.slot,
-      publicKey: k.publicKey,
-    })),
+      publicKey: k.publicKey
+    }))
   };
 
   await writeDatabase(config.path, dbFile);
@@ -131,5 +131,5 @@ export {
   getMatchingKey,
   loadDatabase,
   saveDatabase,
-  unlockDatabase,
+  unlockDatabase
 };
