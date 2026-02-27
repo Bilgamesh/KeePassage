@@ -50,7 +50,10 @@ class YubiKeyIdentity implements Identity {
       return null;
     }
     const stanza = stanzas[0];
-    const epkBytes = base64nopad.decode(stanza?.args[2]!);
+    if (stanza === undefined) {
+      throw new Error('Missing stanza');
+    }
+    const epkBytes = base64nopad.decode(stanza.args[2]!);
 
     await this.yubiKey.selectPiv();
 
@@ -80,7 +83,7 @@ class YubiKeyIdentity implements Identity {
       throw new Error('Invalid inner TLV');
     }
 
-    const ephemeralPublic = base64nopad.decode(stanza?.args[2]!);
+    const ephemeralPublic = base64nopad.decode(stanza.args[2]!);
     const recipientPublic = bech32.decodeToBytes(this.publicKey).bytes;
     const salt = new Uint8Array(
       ephemeralPublic.length + recipientPublic.length
@@ -97,7 +100,7 @@ class YubiKeyIdentity implements Identity {
 
     const nonce = new Uint8Array(NONCE_LENGTH);
 
-    return chacha20poly1305(key, nonce).decrypt(stanza?.body!);
+    return chacha20poly1305(key, nonce).decrypt(stanza.body);
   }
 }
 

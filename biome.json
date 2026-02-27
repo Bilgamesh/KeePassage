@@ -20,9 +20,6 @@
       "a11y": "off",
       "style": {
         "noNonNullAssertion": "off"
-      },
-      "suspicious": {
-        "noNonNullAssertedOptionalChain": "off"
       }
     }
   },

@@ -6,7 +6,7 @@
     "node": "~22"
   },
   "scripts": {
-    "format": "biome format --write && biome lint --write && biome check --write",
+    "format": "biome check --write",
     "build": "tsc && vite build --mode app && vite build --mode daemon",
     "start": "node ./scripts/yode.ts build/index.cjs",
     "dev:prepare": "rimraf build && shx mkdir build && shx touch build/index.cjs",
@@ -17,9 +17,6 @@
     "watch:yode": "node scripts/yode.ts --watch build/index.cjs",
     "release": "rimraf release && npm run build && node scripts/release.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@scure/base": "^2.0.0",
     "@solid-primitives/i18n": "^2.2.1",
