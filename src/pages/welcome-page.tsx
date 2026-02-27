@@ -42,9 +42,9 @@ function WelcomePage(props: { window: Window }) {
     <container style={{ flex: 1, flexDirection: 'column' }}>
       <Expand />
       <Image
-        src={logoImage}
-        size={{ height: 50, width: 50 }}
         scale={2}
+        size={{ height: 50, width: 50 }}
+        src={logoImage}
         style={{ 'margin-bottom': 20 }}
       />
       <label
@@ -56,26 +56,24 @@ function WelcomePage(props: { window: Window }) {
           }
         )}
       />
-      <label visible={!recent().length} text={t('startStoring')} />
+      <label text={t('startStoring')} visible={!recent().length} />
       <container style={{ flexDirection: 'row', 'margin-top': 20 }}>
         <Expand />
         <button
-          title={`+ ${t('createDatabase')}`}
-          style={LARGE_BUTTON_STYLE}
           onClick={() => {
             const win = getDatabaseWindow();
             render(
               () => (
-                <DatabaseCreationPage window={win} mainWindow={props.window} />
+                <DatabaseCreationPage mainWindow={props.window} window={win} />
               ),
               win
             );
             win.activate();
           }}
+          style={LARGE_BUTTON_STYLE}
+          title={`+ ${t('createDatabase')}`}
         />
         <button
-          title={t('openDb')}
-          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={async () => {
             if (hasDatabaseWindow()) {
               getDatabaseWindow().activate();
@@ -93,26 +91,29 @@ function WelcomePage(props: { window: Window }) {
               openDatabase(props.window, path);
             }
           }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
+          title={t('openDb')}
         />
         <button
           enabled={false}
-          title={t('importFile')}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
+          title={t('importFile')}
         />
         <Expand />
       </container>
       <container
-        visible={recent().length > 0}
         style={{ flex: 1, flexDirection: 'row' }}
+        visible={recent().length > 0}
       >
         <Expand direction="row" />
         <container style={{ flexDirection: 'column', width: 440 }}>
           <label
-            text={t('recentDatabases')}
             align="start"
             style={{ 'margin-top': 20, 'margin-bottom': 5 }}
+            text={t('recentDatabases')}
           />
           <table
+            columnsVisible={false}
             columnsWithOptions={[
               {
                 label: '',
@@ -121,8 +122,6 @@ function WelcomePage(props: { window: Window }) {
                 }
               }
             ]}
-            columnsVisible={false}
-            style={{ flex: 4 }}
             hasBorder={true}
             model={dbTable()}
             onRowActivate={async (_table, row) => {
@@ -133,6 +132,7 @@ function WelcomePage(props: { window: Window }) {
               const path = recent()[row]!;
               openDatabase(props.window, path);
             }}
+            style={{ flex: 4 }}
           />
         </container>
         <Expand direction="row" />

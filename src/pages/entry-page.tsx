@@ -117,75 +117,75 @@ function EntryPage() {
   return (
     <container style={{ flex: 1, margin: 20, 'margin-right': 40 }}>
       <EntryLine
-        title={`${t('title')}:`}
-        text={title}
         onTextChange={setTitle}
+        text={title}
+        title={`${t('title')}:`}
       />
       <EntryLine
-        title={`${t('username')}:`}
-        text={username}
         onTextChange={setUsername}
+        text={username}
+        title={`${t('username')}:`}
       />
       <EntryLine
-        title={t('password')}
-        text={password}
-        type={passwordVisible() ? 'normal' : 'password'}
         onTextChange={setPassword}
+        text={password}
+        title={t('password')}
+        type={passwordVisible() ? 'normal' : 'password'}
       >
         <IconButton
-          tooltip={t('passwordGenerator')}
-          src={diceIcon}
-          size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           imageSize={{ height: 13, width: 13 }}
-          style={{
-            'margin-top': 0,
-            'margin-left': 4
-          }}
           onClick={async () => {
             const oldEntry = getRawEntry();
             const pw = await getGeneratedPassword();
             restoreRawEntry({ ...oldEntry, password: pw || oldEntry.password });
           }}
+          size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
+          src={diceIcon}
+          style={{
+            'margin-top': 0,
+            'margin-left': 4
+          }}
+          tooltip={t('passwordGenerator')}
         />
         <IconButton
-          tooltip={t('previewPassword')}
-          src={passwordVisible() ? eyeOffIcon : eyeIcon}
-          size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           imageSize={{ height: 13, width: 13 }}
+          onClick={() => {
+            setPasswordVisible((v) => !v);
+          }}
+          size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
+          src={passwordVisible() ? eyeOffIcon : eyeIcon}
           style={{
             'margin-top': 0,
             'margin-left': 2
           }}
-          onClick={() => {
-            setPasswordVisible((v) => !v);
-          }}
+          tooltip={t('previewPassword')}
         />
       </EntryLine>
-      <EntryLine title={t('url')} text={url} onTextChange={setUrl} />
-      <EntryLine title={t('tags')} text={tags} onTextChange={setTags} />
+      <EntryLine onTextChange={setUrl} text={url} title={t('url')} />
+      <EntryLine onTextChange={setTags} text={tags} title={t('tags')} />
       <EntryTextArea
-        title={t('notes')}
-        text={notes}
-        style={{ flex: 1, flexDirection: 'row', 'margin-top': 10 }}
         onTextChange={setNotes}
+        style={{ flex: 1, flexDirection: 'row', 'margin-top': 10 }}
+        text={notes}
+        title={t('notes')}
       />
       <container style={{ flexDirection: 'row', 'margin-top': 20 }}>
         <Expand direction="row" />
         <button
-          title={t('ok')}
           enabled={title().trim().length > 0}
-          style={LARGE_BUTTON_STYLE}
           onClick={() => {
             setModified(Date.now());
             onEntrySubmit();
           }}
+          style={LARGE_BUTTON_STYLE}
+          title={t('ok')}
         />
         <button
-          title={t('cancel')}
-          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 20 }}
           onClick={(_button) => {
             controller.abort('Cancel');
           }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 20 }}
+          title={t('cancel')}
         />
       </container>
     </container>

@@ -28,12 +28,12 @@ function PreviewLine(props: {
   return (
     <container style={{ flexDirection: 'row', ...(props.style || {}) }}>
       <label
-        style={{ width: 80 }}
         attributedText={AttributedText.create(props.label, {
           font: PREVIEW_LABEL_FONT,
           align: 'end',
           valign: props.last ? 'start' : 'center'
         })}
+        style={{ width: 80 }}
       />
       <Space height={1} width={10} />
       {props.children}
@@ -43,16 +43,6 @@ function PreviewLine(props: {
         {...(process.platform === 'win32'
           ? { backgroundColor: WINDOWS_APP_BACKGROUND_COLOR }
           : {})}
-        onMouseDown={(textEdit, ev) => {
-          if (ev.button === 2 && textEdit.hasFocus()) {
-            TextContextMenu({
-              editable: false,
-              textEdit
-            }).popup();
-          } else {
-            textEdit.focus();
-          }
-        }}
         onKeyDown={(_textedit, ev) => {
           switch (ev.key) {
             case 'Control':
@@ -70,6 +60,16 @@ function PreviewLine(props: {
             default:
               setCopyingEnabled(true);
               break;
+          }
+        }}
+        onMouseDown={(textEdit, ev) => {
+          if (ev.button === 2 && textEdit.hasFocus()) {
+            TextContextMenu({
+              editable: false,
+              textEdit
+            }).popup();
+          } else {
+            textEdit.focus();
           }
         }}
         onTextChange={(textedit) => {

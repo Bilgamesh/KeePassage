@@ -18,30 +18,30 @@ function DatabaseGeneralInfo(props: {
       </container>
       <container style={{ flexDirection: 'row', 'margin-top': 20 }}>
         <label
-          text={t('dbName')}
-          style={{ width: 120, 'margin-left': 10 }}
           align="start"
+          style={{ width: 120, 'margin-left': 10 }}
+          text={t('dbName')}
         />
         <entry
-          style={{ flex: 1, 'margin-right': 10 }}
-          text={props.dbName()}
           onTextChange={(self) => {
             props.setDbName(self.getText());
           }}
+          style={{ flex: 1, 'margin-right': 10 }}
+          text={props.dbName()}
         />
       </container>
       <container style={{ flexDirection: 'row', 'margin-top': 10 }}>
         <label
-          text={t('description')}
-          style={{ width: 120, 'margin-left': 10 }}
           align="start"
+          style={{ width: 120, 'margin-left': 10 }}
+          text={t('description')}
         />
         <entry
-          style={{ flex: 1, 'margin-right': 10 }}
-          text={props.description()}
           onTextChange={(self) => {
             props.setDescription(self.getText());
           }}
+          style={{ flex: 1, 'margin-right': 10 }}
+          text={props.description()}
         />
       </container>
     </container>

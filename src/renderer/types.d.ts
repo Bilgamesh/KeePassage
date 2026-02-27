@@ -40,16 +40,13 @@ export type TableColumn = {
 };
 
 export interface view<NodeType> {
-  ref?: (element: { node: NodeType }) => void;
-  color?: string;
   backgroundColor?: string;
-  enabled?: boolean;
+  color?: string;
   cursor?: gui.CursorType;
+  enabled?: boolean;
   focusable?: boolean;
   font?: gui.Font;
   mouseDownCanMoveWindow?: boolean;
-  tooltip?: string;
-  visible?: boolean;
   onCaptureLost?: (self: NodeType) => void;
   onDragLeave?: (self: NodeType) => void;
   onFocusIn?: (self: NodeType) => void;
@@ -62,14 +59,17 @@ export interface view<NodeType> {
   onMouseMove?: (self: NodeType, event: gui.MouseEvent) => void;
   onMouseUp?: (self: NodeType, event: gui.MouseEvent) => void;
   onSizeChanged?: (self: NodeType) => void;
+  ref?: (element: { node: NodeType }) => void;
   style?: Style;
+  tooltip?: string;
+  visible?: boolean;
 }
 
 export interface label<NodeType> extends view<NodeType> {
-  text?: string;
   align?: gui.TextAlign;
-  vAlign?: gui.TextAlign;
   attributedText?: gui.AttributedText;
+  text?: string;
+  vAlign?: gui.TextAlign;
 }
 
 export interface container<NodeType> extends view<NodeType> {
@@ -78,64 +78,64 @@ export interface container<NodeType> extends view<NodeType> {
 }
 
 export interface button<NodeType> extends view<NodeType> {
-  title?: string;
+  buttonStyle?: gui.ButtonStyle;
   controlSize?: gui.ControlSize;
   hasBorder?: boolean;
   image?: gui.Image;
-  buttonStyle?: gui.ButtonStyle;
   onClick?: (self: NodeType) => void;
+  title?: string;
 }
 
 export interface datepicker<NodeType> extends view<NodeType> {
-  range?: { minimum: Date; maximum: Date };
   date?: Date;
   onDateChange?: (self: NodeType) => void;
+  range?: { minimum: Date; maximum: Date };
 }
 
 export interface combobox<NodeType> extends picker<NodeType> {
-  text?: string;
   onTextChange?: (self: NodeType) => void;
+  text?: string;
 }
 
 export interface picker<NodeType> extends view<NodeType> {
   items?: string[];
-  selectedItemIndex?: number;
   onSelectionChange?: (self: NodeType) => void;
+  selectedItemIndex?: number;
 }
 
 export interface entry<NodeType> extends view<NodeType> {
-  text?: string;
-  onTextChange?: (self: NodeType) => void;
   onActivate?: (self: NodeType) => void;
+  onTextChange?: (self: NodeType) => void;
+  text?: string;
 }
 
 export interface gifplayer<NodeType> extends view<NodeType> {
-  image?: gui.Image;
   animating?: boolean;
+  image?: gui.Image;
   scale?: gui.ImageScale;
 }
 
 export interface group<NodeType> extends view<NodeType> {
-  title?: string;
   children?: [gui.Container];
+  title?: string;
 }
 
 export interface progressbar<NodeType> extends view<NodeType> {
-  value?: number;
   indeterminate?: boolean;
+  value?: number;
 }
 
 export interface scroll<NodeType> extends view<NodeType> {
-  contentSize?: gui.SizeF;
   children?: [gui.View];
-  scrollPosition?: { horizon: number; vertical: number };
+  contentSize?: gui.SizeF;
+  onScroll?: (self: NodeType) => void;
   overlayScrollbar?: boolean;
   scrollbarPolicy?: { hpolicy: gui.ScrollPolicy; vpolicy: gui.ScrollPolicy };
   scrollElasticity?: {
     helasticity: gui.ScrollElasticity;
     velasticity: gui.ScrollElasticity;
   };
-  onScroll?: (self: NodeType) => void;
+  scrollPosition?: { horizon: number; vertical: number };
 }
 
 export interface vseparator<NodeType> extends view<NodeType> {}
@@ -143,51 +143,51 @@ export interface vseparator<NodeType> extends view<NodeType> {}
 export interface hseparator<NodeType> extends view<NodeType> {}
 
 export interface slider<NodeType> extends view<NodeType> {
-  value?: number;
-  step?: number;
-  range?: { min: number; max: number };
-  onValueChange?: (self: NodeType) => void;
   onSlidingComplete?: (self: NodeType) => void;
+  onValueChange?: (self: NodeType) => void;
+  range?: { min: number; max: number };
+  step?: number;
+  value?: number;
 }
 
 export interface tab<NodeType> extends view<NodeType> {
   children: gui.View[];
-  titles: string[];
-  selectedPage?: number;
   onSelectedPageChange?: (self: NodeType) => void;
+  selectedPage?: number;
+  titles: string[];
 }
 
 export interface table<NodeType> extends view<NodeType> {
-  model?: gui.TableModel;
   columns?: string[];
-  columnsWithOptions?: { label: string; options: gui.TableColumnOptions }[];
   columnsVisible?: boolean;
-  rowHeight?: number;
+  columnsWithOptions?: { label: string; options: gui.TableColumnOptions }[];
   hasBorder?: boolean;
+  model?: gui.TableModel;
   multipleSelections?: boolean;
+  onRowActivate?: (self: NodeType, row: number) => void;
+  onSelectionChange?: (self: NodeType) => void;
+  onToggleCheckbox?: (self: NodeType, column: number, row: number) => void;
+  rowHeight?: number;
   selectedRow?: number;
   selectedRows?: number[];
-  onSelectionChange?: (self: NodeType) => void;
-  onRowActivate?: (self: NodeType, row: number) => void;
-  onToggleCheckbox?: (self: NodeType, column: number, row: number) => void;
 }
 
 export interface textedit<NodeType> extends view<NodeType> {
-  text?: string;
-  selectedRange?: { start: number; end: number };
+  onTextChange?: (self: NodeType) => void;
   overlayScrollbar?: boolean;
   scrollbarPolicy?: { hpolicy: gui.ScrollPolicy; vpolicy: gui.ScrollPolicy };
   scrollElasticity?: {
     helasticity: gui.ScrollElasticity;
     velasticity: gui.ScrollElasticity;
   };
-  onTextChange?: (self: NodeType) => void;
+  selectedRange?: { start: number; end: number };
   shouldInsertNewLine?: (self: NodeType) => boolean;
+  text?: string;
 }
 
 export interface vibrant<NodeType> extends container<NodeType> {
-  material?: gui.VibrantMaterial;
   blendingMode?: gui.VibrantBlendingMode;
+  material?: gui.VibrantMaterial;
 }
 
 export interface checkbox<NodeType> extends button<NodeType> {
@@ -199,46 +199,46 @@ export interface radio<NodeType> extends button<NodeType> {
 }
 
 export interface browser<NodeType> extends view<NodeType> {
-  url?: string;
   html?: { html: string; baseUrl?: string } | string;
-  userAgent?: string;
-  magnifiable?: boolean;
   javaScript?: { code: string; callback?: () => void };
-  onClose?: (self: NodeType) => void;
-  onUpdateCommand?: (self: NodeType) => void;
+  magnifiable?: boolean;
   onChangeLoading?: (self: NodeType) => void;
-  onUpdateTitle?: (self: NodeType, title: string) => void;
-  onStartNavigation?: (self: NodeType, url: string) => void;
+  onClose?: (self: NodeType) => void;
   onCommitNavigation?: (self: NodeType, url: string) => void;
-  onFinishNavigation?: (self: NodeType, url: string) => void;
   onFailNavigation?: (self: NodeType, url: string, code: number) => void;
+  onFinishNavigation?: (self: NodeType, url: string) => void;
+  onStartNavigation?: (self: NodeType, url: string) => void;
+  onUpdateCommand?: (self: NodeType) => void;
+  onUpdateTitle?: (self: NodeType, title: string) => void;
+  url?: string;
+  userAgent?: string;
 }
 
 declare module 'solid-js' {
   namespace JSX {
     interface IntrinsicElements {
-      label: label<gui.Label>;
-      container: container<gui.Container>;
+      browser: browser<gui.Browser>;
       button: button<gui.Button>;
-      datepicker: datepicker<gui.DatePicker>;
-      picker: picker<gui.Picker>;
+      checkbox: checkbox<gui.Button>;
       combobox: combobox<gui.ComboBox>;
+      container: container<gui.Container>;
+      datepicker: datepicker<gui.DatePicker>;
       entry: entry<gui.Entry>;
-      password: entry<gui.Entry>;
       gifplayer: gifplayer<gui.GifPlayer>;
       group: group<gui.Group>;
-      progressbar: progressbar<gui.ProgressBar>;
-      scroll: scroll<gui.Scroll>;
-      vseparator: vseparator<gui.Separator>;
       hseparator: hseparator<gui.Separator>;
+      label: label<gui.Label>;
+      password: entry<gui.Entry>;
+      picker: picker<gui.Picker>;
+      progressbar: progressbar<gui.ProgressBar>;
+      radio: radio<gui.Button>;
+      scroll: scroll<gui.Scroll>;
       slider: slider<gui.Slider>;
       tab: tab<gui.Tab>;
       table: table<gui.Table>;
       textedit: textedit<gui.TextEdit>;
       vibrant: vibrant<gui.Vibrant>;
-      checkbox: checkbox<gui.Button>;
-      radio: radio<gui.Button>;
-      browser: browser<gui.Browser>;
+      vseparator: vseparator<gui.Separator>;
     }
   }
 }

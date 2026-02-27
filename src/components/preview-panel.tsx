@@ -41,12 +41,12 @@ function PreviewPanel(props: {
 
   return (
     <container
-      visible={props.visible !== false}
       style={{
         flex: 1,
         margin: 20,
         'margin-top': 0
       }}
+      visible={props.visible !== false}
     >
       <label
         attributedText={AttributedText.create(props.entry.title, {
@@ -59,23 +59,19 @@ function PreviewPanel(props: {
         <container style={{ flex: 1, flexDirection: 'column' }}>
           <PreviewLine
             label={`${t('username')}:`}
-            value={displayedUserName()}
             style={{ 'margin-top': 10, height: 20 }}
+            value={displayedUserName()}
           />
           <PreviewLine
             label={t('password')}
-            value={password() === null ? '***' : password()!}
             style={{
               'margin-top': 10,
               height: process.platform === 'win32' ? 22 : 35
             }}
+            value={password() === null ? '***' : password()!}
           >
             <IconButton
-              src={password() === null ? eyeIcon : eyeOffIcon}
-              tooltip={t('previewPassword')}
-              size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
-              style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
               onClick={() => {
                 if (password() === null) {
                   showPassword();
@@ -83,47 +79,51 @@ function PreviewPanel(props: {
                   setPassword(null);
                 }
               }}
+              size={{ height: 20, width: 20 }}
+              src={password() === null ? eyeIcon : eyeOffIcon}
+              style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
+              tooltip={t('previewPassword')}
             />
             <IconButton
-              src={qrcodeIcon}
-              tooltip={t('showQrCode')}
-              size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
-              style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
               onClick={() => {
                 showQrCode(props.window);
               }}
+              size={{ height: 20, width: 20 }}
+              src={qrcodeIcon}
+              style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
+              tooltip={t('showQrCode')}
             />
             <IconButton
-              src={clipboardIcon}
-              tooltip={t('copyPassword')}
-              size={{ height: 20, width: 20 }}
               imageSize={{ height: 13, width: 13 }}
-              style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
               onClick={() => {
                 copyPassword(props.window);
               }}
+              size={{ height: 20, width: 20 }}
+              src={clipboardIcon}
+              style={{ 'margin-top': 0, 'margin-left': 0, 'margin-right': 2 }}
+              tooltip={t('copyPassword')}
             />
           </PreviewLine>
           <PreviewLine
             label={t('tags')}
-            value={props.entry.tags}
             style={{ 'margin-top': 10, height: 20 }}
+            value={props.entry.tags}
           />
         </container>
         <container style={{ flex: 1, flexDirection: 'column' }}>
           <PreviewLine
             label={t('url')}
-            value={props.entry.url}
             style={{ 'margin-top': 10, height: 20 }}
+            value={props.entry.url}
           />
         </container>
       </container>
       <PreviewLine
         label={t('notes')}
-        value={props.entry.notes}
-        style={{ 'margin-top': 10, flex: 1 }}
         last={true}
+        style={{ 'margin-top': 10, flex: 1 }}
+        value={props.entry.notes}
       />
     </container>
   );

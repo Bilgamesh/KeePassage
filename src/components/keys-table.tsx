@@ -60,15 +60,15 @@ function KeysTable(props: {
   return (
     <container style={{ flex: 1 }}>
       <table
-        style={{ flex: 1 }}
-        model={dbTable}
         columnsWithOptions={columns}
         hasBorder={true}
+        model={dbTable}
         onToggleCheckbox={(_table, _column, row) => {
           const yubiKey = props.yubiKeys()[row]!;
           yubiKey.paired = !yubiKey.paired;
           props.setYubiKeys((keys) => [...keys]);
         }}
+        style={{ flex: 1 }}
       />
     </container>
   );

@@ -66,31 +66,17 @@ function TimeoutEntry(props: {
     <container style={{ flexDirection: 'row', ...(props.style || {}) }}>
       <container style={{ width: props.checkboxWidth }}>
         <checkbox
-          title={props.title}
           checked={props.checked || false}
           onClick={(checkbox) => {
             if (props.onClick) {
               props.onClick(checkbox.isChecked());
             }
           }}
+          title={props.title}
         />
       </container>
       <entry
         enabled={props.checked || false}
-        ref={({ node }) => {
-          entry = node;
-        }}
-        text={`${props.value || 0} sec`}
-        style={{ ...LARGE_ENTRY_STYLE, width: props.entryWidth }}
-        onTextChange={(entry) => {
-          const text = entry.getText();
-          if (/^\d* sec$/g.test(text)) {
-            const number = Number(text.replace('sec', '').trim());
-            setSeconds(number);
-          } else {
-            entry.setText(`${seconds()} sec`);
-          }
-        }}
         onKeyDown={(_entry, ev) => {
           if (ev.key === 'ArrowUp') {
             increment();
@@ -100,22 +86,36 @@ function TimeoutEntry(props: {
           }
           return !ALLOWED_KEYS.includes(ev.key);
         }}
+        onTextChange={(entry) => {
+          const text = entry.getText();
+          if (/^\d* sec$/g.test(text)) {
+            const number = Number(text.replace('sec', '').trim());
+            setSeconds(number);
+          } else {
+            entry.setText(`${seconds()} sec`);
+          }
+        }}
+        ref={({ node }) => {
+          entry = node;
+        }}
+        style={{ ...LARGE_ENTRY_STYLE, width: props.entryWidth }}
+        text={`${props.value || 0} sec`}
       />
       <button
         enabled={props.checked || false}
-        title="-"
-        style={{ width: 20 }}
         onMouseDown={() => {
           decrement();
         }}
+        style={{ width: 20 }}
+        title="-"
       />
       <button
         enabled={props.checked || false}
-        title="+"
-        style={{ width: 20 }}
         onMouseDown={() => {
           increment();
         }}
+        style={{ width: 20 }}
+        title="+"
       />
     </container>
   );

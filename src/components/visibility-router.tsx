@@ -17,8 +17,8 @@ function VisibilityRouter(props: {
       <For each={pages}>
         {(page: View[], index) => (
           <container
-            visible={index() === props.selectedPageIndex}
             style={{ flex: index() === props.selectedPageIndex ? 1 : 0 }}
+            visible={index() === props.selectedPageIndex}
           >
             {page}
           </container>

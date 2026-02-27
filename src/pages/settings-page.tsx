@@ -58,20 +58,19 @@ function SettingsPage(props: { window: Window }) {
   return (
     <container style={{ flex: 1, margin: 20 }}>
       <label
-        style={{ 'margin-left': 5 }}
         attributedText={AttributedText.create(t('applicationSettings'), {
           align: 'start',
           font: TITLE_FONT
         })}
+        style={{ 'margin-left': 5 }}
       />
       <group
-        title={t('userInterface')}
         style={{ height: 250, 'margin-top': 10 }}
+        title={t('userInterface')}
       >
         <container>
           <container style={{ 'margin-left': 10 }}>
             <checkbox
-              title={t('showToolbar')}
               checked={unsavedAppSettings().showToolbar}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -79,9 +78,9 @@ function SettingsPage(props: { window: Window }) {
                   showToolbar: checkbox.isChecked()
                 }));
               }}
+              title={t('showToolbar')}
             />
             <checkbox
-              title={t('showMenubar')}
               checked={unsavedAppSettings().showMenuBar}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -89,9 +88,9 @@ function SettingsPage(props: { window: Window }) {
                   showMenuBar: checkbox.isChecked()
                 }));
               }}
+              title={t('showMenubar')}
             />
             <checkbox
-              title={t('showPreviewPanel')}
               checked={unsavedAppSettings().showPreview}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -99,9 +98,9 @@ function SettingsPage(props: { window: Window }) {
                   showPreview: checkbox.isChecked()
                 }));
               }}
+              title={t('showPreviewPanel')}
             />
             <checkbox
-              title={t('minimiseInsteadOfExit')}
               checked={unsavedAppSettings().minimiseInsteadOfExit}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -109,9 +108,9 @@ function SettingsPage(props: { window: Window }) {
                   minimiseInsteadOfExit: checkbox.isChecked()
                 }));
               }}
+              title={t('minimiseInsteadOfExit')}
             />
             <checkbox
-              title={t('showTrayIcon')}
               checked={unsavedAppSettings().showTrayIcon}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -119,9 +118,9 @@ function SettingsPage(props: { window: Window }) {
                   showTrayIcon: checkbox.isChecked()
                 }));
               }}
+              title={t('showTrayIcon')}
             />
             <checkbox
-              title={t('alwaysOnTop')}
               checked={unsavedAppSettings().alwaysOnTop}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -129,9 +128,9 @@ function SettingsPage(props: { window: Window }) {
                   alwaysOnTop: checkbox.isChecked()
                 }));
               }}
+              title={t('alwaysOnTop')}
             />
             <checkbox
-              title={t('hideUserNames')}
               checked={unsavedAppSettings().hideUserNames}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -139,15 +138,11 @@ function SettingsPage(props: { window: Window }) {
                   hideUserNames: checkbox.isChecked()
                 }));
               }}
+              title={t('hideUserNames')}
             />
             <container style={{ 'margin-top': 10, flexDirection: 'row' }}>
               <label text={`${t('language')}: `} />
               <picker
-                ref={({ node }) => {
-                  picker = node;
-                }}
-                style={{ width: LARGE_BUTTON_STYLE.width! }}
-                selectedItemIndex={currentLanguageIndex()}
                 items={languages()}
                 onSelectionChange={(picker) => {
                   const index = picker.getSelectedItemIndex();
@@ -157,27 +152,29 @@ function SettingsPage(props: { window: Window }) {
                     language: dict.languageCode
                   }));
                 }}
+                ref={({ node }) => {
+                  picker = node;
+                }}
+                selectedItemIndex={currentLanguageIndex()}
+                style={{ width: LARGE_BUTTON_STYLE.width! }}
               />
             </container>
           </container>
         </container>
       </group>
       <group
-        title={t('timeouts')}
         style={{
           height: process.platform === 'win32' ? 85 : 100,
           'margin-top': 10
         }}
+        title={t('timeouts')}
       >
         <container>
           <container style={{ 'margin-left': 10 }}>
             <TimeoutEntry
-              title={t('clearClipboardAfter')}
               checkboxWidth={process.platform === 'win32' ? 250 : 300}
-              entryWidth={50}
-              style={{ 'margin-bottom': 5 }}
               checked={unsavedAppSettings().clipboardTimout !== null}
-              value={unsavedAppSettings().clipboardTimout || 0}
+              entryWidth={50}
               onClick={(checked) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
@@ -189,13 +186,14 @@ function SettingsPage(props: { window: Window }) {
               onValueChange={(value) => {
                 unsavedAppSettings().clipboardTimout = value;
               }}
+              style={{ 'margin-bottom': 5 }}
+              title={t('clearClipboardAfter')}
+              value={unsavedAppSettings().clipboardTimout || 0}
             />
             <TimeoutEntry
-              title={t('lockDatabaseAfter')}
               checkboxWidth={process.platform === 'win32' ? 250 : 300}
-              entryWidth={50}
               checked={unsavedAppSettings().dbTimeout !== null}
-              value={unsavedAppSettings().dbTimeout || 0}
+              entryWidth={50}
               onClick={(checked) => {
                 setUnsavedAppSettings((s) => ({
                   ...s,
@@ -207,15 +205,16 @@ function SettingsPage(props: { window: Window }) {
               onValueChange={(value) => {
                 unsavedAppSettings().dbTimeout = value;
               }}
+              title={t('lockDatabaseAfter')}
+              value={unsavedAppSettings().dbTimeout || 0}
             />
           </container>
         </container>
       </group>
-      <group title={t('lockOptions')} style={{ height: 50, 'margin-top': 10 }}>
+      <group style={{ height: 50, 'margin-top': 10 }} title={t('lockOptions')}>
         <container>
           <container style={{ 'margin-left': 10 }}>
             <checkbox
-              title={t('dbMinimiseLock')}
               checked={unsavedAppSettings().dbMinimiseLock}
               onClick={(checkbox) => {
                 setUnsavedAppSettings((s) => ({
@@ -223,6 +222,7 @@ function SettingsPage(props: { window: Window }) {
                   dbMinimiseLock: checkbox.isChecked()
                 }));
               }}
+              title={t('dbMinimiseLock')}
             />
           </container>
         </container>
@@ -230,8 +230,6 @@ function SettingsPage(props: { window: Window }) {
       <Expand direction="column" />
       <container style={{ flexDirection: 'row' }}>
         <button
-          title={t('resetSettings')}
-          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             const msgBox = MessageBox.create();
             msgBox.setType('information');
@@ -244,23 +242,25 @@ function SettingsPage(props: { window: Window }) {
               updateSettings(() => DEFAULT_SETTINGS);
             }
           }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
+          title={t('resetSettings')}
         />
         <Expand direction="row" />
         <button
-          title={t('ok')}
-          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             setMainPageIndex(previousPageIndex);
             updateSettings(() => unsavedAppSettings());
           }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
+          title={t('ok')}
         />
         <button
-          title={t('cancel')}
-          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           onClick={() => {
             setMainPageIndex(previousPageIndex);
             reset();
           }}
+          style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
+          title={t('cancel')}
         />
       </container>
     </container>

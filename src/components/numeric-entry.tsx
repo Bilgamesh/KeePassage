@@ -70,11 +70,15 @@ function NumericEntry(props: {
   return (
     <>
       <entry
-        ref={({ node }) => {
-          entry = node;
+        onKeyDown={(_entry, ev) => {
+          if (ev.key === 'ArrowUp') {
+            increment();
+          }
+          if (ev.key === 'ArrowDown') {
+            decrement();
+          }
+          return !ALLOWED_KEYS.includes(ev.key);
         }}
-        text={`${props.value ?? props.minValue ?? 1}`}
-        style={{ ...(props.entryStyle || {}) }}
         onTextChange={(entry) => {
           const text = entry.getText();
           if (text === '') {
@@ -97,29 +101,25 @@ function NumericEntry(props: {
             }
           }
         }}
-        onKeyDown={(_entry, ev) => {
-          if (ev.key === 'ArrowUp') {
-            increment();
-          }
-          if (ev.key === 'ArrowDown') {
-            decrement();
-          }
-          return !ALLOWED_KEYS.includes(ev.key);
+        ref={({ node }) => {
+          entry = node;
         }}
+        style={{ ...(props.entryStyle || {}) }}
+        text={`${props.value ?? props.minValue ?? 1}`}
       />
       <button
-        title="-"
-        style={{ width: 20 }}
         onMouseDown={() => {
           decrement();
         }}
+        style={{ width: 20 }}
+        title="-"
       />
       <button
-        title="+"
-        style={{ width: 20 }}
         onMouseDown={() => {
           increment();
         }}
+        style={{ width: 20 }}
+        title="+"
       />
     </>
   );

@@ -39,8 +39,9 @@ function IconButton(props: {
 
   return (
     <button
-      visible={props.visible !== false}
       enabled={props.enabled}
+      image={image()}
+      onClick={props.onClick || (() => {})}
       style={{
         height: props.size?.height || 40,
         width: props.size?.width || 40,
@@ -48,9 +49,8 @@ function IconButton(props: {
         'margin-top': 5,
         ...(props.style || {})
       }}
-      image={image()}
       tooltip={props.tooltip || ''}
-      onClick={props.onClick || (() => {})}
+      visible={props.visible !== false}
     />
   );
 }

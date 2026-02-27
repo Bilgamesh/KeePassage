@@ -86,15 +86,13 @@ function Toolbar(props: { window: Window }) {
   return (
     <>
       <container
-        visible={appSettings().showToolbar}
         style={{ flexDirection: 'row', height: 50 }}
+        visible={appSettings().showToolbar}
         {...(process.platform === 'win32'
           ? { backgroundColor: '#FFFFFF' }
           : {})}
       >
         <IconButton
-          tooltip={t('openDb...')}
-          src={folderIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME ||
             mainPageIndex() === PAGE_INDEXES.DB_INDEX
@@ -112,10 +110,10 @@ function Toolbar(props: { window: Window }) {
               openDatabase(props.window, path);
             }
           }}
+          src={folderIcon}
+          tooltip={t('openDb...')}
         />
         <IconButton
-          tooltip={t('lockDb')}
-          src={lockIcon}
           enabled={
             unlockedDbIndex() !== null &&
             mainPageIndex() === PAGE_INDEXES.DB_INDEX
@@ -125,21 +123,21 @@ function Toolbar(props: { window: Window }) {
             setSelectedDbPath('');
             setMainPageIndex(PAGE_INDEXES.WELCOME);
           }}
+          src={lockIcon}
+          tooltip={t('lockDb')}
         />
         <vseparator
           style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }}
         />
         <IconButton
-          tooltip={t('newEntry...')}
-          src={plusIcon}
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX}
           onClick={() => {
             addNewEntry();
           }}
+          src={plusIcon}
+          tooltip={t('newEntry...')}
         />
         <IconButton
-          tooltip={t('editEntry')}
-          src={editIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.DB_INDEX &&
             selectedEntry() !== null
@@ -147,10 +145,10 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             editEntry(props.window);
           }}
+          src={editIcon}
+          tooltip={t('editEntry')}
         />
         <IconButton
-          tooltip={t('deleteEntry')}
-          src={trashIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.DB_INDEX &&
             selectedEntry() !== null
@@ -158,13 +156,13 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             deleteEntry(props.window);
           }}
+          src={trashIcon}
+          tooltip={t('deleteEntry')}
         />
         <vseparator
           style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }}
         />
         <IconButton
-          tooltip={t('copyUsername')}
-          src={userIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.DB_INDEX &&
             selectedEntry() !== null
@@ -172,10 +170,10 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             copyUsername();
           }}
+          src={userIcon}
+          tooltip={t('copyUsername')}
         />
         <IconButton
-          tooltip={t('copyPassword')}
-          src={copyIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.DB_INDEX &&
             selectedEntry() !== null
@@ -183,10 +181,10 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             copyPassword(props.window);
           }}
+          src={copyIcon}
+          tooltip={t('copyPassword')}
         />
         <IconButton
-          tooltip={t('showQrCode')}
-          src={qrcodeIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.DB_INDEX &&
             selectedEntry() !== null
@@ -194,10 +192,10 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             showQrCode(props.window);
           }}
+          src={qrcodeIcon}
+          tooltip={t('showQrCode')}
         />
         <IconButton
-          tooltip={t('copyUrl')}
-          src={linkIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.DB_INDEX &&
             selectedEntry() !== null
@@ -205,13 +203,13 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             copyUrl();
           }}
+          src={linkIcon}
+          tooltip={t('copyUrl')}
         />
         <vseparator
           style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }}
         />
         <IconButton
-          tooltip={t('passwordGenerator')}
-          src={diceIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME ||
             mainPageIndex() === PAGE_INDEXES.DB_INDEX
@@ -219,10 +217,10 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             openPasswordGenerator();
           }}
+          src={diceIcon}
+          tooltip={t('passwordGenerator')}
         />
         <IconButton
-          tooltip={t('settings')}
-          src={settingsIcon}
           enabled={
             mainPageIndex() === PAGE_INDEXES.WELCOME ||
             mainPageIndex() === PAGE_INDEXES.DB_INDEX
@@ -230,28 +228,23 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             openSettingsPage();
           }}
+          src={settingsIcon}
+          tooltip={t('settings')}
         />
         <vseparator
           style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }}
         />
         <Image
+          scale={2}
           size={{ height: 15, width: 15 }}
           src={searchIcon}
           style={{ 'margin-left': 5 }}
-          scale={2}
           {...(process.platform === 'linux' && isDark()
             ? { tint: DARK_MODE_FONT_COLOR }
             : {})}
         />
         <entry
           enabled={mainPageIndex() === PAGE_INDEXES.DB_INDEX}
-          style={{
-            flex: 1,
-            'margin-left': 2,
-            'margin-right': 20,
-            'margin-top': 14,
-            ...SMALL_ENTRY_STYLE
-          }}
           onKeyDown={(self, ev) => {
             if (ev.key === 'Enter') {
               return true;
@@ -260,6 +253,10 @@ function Toolbar(props: { window: Window }) {
               return true;
             }
             return false;
+          }}
+          onTextChange={(self) => {
+            const text = self.getText().trim();
+            updateFilter(text);
           }}
           ref={({ node }) => {
             searchBar = node;
@@ -274,9 +271,12 @@ function Toolbar(props: { window: Window }) {
               }
             });
           }}
-          onTextChange={(self) => {
-            const text = self.getText().trim();
-            updateFilter(text);
+          style={{
+            flex: 1,
+            'margin-left': 2,
+            'margin-right': 20,
+            'margin-top': 14,
+            ...SMALL_ENTRY_STYLE
           }}
         />
       </container>

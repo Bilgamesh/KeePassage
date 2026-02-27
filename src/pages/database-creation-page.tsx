@@ -37,8 +37,8 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
     <container style={{ flex: 1 }}>
       <container style={{ flex: 5, flexDirection: 'row', 'margin-top': 20 }}>
         <Image
-          src={page() === 1 ? yubiKeyImage : null}
           size={{ height: 200, width: 200 }}
+          src={page() === 1 ? yubiKeyImage : null}
         />
         <container
           style={{
@@ -48,21 +48,21 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
           }}
         >
           <label
-            style={{ 'margin-left': 10 }}
             attributedText={AttributedText.create(titles(page()) || '404', {
               font: TITLE_FONT,
               align: 'start'
             })}
+            style={{ 'margin-left': 10 }}
           />
-          <group title={t('dbCreation')} style={{ flex: 3 }}>
+          <group style={{ flex: 3 }} title={t('dbCreation')}>
             <Router selectedPageIndex={page}>
               <DatabaseGeneralInfo
                 dbName={dbName}
-                setDbName={setDbName}
                 description={description}
+                setDbName={setDbName}
                 setDescription={setDescription}
               />
-              <DatabaseKeys yubiKeys={yubiKeys} setYubiKeys={setYubiKeys} />
+              <DatabaseKeys setYubiKeys={setYubiKeys} yubiKeys={yubiKeys} />
             </Router>
           </group>
           <container
@@ -74,20 +74,15 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
           >
             <Expand />
             <button
-              title={t('goBack')}
-              style={{ height: 30, width: 80 }}
               enabled={page() !== 0}
               onClick={() => {
                 setPage((p) => p - 1);
               }}
+              style={{ height: 30, width: 80 }}
+              title={t('goBack')}
             />
             <button
-              title={page() !== 1 ? t('continue') : t('save')}
-              style={{
-                height: 30,
-                width: 100,
-                'margin-left': 10
-              }}
+              enabled={page() === 0 || selectedKeys().length > 0}
               onClick={() => {
                 if (page() !== 1) {
                   setPage((p) => p + 1);
@@ -101,14 +96,19 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                   });
                 }
               }}
-              enabled={page() === 0 || selectedKeys().length > 0}
+              style={{
+                height: 30,
+                width: 100,
+                'margin-left': 10
+              }}
+              title={page() !== 1 ? t('continue') : t('save')}
             />
             <button
-              title={t('cancel')}
-              style={{ height: 30, width: 60, 'margin-left': 10 }}
               onClick={() => {
                 props.window.close();
               }}
+              style={{ height: 30, width: 60, 'margin-left': 10 }}
+              title={t('cancel')}
             />
           </container>
         </container>

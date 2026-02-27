@@ -65,40 +65,28 @@ function PinentryPage() {
         <Expand direction="row" />
         <container style={{ width: 650 }}>
           <label
+            align="start"
             attributedText={AttributedText.create(purpose(), {
               align: 'start',
               font: TITLE_FONT
             })}
-            align="start"
           />
           <label
-            text={selectedDbPath()}
             align="start"
             style={{ 'margin-top': 5, 'margin-bottom': 20 }}
+            text={selectedDbPath()}
           />
-          <group title={t('pinEntry')} style={{ flex: 1 }}>
+          <group style={{ flex: 1 }} title={t('pinEntry')}>
             <container style={{ height: 600 }}>
               <container style={{ margin: 20, height: 170 }}>
                 <label
-                  text={`${t('enterPinFor')} ${serial()}:`}
                   align="start"
+                  text={`${t('enterPinFor')} ${serial()}:`}
                 />
                 <password
-                  ref={(element) => {
-                    entryNode = element.node;
-                  }}
-                  style={{ 'margin-top': 5, 'margin-bottom': 30 }}
-                  text={`${pin() || ''}`}
-                  onTextChange={(entry) => {
-                    const text = entry.getText();
-                    if (text) {
-                      if (validatePin(text)) {
-                        setPin(Number(text));
-                      } else {
-                        entry.setText(`${pin() || ''}`);
-                      }
-                    } else {
-                      setPin(null);
+                  onActivate={() => {
+                    if (pin() !== null) {
+                      pinListeners.notifyListeners(pin());
                     }
                   }}
                   onKeyDown={(_self, ev) => {
@@ -117,11 +105,23 @@ function PinentryPage() {
                     }
                     return false;
                   }}
-                  onActivate={() => {
-                    if (pin() !== null) {
-                      pinListeners.notifyListeners(pin());
+                  onTextChange={(entry) => {
+                    const text = entry.getText();
+                    if (text) {
+                      if (validatePin(text)) {
+                        setPin(Number(text));
+                      } else {
+                        entry.setText(`${pin() || ''}`);
+                      }
+                    } else {
+                      setPin(null);
                     }
                   }}
+                  ref={(element) => {
+                    entryNode = element.node;
+                  }}
+                  style={{ 'margin-top': 5, 'margin-bottom': 30 }}
+                  text={`${pin() || ''}`}
                 />
                 <Expand direction="column" />
                 <container
@@ -129,17 +129,17 @@ function PinentryPage() {
                 >
                   <Expand direction="row" />
                   <button
-                    title={t('submit')}
                     enabled={pin() !== null}
-                    style={LARGE_BUTTON_STYLE}
                     onClick={() => pinListeners.notifyListeners(pin())}
+                    style={LARGE_BUTTON_STYLE}
+                    title={t('submit')}
                   />
                   <button
-                    title={t('cancel')}
-                    style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
                     onClick={() => {
                       controller?.abort('Cancel');
                     }}
+                    style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
+                    title={t('cancel')}
                   />
                 </container>
               </container>

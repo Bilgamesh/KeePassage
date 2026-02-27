@@ -12,16 +12,20 @@ function EntryTextArea(props: {
   return (
     <container style={props.style || {}}>
       <label
-        text={props.title}
+        align="end"
         style={{
           width: props.titleWidth || (process.platform === 'win32' ? 70 : 80)
         }}
-        align="end"
+        text={props.title}
         vAlign="start"
       />
       <textedit
-        text={props.text ? props.text() : ''}
-        style={{ flex: 1, 'margin-left': 10 }}
+        onKeyDown={(self, ev) => {
+          if (ev.key === 'Backspace' && self.getText() === '') {
+            return true;
+          }
+          return false;
+        }}
         onMouseDown={(textEdit, ev) => {
           if (ev.button === 2 && textEdit.hasFocus()) {
             TextContextMenu({
@@ -32,17 +36,13 @@ function EntryTextArea(props: {
             textEdit.focus();
           }
         }}
-        onKeyDown={(self, ev) => {
-          if (ev.key === 'Backspace' && self.getText() === '') {
-            return true;
-          }
-          return false;
-        }}
         onTextChange={(textedit) => {
           if (props.onTextChange) {
             props.onTextChange(textedit.getText());
           }
         }}
+        style={{ flex: 1, 'margin-left': 10 }}
+        text={props.text ? props.text() : ''}
       />
     </container>
   );

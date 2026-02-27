@@ -34,7 +34,7 @@ function TouchPage() {
       <Expand />
       <container style={{ flexDirection: 'row' }}>
         <Expand direction="row" />
-        <group title={t('userPresence')} style={{ width: 400, height: 400 }}>
+        <group style={{ width: 400, height: 400 }} title={t('userPresence')}>
           <container style={{ flex: 1 }}>
             <Expand />
             <container style={{ flexDirection: 'column' }}>
@@ -46,24 +46,24 @@ function TouchPage() {
                 style={{ 'margin-bottom': 50 }}
               />
               <Image
-                src={touchImage}
-                size={{ height: 100, width: 100 }}
                 scale={5}
+                size={{ height: 100, width: 100 }}
+                src={touchImage}
                 {...(process.platform === 'linux' && isDark()
                   ? { tint: DARK_MODE_FONT_COLOR }
                   : {})}
               />
               <button
-                title={t('cancel')}
+                onClick={() => {
+                  controller.abort('Cancel');
+                }}
                 style={{
                   height: 30,
                   width: 300,
                   'margin-left': 45,
                   'margin-top': 100
                 }}
-                onClick={() => {
-                  controller.abort('Cancel');
-                }}
+                title={t('cancel')}
               />
             </container>
             <Expand />

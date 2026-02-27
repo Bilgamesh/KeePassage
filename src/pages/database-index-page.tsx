@@ -37,12 +37,17 @@ function DatabaseIndexPage(props: { window: Window }) {
 
   return (
     <container style={{ flex: 1 }}>
-      <Show when={DatabaseColumns()} keyed>
+      <Show keyed when={DatabaseColumns()}>
         <table
           columnsWithOptions={DatabaseColumns()}
-          style={{ flex: 1, margin: 20 }}
           hasBorder={true}
           model={model()}
+          onMouseDown={async (_self, event) => {
+            if (event.button === 2) {
+              await setTimeout(10);
+              DatabaseIndexContextMenu({ window: props.window }).popup();
+            }
+          }}
           onRowActivate={() => {
             editEntry(props.window);
           }}
@@ -51,17 +56,10 @@ function DatabaseIndexPage(props: { window: Window }) {
             const index = self.getSelectedRow();
             setSelectedEntry(entries()[index] || null);
           }}
-          onMouseDown={async (_self, event) => {
-            if (event.button === 2) {
-              await setTimeout(10);
-              DatabaseIndexContextMenu({ window: props.window }).popup();
-            }
-          }}
+          style={{ flex: 1, margin: 20 }}
         />
       </Show>
       <PreviewPanel
-        window={props.window}
-        visible={appSettings().showPreview && selectedEntry() !== null}
         entry={
           selectedEntry() || {
             encryptedPayloads: [],
@@ -73,6 +71,8 @@ function DatabaseIndexPage(props: { window: Window }) {
             modified: 0
           }
         }
+        visible={appSettings().showPreview && selectedEntry() !== null}
+        window={props.window}
       />
     </container>
   );
