@@ -21,16 +21,19 @@ function DatabaseKeys(props: {
         style={{ 'margin-left': 10, 'margin-right': 10 }}
         text={t('beforeUsingGenerateKey')}
       />
-      <label
-        align="start"
-        color="#0000FF"
-        cursor="hand"
-        onMouseDown={() => {
-          open('https://github.com/str4d/age-plugin-yubikey#configuration');
-        }}
-        style={{ 'margin-left': 10, 'margin-right': 10 }}
-        text="https://github.com/str4d/age-plugin-yubikey#configuration"
-      />
+      <container style={{ flexDirection: 'row' }}>
+        <label
+          align="start"
+          color="#0000FF"
+          cursor="hand"
+          onMouseDown={() => {
+            open('https://github.com/str4d/age-plugin-yubikey#configuration');
+          }}
+          style={{ 'margin-left': 10, 'margin-right': 10 }}
+          text="https://github.com/str4d/age-plugin-yubikey#configuration"
+        />
+        <container style={{ flex: 1 }} />
+      </container>
 
       <container style={{ flex: 1, margin: 10 }}>
         <label

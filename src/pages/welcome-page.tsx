@@ -118,7 +118,8 @@ function WelcomePage(props: { window: Window }) {
               {
                 label: '',
                 options: {
-                  type: 'text'
+                  type: 'text',
+                  width: -1
                 }
               }
             ]}

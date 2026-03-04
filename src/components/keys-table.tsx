@@ -52,7 +52,7 @@ function KeysTable(props: {
       label: t('paired'),
       options: {
         type: 'checkbox',
-        width: 70
+        width: -1
       }
     }
   ] satisfies { label: string; options: TableColumnOptions }[];

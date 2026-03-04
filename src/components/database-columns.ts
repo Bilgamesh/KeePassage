@@ -35,7 +35,7 @@ function DatabaseColumns() {
       label: t('modified'),
       options: {
         type: 'text',
-        width: 140
+        width: -1
       }
     }
   ];

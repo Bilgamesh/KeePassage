@@ -1,6 +1,6 @@
 import { setTimeout } from 'node:timers/promises';
 import { AttributedText } from 'gui';
-import touchImage from '#/assets/img/touch.png';
+import touchIcon from '#/assets/icons/touch.png';
 import { Expand } from '#/components/expand';
 import { Image } from '#/components/image';
 import {
@@ -48,7 +48,7 @@ function TouchPage() {
               <Image
                 scale={5}
                 size={{ height: 100, width: 100 }}
-                src={touchImage}
+                src={touchIcon}
                 {...(process.platform === 'linux' && isDark()
                   ? { tint: DARK_MODE_FONT_COLOR }
                   : {})}
