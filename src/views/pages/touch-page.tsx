@@ -1,8 +1,6 @@
 import { setTimeout } from 'node:timers/promises';
 import { AttributedText } from 'gui';
 import touchIcon from '#/assets/icons/touch.png';
-import { Expand } from '#/components/expand';
-import { Image } from '#/components/image';
 import {
   DARK_MODE_FONT_COLOR,
   PAGE_INDEXES,
@@ -10,6 +8,8 @@ import {
 } from '#/data/constants';
 import { t } from '#/data/i18n';
 import { isDark, mainPageIndex, setMainPageIndex } from '#/data/shared-state';
+import { Expand } from '#/views/components/expand';
+import { Image } from '#/views/components/image';
 
 let controller: AbortController;
 

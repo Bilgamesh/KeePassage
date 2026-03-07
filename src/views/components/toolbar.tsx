@@ -18,8 +18,6 @@ import searchIcon from '#/assets/icons/search.png';
 import settingsIcon from '#/assets/icons/settings.png';
 import plusIcon from '#/assets/icons/square-plus.png';
 import trashIcon from '#/assets/icons/trash.png';
-import { IconButton } from '#/components/icon-button';
-import { Image } from '#/components/image';
 import {
   DARK_MODE_FONT_COLOR,
   DATABASE_EXTENSION,
@@ -48,8 +46,10 @@ import {
   setUnlockedDbIndex,
   unlockedDbIndex
 } from '#/data/shared-state';
-import { openPasswordGenerator } from '#/pages/pw-generator-page';
-import { openSettingsPage } from '#/pages/settings-page';
+import { IconButton } from '#/views/components/icon-button';
+import { Image } from '#/views/components/image';
+import { openPasswordGenerator } from '#/views/pages/pw-generator-page';
+import { openSettingsPage } from '#/views/pages/settings-page';
 
 function Toolbar(props: { window: Window }) {
   function updateFilter(text: string) {

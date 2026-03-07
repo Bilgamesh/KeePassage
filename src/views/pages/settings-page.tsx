@@ -1,7 +1,5 @@
 import { AttributedText, MessageBox, type Picker, type Window } from 'gui';
 import { createEffect, createMemo, createSignal } from 'solid-js';
-import { Expand } from '#/components/expand';
-import { TimeoutEntry } from '#/components/timeout-entry';
 import {
   DEFAULT_SETTINGS,
   LARGE_BUTTON_STYLE,
@@ -15,6 +13,8 @@ import {
   setMainPageIndex
 } from '#/data/shared-state';
 import { updateSettings } from '#/service/config-service';
+import { Expand } from '#/views/components/expand';
+import { TimeoutEntry } from '#/views/components/timeout-entry';
 
 const [unsavedAppSettings, setUnsavedAppSettings] = createSignal({
   ...appSettings()

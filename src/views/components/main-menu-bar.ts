@@ -29,13 +29,13 @@ import {
   setUnlockedDbIndex,
   unlockedDbIndex
 } from '#/data/shared-state';
-import { DatabaseCreationPage } from '#/pages/database-creation-page';
-import { openPasswordGenerator } from '#/pages/pw-generator-page';
-import { openSettingsPage } from '#/pages/settings-page';
 import { render } from '#/renderer';
 import type { MenuItemOptions } from '#/renderer/types';
 import { updateSettings } from '#/service/config-service';
 import { open } from '#/utils/url-util';
+import { DatabaseCreationPage } from '#/views/pages/database-creation-page';
+import { openPasswordGenerator } from '#/views/pages/pw-generator-page';
+import { openSettingsPage } from '#/views/pages/settings-page';
 import { getDatabaseWindow } from '#/windows/database-window';
 
 const rules = () => [

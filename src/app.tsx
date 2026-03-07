@@ -1,14 +1,14 @@
 import { appearance, type Window } from 'gui';
-import { Router } from '#/components/router';
-import { Toolbar } from '#/components/toolbar';
 import { mainPageIndex, setDark } from '#/data/shared-state';
-import { DatabaseIndexPage } from '#/pages/database-index-page';
-import { EntryPage } from '#/pages/entry-page';
-import { PinentryPage } from '#/pages/pinentry-page';
-import { PwGeneratorPage } from '#/pages/pw-generator-page';
-import { SettingsPage } from '#/pages/settings-page';
-import { TouchPage } from '#/pages/touch-page';
-import { WelcomePage } from '#/pages/welcome-page';
+import { Router } from '#/views/components/router';
+import { Toolbar } from '#/views/components/toolbar';
+import { DatabaseIndexPage } from '#/views/pages/database-index-page';
+import { EntryPage } from '#/views/pages/entry-page';
+import { PinentryPage } from '#/views/pages/pinentry-page';
+import { PwGeneratorPage } from '#/views/pages/pw-generator-page';
+import { SettingsPage } from '#/views/pages/settings-page';
+import { TouchPage } from '#/views/pages/touch-page';
+import { WelcomePage } from '#/views/pages/welcome-page';
 
 function App(props: { window: Window }) {
   appearance.onColorSchemeChange.connect(() =>

@@ -1,12 +1,12 @@
 import { AttributedText, type View } from 'gui';
-import { Space } from '#/components/space';
-import { TextContextMenu } from '#/components/text-context-menu';
 import {
   PREVIEW_LABEL_FONT,
   WINDOWS_APP_BACKGROUND_COLOR
 } from '#/data/constants';
 import { setCopyingEnabled } from '#/data/shared-state';
 import type { Style } from '#/renderer/types';
+import { Space } from '#/views/components/space';
+import { TextContextMenu } from '#/views/components/text-context-menu';
 
 let timeout: NodeJS.Timeout | null = null;
 

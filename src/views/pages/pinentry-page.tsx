@@ -1,6 +1,5 @@
 import { AttributedText, type Entry } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
-import { Expand } from '#/components/expand';
 import {
   APP_NAME,
   LARGE_BUTTON_STYLE,
@@ -14,6 +13,7 @@ import {
   setMainPageIndex
 } from '#/data/shared-state';
 import { createListeners } from '#/utils/listen-util';
+import { Expand } from '#/views/components/expand';
 
 type Pin = number | null;
 

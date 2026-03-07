@@ -1,8 +1,5 @@
 import { setTimeout } from 'node:timers/promises';
 import { SimpleTableModel, type Window } from 'gui';
-import { DatabaseColumns } from '#/components/database-columns';
-import { DatabaseIndexContextMenu } from '#/components/database-index-context-menu';
-import { PreviewPanel } from '#/components/preview-panel';
 import { editEntry } from '#/data/db-orchestrator';
 import {
   appSettings,
@@ -12,6 +9,9 @@ import {
   unlockedDbIndex
 } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
+import { DatabaseColumns } from '#/views/components/database-columns';
+import { DatabaseIndexContextMenu } from '#/views/components/database-index-context-menu';
+import { PreviewPanel } from '#/views/components/preview-panel';
 
 function DatabaseIndexPage(props: { window: Window }) {
   const sorter = (a: Entry, b: Entry) => a.title.localeCompare(b.title);

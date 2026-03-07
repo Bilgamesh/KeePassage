@@ -2,10 +2,6 @@ import { createEffect, createSignal } from 'solid-js';
 import diceIcon from '#/assets/icons/dice-3.png';
 import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
-import { EntryLine } from '#/components/entry-line';
-import { EntryTextArea } from '#/components/entry-text-area';
-import { Expand } from '#/components/expand';
-import { IconButton } from '#/components/icon-button';
 import {
   LARGE_BUTTON_STYLE,
   PAGE_INDEXES,
@@ -17,10 +13,14 @@ import {
   setMainPageIndex,
   unlockedDbIndex
 } from '#/data/shared-state';
-import { getGeneratedPassword } from '#/pages/pw-generator-page';
 import type { Entry } from '#/schemas/database-schema';
 import { encrypt } from '#/service/pcsc-service';
 import { createListeners } from '#/utils/listen-util';
+import { EntryLine } from '#/views/components/entry-line';
+import { EntryTextArea } from '#/views/components/entry-text-area';
+import { Expand } from '#/views/components/expand';
+import { IconButton } from '#/views/components/icon-button';
+import { getGeneratedPassword } from '#/views/pages/pw-generator-page';
 
 let controller: AbortController;
 const [passwordVisible, setPasswordVisible] = createSignal(false);

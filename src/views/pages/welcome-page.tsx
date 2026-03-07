@@ -6,8 +6,6 @@ import {
 } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
 import logoImage from '#/assets/img/logo.ico';
-import { Expand } from '#/components/expand';
-import { Image } from '#/components/image';
 import {
   APP_NAME,
   DATABASE_EXTENSION,
@@ -18,8 +16,10 @@ import {
 import { openDatabase } from '#/data/db-orchestrator';
 import { t } from '#/data/i18n';
 import { appSettings } from '#/data/shared-state';
-import { DatabaseCreationPage } from '#/pages/database-creation-page';
 import { render } from '#/renderer';
+import { Expand } from '#/views/components/expand';
+import { Image } from '#/views/components/image';
+import { DatabaseCreationPage } from '#/views/pages/database-creation-page';
 import {
   getDatabaseWindow,
   hasDatabaseWindow

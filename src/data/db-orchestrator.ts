@@ -11,9 +11,6 @@ import {
   setUnlockedDbIndex,
   unlockedDbIndex
 } from '#/data/shared-state';
-import { requestEntry } from '#/pages/entry-page';
-import { requestPin } from '#/pages/pinentry-page';
-import { requestTouch } from '#/pages/touch-page';
 import type { Entry } from '#/schemas/database-schema';
 import type { YubiKey } from '#/schemas/yubikey-schema';
 import { updateSettings } from '#/service/config-service';
@@ -27,6 +24,9 @@ import {
 import { decrypt } from '#/service/pcsc-service';
 import { showError } from '#/utils/message-box-util';
 import { showQrCodeWindow } from '#/utils/qr-code-util';
+import { requestEntry } from '#/views/pages/entry-page';
+import { requestPin } from '#/views/pages/pinentry-page';
+import { requestTouch } from '#/views/pages/touch-page';
 import { getMainWindow } from '#/windows/main-window';
 import { t } from './i18n';
 
