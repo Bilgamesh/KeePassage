@@ -76,7 +76,7 @@ async function requestEntry(password?: string, existingEntry?: Entry) {
 }
 
 function EntryPage() {
-  navigator.addOnChange(() => {
+  navigator.subscribe(() => {
     setTitle('');
     setUsername('');
     setPassword('');

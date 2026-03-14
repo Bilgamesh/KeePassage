@@ -186,7 +186,7 @@ function MainMenuBar(props: { window: Window }) {
             ) {
               setUnlockedDbIndex(null);
               setSelectedDbPath('');
-              navigator.replace((pages) => pages.WELCOME);
+              navigator.replace({ to: (pages) => pages.WELCOME });
             }
           }
         },

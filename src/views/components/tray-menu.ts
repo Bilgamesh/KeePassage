@@ -27,7 +27,7 @@ function TrayMenu(props: {
       onClick: () => {
         setUnlockedDbIndex(null);
         setSelectedDbPath('');
-        navigator.replace((pages) => pages.WELCOME);
+        navigator.replace({ to: (pages) => pages.WELCOME });
       }
     },
     {

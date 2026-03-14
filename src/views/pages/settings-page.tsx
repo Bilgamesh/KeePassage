@@ -43,7 +43,7 @@ function SettingsPage(props: { window: Window }) {
     setUnsavedAppSettings({ ...savedSettings });
   });
 
-  navigator.addOnChange(() => {
+  navigator.subscribe(() => {
     picker.selectItemAt(currentLanguageIndex());
   });
 

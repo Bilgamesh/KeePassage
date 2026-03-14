@@ -63,8 +63,8 @@ async function openDatabase(window: Window, path: string) {
       { signal }
     );
     setUnlockedDbIndex({ ...index });
-    navigator.pushConditionally({
-      from: (pages) => pages.TOUCH,
+    navigator.replace({
+      from: (pages) => [pages.TOUCH, pages.PINTENTRY],
       to: (pages) => pages.DB_INDEX
     });
   } catch (err) {
@@ -73,7 +73,10 @@ async function openDatabase(window: Window, path: string) {
       showError(window, err);
     }
     setSelectedDbPath(previousPath);
-    navigator.pop();
+    navigator.replace({
+      from: (pages) => [pages.TOUCH, pages.PINTENTRY],
+      to: (pages) => pages.WELCOME
+    });
   }
   await updateSettings((settings) => {
     const index = settings.recent.indexOf(path);
@@ -153,7 +156,7 @@ async function getPassword(options: { entry: Entry; window: Window }) {
   }
   const pin = await requestPin(key.serial, entry.title);
   if (!pin) {
-    navigator.pushConditionally({
+    navigator.replace({
       from: (pages) => [pages.TOUCH, pages.PINTENTRY],
       to: (pages) => pages.DB_INDEX
     });
@@ -180,7 +183,7 @@ async function getPassword(options: { entry: Entry; window: Window }) {
 
 async function addNewEntry() {
   const entry = await requestEntry();
-  navigator.pushConditionally({
+  navigator.replace({
     from: (pages) => pages.ENTRY,
     to: (pages) => pages.DB_INDEX
   });
@@ -206,14 +209,14 @@ async function editEntry(window: Window) {
   }
   const password = await getPassword({ entry, window });
   if (password === null) {
-    navigator.pushConditionally({
+    navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
     return;
   }
   const newEntry = await requestEntry(password, entry);
-  navigator.pushConditionally({
+  navigator.replace({
     from: (pages) => pages.ENTRY,
     to: (pages) => pages.DB_INDEX
   });
@@ -269,7 +272,7 @@ async function copyPassword(window: Window) {
   const entry = selectedEntry();
   if (entry) {
     const password = await getPassword({ entry, window });
-    navigator.pushConditionally({
+    navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
@@ -284,7 +287,7 @@ async function showQrCode(window: Window) {
   const entry = selectedEntry();
   if (entry) {
     const password = await getPassword({ entry, window });
-    navigator.pushConditionally({
+    navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
@@ -317,7 +320,7 @@ function refreshDbLock() {
   if (isMinimised && appSettings().dbMinimiseLock) {
     setUnlockedDbIndex(null);
     setSelectedDbPath('');
-    navigator.replace((pages) => pages.WELCOME);
+    navigator.replace({ to: (pages) => pages.WELCOME });
   }
 
   if (
@@ -327,7 +330,7 @@ function refreshDbLock() {
   ) {
     setUnlockedDbIndex(null);
     setSelectedDbPath('');
-    navigator.replace((pages) => pages.WELCOME);
+    navigator.replace({ to: (pages) => pages.WELCOME });
   }
 }
 

@@ -119,7 +119,7 @@ function Toolbar(props: { window: Window }) {
           onClick={() => {
             setUnlockedDbIndex(null);
             setSelectedDbPath('');
-            navigator.replace((pages) => pages.WELCOME);
+            navigator.replace({ to: (pages) => pages.WELCOME });
           }}
           src={lockIcon}
           tooltip={t('lockDb')}

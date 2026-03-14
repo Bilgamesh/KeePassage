@@ -1,5 +1,5 @@
 import { randomUUID, type UUID } from 'node:crypto';
-import { createEffect, createSignal } from 'solid-js';
+import { createEffect, createSignal, on } from 'solid-js';
 
 const PAGE_INDEXES = {
   WELCOME: 0,
@@ -31,48 +31,57 @@ const [pageIndex, setPageIndex] = createSignal(
   PAGE_INDEXES.WELCOME as PAGE_INDEXES
 );
 
-const history: historyItem[] = [
+const [history, setHistory] = createSignal<historyItem[]>([
   {
     index: pageIndex(),
     id: randomUUID(),
     cleanup: null
   }
-];
+]);
 
 function push(pageSelector: pageSelector) {
   const input = pageSelector(PAGE_INDEXES);
   const { index, cleanup } =
     typeof input === 'number' ? { index: input } : input;
-  history.push({ index, id: randomUUID(), cleanup: cleanup ?? null });
+  setHistory((history) => [
+    ...history,
+    { index, id: randomUUID(), cleanup: cleanup ?? null }
+  ]);
   setPageIndex(index);
 }
 
-function pushConditionally(options: { from: pageChecker; to: pageSelector }) {
-  if (options.from(PAGE_INDEXES) === pageIndex()) push(options.to);
-}
+function replace(options: { from?: pageChecker; to: pageSelector }) {
+  const input = options.to(PAGE_INDEXES);
+  const from = options.from ? options.from(PAGE_INDEXES) : null;
 
-function replace(pageSelector: pageSelector) {
-  const input = pageSelector(PAGE_INDEXES);
+  if (Array.isArray(from) && from.includes(pageIndex())) {
+    return replace({ to: options.to });
+  }
+  if (from === pageIndex()) {
+    return replace({ to: options.to });
+  }
+
   const { index, cleanup } =
     typeof input === 'number' ? { index: input } : input;
-  for (const item of history.reverse()) if (item.cleanup) item.cleanup();
-  history.length = 0;
-  history.push({ index, id: randomUUID(), cleanup: cleanup ?? null });
+
+  for (const item of history().reverse()) {
+    if (item.cleanup) item.cleanup();
+  }
+  setHistory([{ index, id: randomUUID(), cleanup: cleanup ?? null }]);
   setPageIndex(index);
 }
 
 function pop() {
-  if (history.length < 2) return;
-  const { cleanup } = history.pop()!;
-  if (cleanup) cleanup();
-  const { index } = history[history.length - 1]!;
+  if (history().length < 2) return;
+  const lastItem = history()[history().length - 1]!;
+  if (lastItem.cleanup) lastItem.cleanup();
+  setHistory((history) => [...history.slice(0, -1)]);
+  const { index } = history()[history().length - 1]!;
   setPageIndex(index);
 }
 
-function addOnChange(callback: (page: PAGE_INDEXES) => void) {
-  createEffect(() => {
-    callback(pageIndex());
-  });
+function subscribe(callback: (page: PAGE_INDEXES) => void) {
+  createEffect(on(pageIndex, (value) => callback(value)));
 }
 
 function isCurrentPage(pageChecker: pageChecker) {
@@ -83,11 +92,10 @@ function isCurrentPage(pageChecker: pageChecker) {
 
 export {
   push,
-  pushConditionally,
   pop,
   replace,
   pageIndex,
   isCurrentPage,
-  addOnChange,
+  subscribe,
   PAGE_INDEXES
 };

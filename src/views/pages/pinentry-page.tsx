@@ -51,7 +51,7 @@ function PinentryPage() {
     return /^\d+$/.test(pin);
   }
 
-  navigator.addOnChange(() => {
+  navigator.subscribe(() => {
     setPin(null);
   });
 

@@ -22,7 +22,10 @@ function PreviewPanel(props: {
 
   async function showPassword() {
     const pw = await getPassword(props);
-    navigator.push((pages) => pages.DB_INDEX);
+    navigator.replace({
+      from: (pages) => [pages.TOUCH, pages.PINTENTRY],
+      to: (pages) => pages.DB_INDEX
+    });
     setPassword(pw);
   }
 
