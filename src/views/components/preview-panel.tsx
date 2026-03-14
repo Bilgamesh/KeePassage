@@ -4,14 +4,11 @@ import clipboardIcon from '#/assets/icons/clipboard.png';
 import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
 import qrcodeIcon from '#/assets/icons/qrcode.png';
-import { PAGE_INDEXES, TITLE_FONT } from '#/data/constants';
+import { TITLE_FONT } from '#/data/constants';
 import { copyPassword, getPassword, showQrCode } from '#/data/db-orchestrator';
 import { t } from '#/data/i18n';
-import {
-  appSettings,
-  selectedEntry,
-  setMainPageIndex
-} from '#/data/shared-state';
+import * as navigator from '#/data/navigator';
+import { appSettings, selectedEntry } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
 import { IconButton } from './icon-button';
 import { PreviewLine } from './preview-line';
@@ -25,7 +22,7 @@ function PreviewPanel(props: {
 
   async function showPassword() {
     const pw = await getPassword(props);
-    setMainPageIndex(PAGE_INDEXES.DB_INDEX);
+    navigator.push((pages) => pages.DB_INDEX);
     setPassword(pw);
   }
 

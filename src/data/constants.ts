@@ -12,15 +12,6 @@ export const MIN_SIZE = { width: 800, height: 600 } as const;
 export const SUBWINDOW_MIN_SIZE = { width: 800, height: 500 } as const;
 export const MAX_SIZE = { width: 0, height: 0 } as const;
 export const DATABASE_EXTENSION = 'kpgdb';
-export const PAGE_INDEXES = {
-  WELCOME: 0,
-  PINTENTRY: 1,
-  TOUCH: 2,
-  DB_INDEX: 3,
-  ENTRY: 4,
-  SETTINGS: 5,
-  GENERATOR: 6
-} as const;
 export const SMALL_BUTTON_STYLE: Style = {
   height: 30,
   width: 80

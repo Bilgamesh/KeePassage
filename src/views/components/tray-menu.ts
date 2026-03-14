@@ -1,9 +1,7 @@
 import { Menu, MessageLoop, type Window } from 'gui';
-import { PAGE_INDEXES } from '#/data/constants';
 import { t } from '#/data/i18n';
+import * as navigator from '#/data/navigator';
 import {
-  mainPageIndex,
-  setMainPageIndex,
   setSelectedDbPath,
   setUnlockedDbIndex,
   unlockedDbIndex
@@ -29,7 +27,7 @@ function TrayMenu(props: {
       onClick: () => {
         setUnlockedDbIndex(null);
         setSelectedDbPath('');
-        setMainPageIndex(PAGE_INDEXES.WELCOME);
+        navigator.replace((pages) => pages.WELCOME);
       }
     },
     {
@@ -43,7 +41,8 @@ function TrayMenu(props: {
   menu
     .itemAt(1)
     .setEnabled(
-      unlockedDbIndex() !== null && mainPageIndex() === PAGE_INDEXES.DB_INDEX
+      unlockedDbIndex() !== null &&
+        navigator.isCurrentPage((pages) => pages.DB_INDEX)
     );
   return menu;
 }

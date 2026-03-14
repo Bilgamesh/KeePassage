@@ -1,5 +1,6 @@
 import { appearance, type Window } from 'gui';
-import { mainPageIndex, setDark } from '#/data/shared-state';
+import { pageIndex } from '#/data/navigator';
+import { setDark } from '#/data/shared-state';
 import { Router } from '#/views/components/router';
 import { Toolbar } from '#/views/components/toolbar';
 import { DatabaseIndexPage } from '#/views/pages/database-index-page';
@@ -17,7 +18,7 @@ function App(props: { window: Window }) {
   return (
     <>
       <Toolbar window={props.window} />
-      <Router selectedPageIndex={mainPageIndex}>
+      <Router selectedPageIndex={pageIndex}>
         <WelcomePage window={props.window} />
         <PinentryPage />
         <TouchPage />

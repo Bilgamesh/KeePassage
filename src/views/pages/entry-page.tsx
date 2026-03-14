@@ -1,18 +1,11 @@
-import { createEffect, createSignal } from 'solid-js';
+import { createSignal } from 'solid-js';
 import diceIcon from '#/assets/icons/dice-3.png';
 import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
-import {
-  LARGE_BUTTON_STYLE,
-  PAGE_INDEXES,
-  SMALL_ENTRY_STYLE
-} from '#/data/constants';
+import { LARGE_BUTTON_STYLE, SMALL_ENTRY_STYLE } from '#/data/constants';
 import { t } from '#/data/i18n';
-import {
-  mainPageIndex,
-  setMainPageIndex,
-  unlockedDbIndex
-} from '#/data/shared-state';
+import * as navigator from '#/data/navigator';
+import { unlockedDbIndex } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
 import { encrypt } from '#/service/pcsc-service';
 import { createListeners } from '#/utils/listen-util';
@@ -61,7 +54,13 @@ function restoreRawEntry(
 async function requestEntry(password?: string, existingEntry?: Entry) {
   controller = new AbortController();
   setPasswordVisible(false);
-  setMainPageIndex(PAGE_INDEXES.ENTRY);
+  navigator.push((pages) => ({
+    index: pages.ENTRY,
+    cleanup: () => {
+      if (controller && !controller.signal.aborted)
+        controller.abort('Page cleanup');
+    }
+  }));
   if (existingEntry && typeof password === 'string') {
     restoreRawEntry({ ...existingEntry, password });
   }
@@ -77,8 +76,7 @@ async function requestEntry(password?: string, existingEntry?: Entry) {
 }
 
 function EntryPage() {
-  createEffect(() => {
-    mainPageIndex();
+  navigator.addOnChange(() => {
     setTitle('');
     setUsername('');
     setPassword('');

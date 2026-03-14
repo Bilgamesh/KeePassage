@@ -1,12 +1,11 @@
 import { Clipboard, FileSaveDialog, MessageBox, type Window } from 'gui';
 import type { Accessor } from 'solid-js';
-import { DATABASE_EXTENSION, PAGE_INDEXES } from '#/data/constants';
+import { DATABASE_EXTENSION } from '#/data/constants';
+import * as navigator from '#/data/navigator';
 import {
   appSettings,
-  mainPageIndex,
   selectedDbPath,
   selectedEntry,
-  setMainPageIndex,
   setSelectedDbPath,
   setUnlockedDbIndex,
   unlockedDbIndex
@@ -33,7 +32,6 @@ import { t } from './i18n';
 async function openDatabase(window: Window, path: string) {
   const previousPath = selectedDbPath();
   setSelectedDbPath(path);
-  const previousPageIndex = mainPageIndex();
   const dbFile = await loadDatabase(path);
   const key = await getMatchingKey(dbFile, 1000);
   if (!key) {
@@ -49,7 +47,7 @@ async function openDatabase(window: Window, path: string) {
   const pin = await requestPin(key.serial);
   if (!pin) {
     setSelectedDbPath(previousPath);
-    setMainPageIndex(previousPageIndex);
+    navigator.pop();
     return;
   }
   try {
@@ -65,14 +63,17 @@ async function openDatabase(window: Window, path: string) {
       { signal }
     );
     setUnlockedDbIndex({ ...index });
-    setMainPageIndex(PAGE_INDEXES.DB_INDEX);
+    navigator.pushConditionally({
+      from: (pages) => pages.TOUCH,
+      to: (pages) => pages.DB_INDEX
+    });
   } catch (err) {
     console.error(`Failed to open database: ${err}`);
     if (!(err instanceof DOMException) || err.name !== 'AbortError') {
       showError(window, err);
     }
     setSelectedDbPath(previousPath);
-    setMainPageIndex(previousPageIndex);
+    navigator.pop();
   }
   await updateSettings((settings) => {
     const index = settings.recent.indexOf(path);
@@ -152,7 +153,10 @@ async function getPassword(options: { entry: Entry; window: Window }) {
   }
   const pin = await requestPin(key.serial, entry.title);
   if (!pin) {
-    setMainPageIndex(PAGE_INDEXES.DB_INDEX);
+    navigator.pushConditionally({
+      from: (pages) => [pages.TOUCH, pages.PINTENTRY],
+      to: (pages) => pages.DB_INDEX
+    });
     return null;
   }
   try {
@@ -176,7 +180,10 @@ async function getPassword(options: { entry: Entry; window: Window }) {
 
 async function addNewEntry() {
   const entry = await requestEntry();
-  setMainPageIndex(PAGE_INDEXES.DB_INDEX);
+  navigator.pushConditionally({
+    from: (pages) => pages.ENTRY,
+    to: (pages) => pages.DB_INDEX
+  });
   if (entry) {
     setUnlockedDbIndex((db) => {
       db?.secrets.push(entry);
@@ -199,11 +206,17 @@ async function editEntry(window: Window) {
   }
   const password = await getPassword({ entry, window });
   if (password === null) {
-    setMainPageIndex(PAGE_INDEXES.DB_INDEX);
+    navigator.pushConditionally({
+      from: (pages) => [pages.PINTENTRY, pages.TOUCH],
+      to: (pages) => pages.DB_INDEX
+    });
     return;
   }
   const newEntry = await requestEntry(password, entry);
-  setMainPageIndex(PAGE_INDEXES.DB_INDEX);
+  navigator.pushConditionally({
+    from: (pages) => pages.ENTRY,
+    to: (pages) => pages.DB_INDEX
+  });
   if (!newEntry) {
     return;
   }
@@ -256,7 +269,10 @@ async function copyPassword(window: Window) {
   const entry = selectedEntry();
   if (entry) {
     const password = await getPassword({ entry, window });
-    setMainPageIndex(PAGE_INDEXES.DB_INDEX);
+    navigator.pushConditionally({
+      from: (pages) => [pages.PINTENTRY, pages.TOUCH],
+      to: (pages) => pages.DB_INDEX
+    });
     if (password) {
       Clipboard.get().setText(password);
       triggerClipboardCleanup();
@@ -268,7 +284,10 @@ async function showQrCode(window: Window) {
   const entry = selectedEntry();
   if (entry) {
     const password = await getPassword({ entry, window });
-    setMainPageIndex(PAGE_INDEXES.DB_INDEX);
+    navigator.pushConditionally({
+      from: (pages) => [pages.PINTENTRY, pages.TOUCH],
+      to: (pages) => pages.DB_INDEX
+    });
     if (password) {
       showQrCodeWindow(`${entry.title} - Password`, password);
     }
@@ -298,7 +317,7 @@ function refreshDbLock() {
   if (isMinimised && appSettings().dbMinimiseLock) {
     setUnlockedDbIndex(null);
     setSelectedDbPath('');
-    setMainPageIndex(PAGE_INDEXES.WELCOME);
+    navigator.replace((pages) => pages.WELCOME);
   }
 
   if (
@@ -308,7 +327,7 @@ function refreshDbLock() {
   ) {
     setUnlockedDbIndex(null);
     setSelectedDbPath('');
-    setMainPageIndex(PAGE_INDEXES.WELCOME);
+    navigator.replace((pages) => pages.WELCOME);
   }
 }
 

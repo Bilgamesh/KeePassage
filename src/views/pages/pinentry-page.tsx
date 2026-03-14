@@ -1,17 +1,9 @@
 import { AttributedText, type Entry } from 'gui';
-import { createEffect, createSignal } from 'solid-js';
-import {
-  APP_NAME,
-  LARGE_BUTTON_STYLE,
-  PAGE_INDEXES,
-  TITLE_FONT
-} from '#/data/constants';
+import { createSignal } from 'solid-js';
+import { APP_NAME, LARGE_BUTTON_STYLE, TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
-import {
-  mainPageIndex,
-  selectedDbPath,
-  setMainPageIndex
-} from '#/data/shared-state';
+import * as navigator from '#/data/navigator';
+import { selectedDbPath } from '#/data/shared-state';
 import { createListeners } from '#/utils/listen-util';
 import { Expand } from '#/views/components/expand';
 
@@ -32,7 +24,13 @@ async function requestPin(serial: number, entryName?: string) {
   }
   setSerial(serial);
   controller = new AbortController();
-  setMainPageIndex(PAGE_INDEXES.PINTENTRY);
+  navigator.push((pages) => ({
+    index: pages.PINTENTRY,
+    cleanup: () => {
+      if (controller && !controller.signal.aborted)
+        controller.abort('Page cleanup');
+    }
+  }));
   entryNode.focus();
   try {
     const pin = await pinListeners.waitForValue({ signal: controller?.signal });
@@ -53,8 +51,7 @@ function PinentryPage() {
     return /^\d+$/.test(pin);
   }
 
-  createEffect(() => {
-    mainPageIndex();
+  navigator.addOnChange(() => {
     setPin(null);
   });
 

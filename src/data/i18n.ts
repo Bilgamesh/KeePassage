@@ -53,9 +53,7 @@ function getSystemLocale() {
 }
 
 const t = translator(() => {
-  const dict = dictionaries.find(
-    (d) => d.languageCode === appSettings().language
-  );
+  const dict = currentDictionary();
   if (!dict) {
     throw new Error('Attempted to translate with `null` dictionary');
   }
@@ -64,4 +62,7 @@ const t = translator(() => {
 
 const dictionaries = getDictionaries();
 
-export { dictionaries, getSystemLocale, t };
+const currentDictionary = () =>
+  dictionaries.find((d) => d.languageCode === appSettings().language);
+
+export { dictionaries, currentDictionary, getSystemLocale, t };

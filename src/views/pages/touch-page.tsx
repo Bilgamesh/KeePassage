@@ -1,13 +1,10 @@
 import { setTimeout } from 'node:timers/promises';
 import { AttributedText } from 'gui';
 import touchIcon from '#/assets/icons/touch.png';
-import {
-  DARK_MODE_FONT_COLOR,
-  PAGE_INDEXES,
-  TITLE_FONT
-} from '#/data/constants';
+import { DARK_MODE_FONT_COLOR, TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
-import { isDark, mainPageIndex, setMainPageIndex } from '#/data/shared-state';
+import * as navigator from '#/data/navigator';
+import { isDark } from '#/data/shared-state';
 import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
 
@@ -15,14 +12,20 @@ let controller: AbortController;
 
 function requestTouch() {
   controller = new AbortController();
-  const previousPageIndex = mainPageIndex();
+  const previousPageId = navigator.pageIndex();
   // In case of incorrect PIN, PSCS usually returns an error in less than 10ms,
   // but if the PIN is correct, PCSC stays silent until user touches the key sensor.
   // We assume that if there was no error within the initial 50ms, PIN must be correct and we prompt the user to tap the key.
   setTimeout(50).then(() => {
-    const stillOnSamePage = previousPageIndex === mainPageIndex();
+    const stillOnSamePage = navigator.isCurrentPage(() => previousPageId);
     if (!controller.signal.aborted && stillOnSamePage) {
-      setMainPageIndex(PAGE_INDEXES.TOUCH);
+      navigator.push((pages) => ({
+        index: pages.TOUCH,
+        cleanup: () => {
+          if (controller && !controller.signal.aborted)
+            controller.abort('Page cleanup');
+        }
+      }));
     }
   });
   return controller.signal;

@@ -3,15 +3,11 @@ import { createEffect, createMemo, createSignal } from 'solid-js';
 import {
   DEFAULT_SETTINGS,
   LARGE_BUTTON_STYLE,
-  PAGE_INDEXES,
   TITLE_FONT
 } from '#/data/constants';
 import { dictionaries, t } from '#/data/i18n';
-import {
-  appSettings,
-  mainPageIndex,
-  setMainPageIndex
-} from '#/data/shared-state';
+import * as navigator from '#/data/navigator';
+import { appSettings } from '#/data/shared-state';
 import { updateSettings } from '#/service/config-service';
 import { Expand } from '#/views/components/expand';
 import { TimeoutEntry } from '#/views/components/timeout-entry';
@@ -20,18 +16,15 @@ const [unsavedAppSettings, setUnsavedAppSettings] = createSignal({
   ...appSettings()
 });
 
-let previousPageIndex: number = PAGE_INDEXES.WELCOME;
-
 function reset() {
   setUnsavedAppSettings((s) => ({ ...s }));
   setUnsavedAppSettings({ ...appSettings() });
 }
 
 function openSettingsPage() {
-  if (mainPageIndex() !== PAGE_INDEXES.SETTINGS) {
-    previousPageIndex = mainPageIndex();
+  if (!navigator.isCurrentPage((page) => page.SETTINGS)) {
     reset();
-    setMainPageIndex(PAGE_INDEXES.SETTINGS);
+    navigator.push((pages) => pages.SETTINGS);
   }
 }
 
@@ -50,8 +43,7 @@ function SettingsPage(props: { window: Window }) {
     setUnsavedAppSettings({ ...savedSettings });
   });
 
-  createEffect(() => {
-    mainPageIndex();
+  navigator.addOnChange(() => {
     picker.selectItemAt(currentLanguageIndex());
   });
 
@@ -238,7 +230,7 @@ function SettingsPage(props: { window: Window }) {
             msgBox.addButton(t('cancel'), -1);
             msgBox.addButton(t('reset'), 1);
             if (msgBox.runForWindow(props.window) === 1) {
-              setMainPageIndex(previousPageIndex);
+              navigator.pop();
               updateSettings(() => DEFAULT_SETTINGS);
             }
           }}
@@ -248,7 +240,7 @@ function SettingsPage(props: { window: Window }) {
         <Expand direction="row" />
         <button
           onClick={() => {
-            setMainPageIndex(previousPageIndex);
+            navigator.pop();
             updateSettings(() => unsavedAppSettings());
           }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
@@ -256,7 +248,7 @@ function SettingsPage(props: { window: Window }) {
         />
         <button
           onClick={() => {
-            setMainPageIndex(previousPageIndex);
+            navigator.pop();
             reset();
           }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}

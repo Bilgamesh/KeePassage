@@ -9,12 +9,11 @@ import {
   ENTRY_BUTTON_STYLE,
   LARGE_BUTTON_STYLE,
   LARGE_ENTRY_STYLE,
-  PAGE_INDEXES,
   PASSWORD_FONT,
   SMALL_BUTTON_STYLE
 } from '#/data/constants';
 import { t } from '#/data/i18n';
-import { mainPageIndex, setMainPageIndex } from '#/data/shared-state';
+import * as navigator from '#/data/navigator';
 import { createListeners } from '#/utils/listen-util';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
@@ -28,7 +27,6 @@ const [passwordPolicy, setPasswordPolicy] = createSignal({
   symbols: true,
   length: 32
 });
-let previousPageIndex: number = PAGE_INDEXES.WELCOME;
 let controller: AbortController;
 const pwListeners = createListeners<string>();
 const [requestInProgress, setRequestInProgress] = createSignal(false);
@@ -51,10 +49,15 @@ async function getGeneratedPassword() {
 }
 
 function openPasswordGenerator() {
-  if (mainPageIndex() !== PAGE_INDEXES.GENERATOR) {
-    previousPageIndex = mainPageIndex();
+  if (!navigator.isCurrentPage((page) => page.GENERATOR)) {
     setPassword('');
-    setMainPageIndex(PAGE_INDEXES.GENERATOR);
+    navigator.push((pages) => ({
+      index: pages.GENERATOR,
+      cleanup: () => {
+        if (controller && !controller.signal.aborted)
+          controller.abort('Page cleanup');
+      }
+    }));
     generate();
   }
 }
@@ -246,7 +249,7 @@ function PwGeneratorPage() {
               enabled={password().length > 0}
               onClick={() => {
                 pwListeners.notifyListeners(password());
-                setMainPageIndex(previousPageIndex);
+                navigator.pop();
                 setPassword('');
               }}
               style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
@@ -255,11 +258,8 @@ function PwGeneratorPage() {
             />
             <button
               onClick={() => {
-                setMainPageIndex(previousPageIndex);
+                navigator.pop();
                 setPassword('');
-                if (controller && !controller.signal.aborted) {
-                  controller.abort('Cancel');
-                }
               }}
               style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10 }}
               title={t('close')}

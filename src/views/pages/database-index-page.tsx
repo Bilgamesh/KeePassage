@@ -1,6 +1,8 @@
 import { setTimeout } from 'node:timers/promises';
 import { SimpleTableModel, type Window } from 'gui';
+import { For, Show } from 'solid-js';
 import { editEntry } from '#/data/db-orchestrator';
+import { currentDictionary, dictionaries } from '#/data/i18n';
 import {
   appSettings,
   filter,
@@ -36,26 +38,34 @@ function DatabaseIndexPage(props: { window: Window }) {
 
   return (
     <container style={{ flex: 1 }}>
-      <table
-        columnsWithOptions={DatabaseColumns()}
-        hasBorder={true}
-        model={model()}
-        onMouseDown={async (_self, event) => {
-          if (event.button === 2) {
-            await setTimeout(10);
-            DatabaseIndexContextMenu({ window: props.window }).popup();
-          }
-        }}
-        onRowActivate={() => {
-          editEntry(props.window);
-        }}
-        onSelectionChange={async (self) => {
-          await setTimeout(2);
-          const index = self.getSelectedRow();
-          setSelectedEntry(entries()[index] || null);
-        }}
-        style={{ flex: 1, margin: 20 }}
-      />
+      <For each={dictionaries}>
+        {(dict) => (
+          // There is a limitation in Yue - table columns cannot be deleted and their titles can't be modified.
+          // Because of that, we have to re-create the table when language is changed, to translate the column titles.
+          <Show when={dict === currentDictionary()}>
+            <table
+              columnsWithOptions={DatabaseColumns()}
+              hasBorder={true}
+              model={model()}
+              onMouseDown={async (_self, event) => {
+                if (event.button === 2) {
+                  await setTimeout(10);
+                  DatabaseIndexContextMenu({ window: props.window }).popup();
+                }
+              }}
+              onRowActivate={() => {
+                editEntry(props.window);
+              }}
+              onSelectionChange={async (self) => {
+                await setTimeout(2);
+                const index = self.getSelectedRow();
+                setSelectedEntry(entries()[index] || null);
+              }}
+              style={{ flex: 1, margin: 20 }}
+            />
+          </Show>
+        )}
+      </For>
       <PreviewPanel
         entry={
           selectedEntry() || {
