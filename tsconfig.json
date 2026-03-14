@@ -13,6 +13,7 @@
     "module": "ESNext",
     "types": ["vite/client"],
     "moduleResolution": "bundler",
+    "erasableSyntaxOnly": true,
     "paths": {
       "#/*": ["./src/*"]
     }

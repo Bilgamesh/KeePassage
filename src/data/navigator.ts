@@ -1,8 +1,6 @@
 import { randomUUID, type UUID } from 'node:crypto';
 import { createEffect, createSignal } from 'solid-js';
 
-const [pageIndex, setPageIndex] = createSignal(0);
-
 const PAGE_INDEXES = {
   WELCOME: 0,
   PINTENTRY: 1,
@@ -13,17 +11,29 @@ const PAGE_INDEXES = {
   GENERATOR: 6
 } as const;
 
-type historyItem = { index: number; id: UUID; cleanup?: (() => void) | null };
+type PAGE_INDEXES = (typeof PAGE_INDEXES)[keyof typeof PAGE_INDEXES];
+
+type historyItem = {
+  index: PAGE_INDEXES;
+  id: UUID;
+  cleanup?: (() => void) | null;
+};
 
 type pageSelector = (
   pages: typeof PAGE_INDEXES
-) => number | { index: number; cleanup?: () => void };
+) => PAGE_INDEXES | { index: PAGE_INDEXES; cleanup?: () => void };
 
-type pageChecker = (pages: typeof PAGE_INDEXES) => number | number[];
+type pageChecker = (
+  pages: typeof PAGE_INDEXES
+) => PAGE_INDEXES | PAGE_INDEXES[];
+
+const [pageIndex, setPageIndex] = createSignal(
+  PAGE_INDEXES.WELCOME as PAGE_INDEXES
+);
 
 const history: historyItem[] = [
   {
-    index: PAGE_INDEXES.WELCOME,
+    index: pageIndex(),
     id: randomUUID(),
     cleanup: null
   }
@@ -59,7 +69,7 @@ function pop() {
   setPageIndex(index);
 }
 
-function addOnChange(callback: (page: number) => void) {
+function addOnChange(callback: (page: PAGE_INDEXES) => void) {
   createEffect(() => {
     callback(pageIndex());
   });
