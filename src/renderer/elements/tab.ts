@@ -57,7 +57,7 @@ class Tab extends View {
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'titles':
-        this.titles = <string[]>value;
+        this.titles = value as string[];
         this.addFromQueue();
         break;
       case 'selectedPage':

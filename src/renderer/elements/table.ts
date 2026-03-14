@@ -22,10 +22,10 @@ class Table extends View {
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'model':
-        this.node.setModel(<TableModel>value);
+        this.node.setModel(value as TableModel);
         break;
       case 'columns':
-        for (const newColumn of <string[]>value) {
+        for (const newColumn of value as string[]) {
           if (!this.columns.includes(newColumn)) {
             this.columns.push(newColumn);
             this.node.addColumn(newColumn);
@@ -33,9 +33,10 @@ class Table extends View {
         }
         break;
       case 'columnsWithOptions':
-        for (const { label, options } of <
-          { label: string; options: TableColumnOptions }[]
-        >value) {
+        for (const { label, options } of value as {
+          label: string;
+          options: TableColumnOptions;
+        }[]) {
           if (!this.columns.includes(label)) {
             this.columns.push(label);
             this.node.addColumnWithOptions(label, options);
@@ -58,7 +59,7 @@ class Table extends View {
         this.node.selectRow(Number(value));
         break;
       case 'selectedRows':
-        this.node.selectRows(<number[]>value);
+        this.node.selectRows(value as number[]);
         break;
       case 'onSelectionChange':
         this.node.onSelectionChange.connect(value);

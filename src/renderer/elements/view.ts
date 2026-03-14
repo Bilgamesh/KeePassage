@@ -5,6 +5,7 @@ import {
   type Font,
   type View as GuiView
 } from 'gui';
+import type { Style } from '#/renderer/types';
 
 class View {
   node: GuiView = Container.create();
@@ -44,19 +45,19 @@ class View {
         this.node.setEnabled(!!value);
         break;
       case 'cursor':
-        this.node.setCursor(Cursor.createWithType(<CursorType>value));
+        this.node.setCursor(Cursor.createWithType(value as CursorType));
         break;
       case 'focusable':
         this.node.setFocusable(!!value);
         break;
       case 'font':
-        this.node.setFont(<Font>value);
+        this.node.setFont(value as Font);
         break;
       case 'mouseDownCanMoveWindow':
         this.node.setMouseDownCanMoveWindow(!!value);
         break;
       case 'style':
-        this.node.setStyle(<object>value);
+        this.node.setStyle(value as Style);
         break;
       case 'tooltip':
         this.node.setTooltip(String(value));

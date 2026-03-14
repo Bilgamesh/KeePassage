@@ -43,14 +43,15 @@ class Browser extends View {
         if (typeof value === 'string') {
           this.node.loadHTML(value, 'about:blank');
         } else {
-          const { html, baseUrl } = <{ html: string; baseUrl?: string }>value;
+          const { html, baseUrl } = value as { html: string; baseUrl?: string };
           this.node.loadHTML(html, baseUrl || 'about:blank');
         }
         break;
       case 'javaScript': {
-        const { code, callback } = <{ code: string; callback?: () => void }>(
-          value
-        );
+        const { code, callback } = value as {
+          code: string;
+          callback?: () => void;
+        };
         this.node.executeJavaScript(code, callback || (() => {}));
         break;
       }

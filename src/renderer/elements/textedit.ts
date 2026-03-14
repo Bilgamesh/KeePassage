@@ -26,21 +26,23 @@ class TextEdit extends View {
         }
         break;
       case 'selectedRange': {
-        const { start, end } = <{ start: number; end: number }>value;
+        const { start, end } = value as { start: number; end: number };
         this.node.selectRange(start, end);
         break;
       }
       case 'scrollbarPolicy': {
-        const { hpolicy, vpolicy } = <
-          { hpolicy: ScrollPolicy; vpolicy: ScrollPolicy }
-        >value;
+        const { hpolicy, vpolicy } = value as {
+          hpolicy: ScrollPolicy;
+          vpolicy: ScrollPolicy;
+        };
         this.node.setScrollbarPolicy(hpolicy, vpolicy);
         break;
       }
       case 'scrollElasticity': {
-        const { helasticity, velasticity } = <
-          { helasticity: ScrollElasticity; velasticity: ScrollElasticity }
-        >value;
+        const { helasticity, velasticity } = value as {
+          helasticity: ScrollElasticity;
+          velasticity: ScrollElasticity;
+        };
         this.node.setScrollElasticity(helasticity, velasticity);
         break;
       }
@@ -48,7 +50,7 @@ class TextEdit extends View {
         this.node.onTextChange.connect(value);
         break;
       case 'shouldInsertNewLine':
-        this.node.shouldInsertNewLine = <(self: GuiTextEdit) => boolean>value;
+        this.node.shouldInsertNewLine = value as (self: GuiTextEdit) => boolean;
         break;
       default:
         super.setProperty<T>(name, value);

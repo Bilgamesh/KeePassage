@@ -17,7 +17,7 @@ class ProgressBar extends View {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'value':
-        this.node.setValue(<number>value);
+        this.node.setValue(value as number);
         break;
       case 'indeterminate':
         this.node.setIndeterminate(!!value);

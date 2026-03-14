@@ -49,12 +49,13 @@ class Scroll extends View {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'contentSize':
-        this.node.setContentSize(<SizeF>value);
+        this.node.setContentSize(value as SizeF);
         break;
       case 'scrollPosition': {
-        const { horizon, vertical } = <{ horizon: number; vertical: number }>(
-          value
-        );
+        const { horizon, vertical } = value as {
+          horizon: number;
+          vertical: number;
+        };
         this.node.setScrollPosition(horizon, vertical);
         break;
       }
@@ -62,16 +63,18 @@ class Scroll extends View {
         this.node.setOverlayScrollbar(!!value);
         break;
       case 'scrollbarPolicy': {
-        const { hpolicy, vpolicy } = <
-          { hpolicy: ScrollPolicy; vpolicy: ScrollPolicy }
-        >value;
+        const { hpolicy, vpolicy } = value as {
+          hpolicy: ScrollPolicy;
+          vpolicy: ScrollPolicy;
+        };
         this.node.setScrollbarPolicy(hpolicy, vpolicy);
         break;
       }
       case 'scrollElasticity': {
-        const { helasticity, velasticity } = <
-          { helasticity: ScrollElasticity; velasticity: ScrollElasticity }
-        >value;
+        const { helasticity, velasticity } = value as {
+          helasticity: ScrollElasticity;
+          velasticity: ScrollElasticity;
+        };
         this.node.setScrollElasticity(helasticity, velasticity);
         break;
       }

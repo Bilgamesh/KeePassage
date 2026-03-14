@@ -21,7 +21,7 @@ class Picker extends View {
         break;
       case 'items':
         this.node.clear();
-        for (const item of <string[]>value) {
+        for (const item of value as string[]) {
           this.node.addItem(item);
         }
         break;

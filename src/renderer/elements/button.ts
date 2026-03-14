@@ -25,16 +25,16 @@ class Button extends View {
         this.node.setTitle(String(value));
         break;
       case 'controlSize':
-        this.node.setControlSize(<ControlSize>value);
+        this.node.setControlSize(value as ControlSize);
         break;
       case 'hasBorder':
         this.node.setHasBorder(!!value);
         break;
       case 'image':
-        this.node.setImage(<Image>value);
+        this.node.setImage(value as Image);
         break;
       case 'buttonStyle':
-        this.node.setButtonStyle(<ButtonStyle>value);
+        this.node.setButtonStyle(value as ButtonStyle);
         break;
       case 'onClick':
         this.node.onClick.connect(value);

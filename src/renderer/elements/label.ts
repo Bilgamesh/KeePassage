@@ -20,13 +20,13 @@ class Label extends View {
         this.node.setText(String(value));
         break;
       case 'attributedText':
-        this.node.setAttributedText(<AttributedText>value);
+        this.node.setAttributedText(value as AttributedText);
         break;
       case 'align':
-        this.node.setAlign(<TextAlign>value);
+        this.node.setAlign(value as TextAlign);
         break;
       case 'vAlign':
-        this.node.setVAlign(<TextAlign>value);
+        this.node.setVAlign(value as TextAlign);
         break;
       default:
         super.setProperty<T>(name, value);

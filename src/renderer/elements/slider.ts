@@ -23,7 +23,7 @@ class Slider extends View {
         this.node.setStep(Number(value));
         break;
       case 'range': {
-        const { min, max } = <{ min: number; max: number }>value;
+        const { min, max } = value as { min: number; max: number };
         this.node.setRange(min, max);
         break;
       }
