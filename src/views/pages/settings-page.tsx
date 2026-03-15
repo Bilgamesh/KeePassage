@@ -164,7 +164,7 @@ function SettingsPage(props: { window: Window }) {
         <container>
           <container style={{ 'margin-left': 10 }}>
             <TimeoutEntry
-              checkboxWidth={process.platform === 'win32' ? 250 : 300}
+              checkboxWidth={process.platform === 'linux' ? 350 : 250}
               checked={unsavedAppSettings().clipboardTimout !== null}
               entryWidth={50}
               onClick={(checked) => {
@@ -183,7 +183,7 @@ function SettingsPage(props: { window: Window }) {
               value={unsavedAppSettings().clipboardTimout || 0}
             />
             <TimeoutEntry
-              checkboxWidth={process.platform === 'win32' ? 250 : 300}
+              checkboxWidth={process.platform === 'linux' ? 350 : 250}
               checked={unsavedAppSettings().dbTimeout !== null}
               entryWidth={50}
               onClick={(checked) => {
