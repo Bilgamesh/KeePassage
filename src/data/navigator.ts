@@ -29,9 +29,7 @@ type pageChecker = (
   pages: typeof PAGE_INDEXES
 ) => PAGE_INDEXES | PAGE_INDEXES[];
 
-const [pageIndex, setPageIndex] = createSignal(
-  PAGE_INDEXES.WELCOME as PAGE_INDEXES
-);
+const [pageIndex, setPageIndex] = createSignal<PAGE_INDEXES>(0);
 
 const [history, setHistory] = createSignal<historyItem[]>([
   {
@@ -62,6 +60,7 @@ function replace(options: { from?: pageChecker; to: pageSelector }) {
   if (from === pageIndex()) {
     return replace({ to: options.to });
   }
+  if (from !== null) return;
 
   const { index, cleanup } =
     typeof input === 'number' ? { index: input } : input;
