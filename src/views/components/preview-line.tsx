@@ -114,7 +114,9 @@ function PreviewLine(props: {
               text={props.value}
               vAlign="start"
             />
-            <container style={{ flex: 1 }} />
+            <Show when={process.platform !== 'linux'}>
+              <container style={{ flex: 1 }} />
+            </Show>
           </container>
         </container>
       </Show>
