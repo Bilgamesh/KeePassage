@@ -13,15 +13,17 @@ const PAGE_INDEXES = {
 
 type PAGE_INDEXES = (typeof PAGE_INDEXES)[keyof typeof PAGE_INDEXES];
 
+type cleanup = (() => void) | null;
+
 type historyItem = {
   index: PAGE_INDEXES;
   id: UUID;
-  cleanup?: (() => void) | null;
+  cleanup: cleanup;
 };
 
 type pageSelector = (
   pages: typeof PAGE_INDEXES
-) => PAGE_INDEXES | { index: PAGE_INDEXES; cleanup?: () => void };
+) => PAGE_INDEXES | Omit<historyItem, 'id'>;
 
 type pageChecker = (
   pages: typeof PAGE_INDEXES
