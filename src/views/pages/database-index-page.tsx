@@ -53,6 +53,12 @@ function DatabaseIndexPage(props: { window: Window }) {
                   DatabaseIndexContextMenu({ window: props.window }).popup();
                 }
               }}
+              onMouseUp={async (_self, event) => {
+                if (event.button === 2 && process.platform === 'linux') {
+                  await setTimeout(10);
+                  DatabaseIndexContextMenu({ window: props.window }).popup();
+                }
+              }}
               onRowActivate={() => {
                 editEntry(props.window);
               }}
