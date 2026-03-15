@@ -91,11 +91,25 @@ async function unlockDatabase(
   return await decryptIndex(dbFile.i, indexKey);
 }
 
-async function loadDatabase(path: string) {
-  const dbFileRaw = await readFile(path, 'utf-8');
-  const decoded = Buffer.from(dbFileRaw, 'base64').toString('utf-8');
-  const dbFile = DbFile.parse(JSON.parse(decoded));
-  return dbFile;
+async function loadDatabase(path: string, retryExtension = true) {
+  try {
+    const dbFileRaw = await readFile(path, 'utf-8');
+    const decoded = Buffer.from(dbFileRaw, 'base64').toString('utf-8');
+    const dbFile = DbFile.parse(JSON.parse(decoded));
+    return dbFile;
+  } catch (err) {
+    if (!retryExtension) throw err;
+    if (path.endsWith(`.${DATABASE_EXTENSION}`)) {
+      console.log('Retrying without extension');
+      return await loadDatabase(
+        path.substring(0, path.length - `.${DATABASE_EXTENSION}`.length),
+        false
+      );
+    } else {
+      console.log('Retrying with extension');
+      return await loadDatabase(`${path}.${DATABASE_EXTENSION}`, false);
+    }
+  }
 }
 
 async function saveDatabase(config: { db: DbIndex; path: string }) {

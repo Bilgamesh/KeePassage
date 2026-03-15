@@ -19,14 +19,18 @@ import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
 import { NumericEntry } from '#/views/components/numeric-entry';
 
-const [password, setPassword] = createSignal('');
-const [passwordPolicy, setPasswordPolicy] = createSignal({
+const DEFAULT_PASSWORD_POLICY = {
   lowerCase: true,
   upperCase: true,
   numbers: true,
   symbols: true,
   length: 32
-});
+};
+
+const [password, setPassword] = createSignal('');
+const [passwordPolicy, setPasswordPolicy] = createSignal(
+  DEFAULT_PASSWORD_POLICY
+);
 let controller: AbortController;
 const pwListeners = createListeners<string>();
 const [requestInProgress, setRequestInProgress] = createSignal(false);
@@ -86,6 +90,11 @@ function generate() {
 
 function PwGeneratorPage() {
   const [visible, setVisible] = createSignal(true);
+
+  // Workaround for Linux bug triggering slider onValueChange on first render
+  setTimeout(() => {
+    setPasswordPolicy(DEFAULT_PASSWORD_POLICY);
+  }, 0);
 
   return (
     <group style={{ flex: 1, margin: 100 }} title={t('passwordGenerator')}>
