@@ -115,6 +115,7 @@ function PreviewPanel(props: {
           <PreviewLine
             label={t('url')}
             style={{ 'margin-top': 10, height: 20 }}
+            type="url"
             value={props.entry.url}
           />
         </container>
