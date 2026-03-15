@@ -91,10 +91,10 @@ function Toolbar(props: { window: Window }) {
           : {})}
       >
         <IconButton
-          enabled={
-            navigator.isCurrentPage((pages) => pages.WELCOME) ||
-            navigator.isCurrentPage((pages) => pages.DB_INDEX)
-          }
+          enabled={navigator.isCurrentPage((pages) => [
+            pages.WELCOME,
+            pages.DB_INDEX
+          ])}
           onClick={() => {
             const dialog = FileOpenDialog.create();
             dialog.setFilters([
@@ -208,10 +208,10 @@ function Toolbar(props: { window: Window }) {
           style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }}
         />
         <IconButton
-          enabled={
-            navigator.isCurrentPage((pages) => pages.WELCOME) ||
-            navigator.isCurrentPage((pages) => pages.DB_INDEX)
-          }
+          enabled={navigator.isCurrentPage((pages) => [
+            pages.WELCOME,
+            pages.DB_INDEX
+          ])}
           onClick={() => {
             openPasswordGenerator();
           }}
@@ -219,10 +219,10 @@ function Toolbar(props: { window: Window }) {
           tooltip={t('passwordGenerator')}
         />
         <IconButton
-          enabled={
-            navigator.isCurrentPage((pages) => pages.WELCOME) ||
-            navigator.isCurrentPage((pages) => pages.DB_INDEX)
-          }
+          enabled={navigator.isCurrentPage((pages) => [
+            pages.WELCOME,
+            pages.DB_INDEX
+          ])}
           onClick={() => {
             openSettingsPage();
           }}

@@ -10,8 +10,8 @@ import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import { appSettings, selectedEntry } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
-import { IconButton } from './icon-button';
-import { PreviewLine } from './preview-line';
+import { IconButton } from '#/views/components/icon-button';
+import { PreviewLine } from '#/views/components/preview-line';
 
 function PreviewPanel(props: {
   window: Window;

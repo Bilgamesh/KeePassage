@@ -1,6 +1,6 @@
 import type { Accessor } from 'solid-js';
 import type { Style } from '#/renderer/types';
-import { TextContextMenu } from './text-context-menu';
+import { TextContextMenu } from '#/views/components/text-context-menu';
 
 function EntryTextArea(props: {
   title: string;

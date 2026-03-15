@@ -1,6 +1,7 @@
 import { Clipboard, FileSaveDialog, MessageBox, type Window } from 'gui';
 import type { Accessor } from 'solid-js';
 import { DATABASE_EXTENSION } from '#/data/constants';
+import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import {
   appSettings,
@@ -27,7 +28,6 @@ import { requestEntry } from '#/views/pages/entry-page';
 import { requestPin } from '#/views/pages/pinentry-page';
 import { requestTouch } from '#/views/pages/touch-page';
 import { getMainWindow } from '#/windows/main-window';
-import { t } from './i18n';
 
 async function openDatabase(window: Window, path: string) {
   const previousPath = selectedDbPath();
