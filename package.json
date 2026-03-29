@@ -45,7 +45,9 @@
   },
   "overrides": {
     "yackage": {
-      "tar": "^7.5.6"
+      "tar": "^7.5.6",
+      "@electron/asar": "^4.1.2",
+      "glob": "^13.0.6"
     }
   }
 }
