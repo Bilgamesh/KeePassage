@@ -7,7 +7,7 @@ import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import { unlockedDbIndex } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
-import { encrypt } from '#/service/pcsc-service';
+import { encrypt } from '#/service/yubikey-service';
 import { createListeners } from '#/utils/listen-util';
 import { EntryLine } from '#/views/components/entry-line';
 import { EntryTextArea } from '#/views/components/entry-text-area';

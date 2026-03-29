@@ -1,7 +1,6 @@
 import { app, MessageLoop } from 'gui';
 import { App } from '#/app';
 import { APP_ID, APP_NAME } from '#/data/constants';
-import { killPcscDaemon, spawnPcscDaemon } from '#/data/pcsc-orchestrator';
 import { render } from '#/renderer';
 import { initConfigFile } from '#/service/config-service';
 import { SingleInstance } from '#/utils/single-instance-util';
@@ -19,14 +18,19 @@ async function main() {
 
   window.activate();
 
-  spawnPcscDaemon({ respawnOnDeath: true });
-  process.on('exit', killPcscDaemon);
-
   if (!(process as { versions: { yode?: string } }).versions.yode) {
     MessageLoop.run();
     process.exit(0);
   }
 }
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
 
 const locker = new SingleInstance(APP_NAME);
 locker

@@ -6,7 +6,6 @@ import {
   MIN_SIZE,
   WINDOWS_APP_BACKGROUND_COLOR
 } from '#/data/constants';
-import { killPcscDaemon } from '#/data/pcsc-orchestrator';
 import { appSettings } from '#/data/shared-state';
 import { createWindow, deleteWindow, getWindow } from '#/data/window-manager';
 import { AppIcon } from '#/views/components/app-icon';
@@ -72,7 +71,6 @@ function createMainWindow() {
     if (tray && appSettings().minimiseInsteadOfExit) {
       deleteWindow(APP_NAME);
     } else {
-      killPcscDaemon();
       deleteWindow(APP_NAME);
       MessageLoop.quit();
       process.exit(0);

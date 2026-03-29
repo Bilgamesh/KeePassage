@@ -2,8 +2,6 @@ import fs from 'node:fs';
 import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
-import getNode from 'get-node';
-import rcedit from 'rcedit';
 // @ts-expect-error
 import { packageApp } from 'yackage';
 
@@ -156,7 +154,24 @@ await writeFile(
 );
 logStep('✅ Bundle and package.json ready.');
 
-// === Step 3: Run Yackage build ===
+// === Step 3: Patch PCSC import ===
+logStep('🩹 Patching PCSC import...');
+const code = (await readFile(bundleDest)).toString();
+// Required to make pcsc-mini native module relative import work when app is packed as executable
+const patched = code.replaceAll(
+  `"${join(
+    import.meta.dirname,
+    '..',
+    'node_modules',
+    'pcsc-mini',
+    'build',
+    'addon.node'
+  ).replaceAll('\\', '\\\\')}"`,
+  'require("path").join(__dirname.split(require("path").sep).slice(0,-2).join(require("path").sep),"/res/node_modules/pcsc-mini/addon.node")'
+);
+await writeFile(bundleDest, patched);
+
+// === Step 4: Run Yackage build ===
 logStep('⚙️  Building with Yackage... (this might take a while)');
 const yackageStart = performance.now();
 await packageApp(
@@ -171,34 +186,18 @@ const yackageDuration = ((yackageEnd - yackageStart) / 1000).toFixed(2);
 
 logStep(`✅ Yackage build finished in ${yackageDuration}s`);
 
-// === Step 4: Fetch Node binary ===
-logStep('📥 Fetching Node binary...');
-const nodeFetchStart = performance.now();
-const { path: nodePath } = await getNode('local', {
-  output: join(import.meta.dirname, '..', 'release')
-});
-const nodeFetchEnd = performance.now();
-const nodeFetchDuration = ((nodeFetchEnd - nodeFetchStart) / 1000).toFixed(2);
-logStep(`✅ Node fetched in ${nodeFetchDuration}s`);
-
 // === Step 5: Copy resources ===
 logStep('📦 Copying resources...');
-const daemonSrc = join(import.meta.dirname, '..', 'build', 'pcsc-daemon.cjs');
-const daemonDest = join(
-  import.meta.dirname,
-  '..',
-  'release',
-  'out',
-  'res',
-  'pcsc-daemon.cjs'
-);
-const pcscSrc = join(
-  import.meta.dirname,
-  '..',
-  'node_modules',
-  detectPcscPkg(),
-  'addon.node'
-);
+const pcscSrc =
+  process.platform === 'win32'
+    ? join(import.meta.dirname, '..', 'bin', 'pcsc-mini', 'addon.node') // See bin/pcsc-mini/README.md
+    : join(
+        import.meta.dirname,
+        '..',
+        'node_modules',
+        detectPcscPkg(),
+        'addon.node'
+      );
 const pcscDest = join(
   import.meta.dirname,
   '..',
@@ -209,47 +208,9 @@ const pcscDest = join(
   'pcsc-mini',
   'addon.node'
 );
-const nodeDest =
-  join(import.meta.dirname, '..', 'release', 'out', 'res', 'bin', 'node') +
-  (process.platform === 'win32' ? '.exe' : '');
-await Promise.all([
-  cp(daemonSrc, daemonDest),
-  cp(pcscSrc, pcscDest),
-  cp(nodePath, nodeDest),
-  copyResources()
-]);
+await Promise.all([cp(pcscSrc, pcscDest), copyResources()]);
 
-// === Step 6: Patch PCSC Daemon ===
-logStep('🩹 Patching PCSC Daemon...');
-const code = (await readFile(daemonDest)).toString();
-const patched = code.replaceAll(
-  join(
-    import.meta.dirname,
-    '..',
-    'node_modules',
-    'pcsc-mini',
-    'build',
-    'addon.node'
-  ).replaceAll('\\', '\\\\'),
-  './node_modules/pcsc-mini/addon.node'
-);
-await writeFile(daemonDest, patched);
-
-// === Step 7: Patch Node.js Daemon ===
-if (process.platform === 'win32') {
-  logStep('🩹 Patching Node.js...');
-  await rcedit(nodeDest, {
-    'version-string': {
-      FileDescription: `${appInfo.description} PCSC Daemon`,
-      ProductName: `${appInfo.productName} PCSC Daemon`,
-      LegalCopyright: appInfo.copyright
-    },
-    'file-version': appInfo.version,
-    'product-version': appInfo.version
-  });
-}
-
-// === Step 8: Summary ===
+// === Step 6: Summary ===
 const totalEnd = performance.now();
 const totalDuration = ((totalEnd - totalStart) / 1000).toFixed(2);
 

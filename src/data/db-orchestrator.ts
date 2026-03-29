@@ -21,7 +21,7 @@ import {
   saveDatabase,
   unlockDatabase
 } from '#/service/database-service';
-import { decrypt } from '#/service/pcsc-service';
+import { decrypt } from '#/service/yubikey-service';
 import { showError } from '#/utils/message-box-util';
 import { showQrCodeWindow } from '#/utils/qr-code-util';
 import { requestEntry } from '#/views/pages/entry-page';
