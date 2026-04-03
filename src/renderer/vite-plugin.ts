@@ -12,12 +12,15 @@ const yuePlugin: (config: {
     config.assetsFolder = config.assetsFolder || join(config.src, 'assets');
     config.assetsFolder = resolve(config.assetsFolder);
     if (resolve(id).startsWith(config.assetsFolder)) {
-      return `
-      import { checkIfPacked, getResourcePath } from '#/renderer/package';
-      const relativePath = \`${id.split(basename(config.assetsFolder))[1]}\`;
-      const path = checkIfPacked() ? getResourcePath(relativePath) : \`${id}\`;
-      export default path;
-      `;
+      return {
+        code: `
+          import { checkIfPacked, getResourcePath } from '#/renderer/package';
+          const relativePath = "${id.split(basename(config.assetsFolder))[1]}";
+          const path = checkIfPacked() ? getResourcePath(relativePath) : "${id}";
+          export default path;
+        `,
+        map: { mappings: '' }
+      };
     }
     return null;
   },

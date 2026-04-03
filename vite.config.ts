@@ -21,6 +21,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: ['./addon.node']
-    }
+    },
+    sourcemap: true
   }
 });

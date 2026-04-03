@@ -12,8 +12,8 @@
     "dev:prepare": "rimraf build && shx mkdir build && shx touch build/index.cjs",
     "dev": "npm run dev:prepare && concurrently --names TS,VITE,YODE --prefix-colors cyan,magenta,green npm:watch:tsc npm:watch:build npm:watch:yode",
     "watch:tsc": "tsc --watch",
-    "watch:build": "vite build",
-    "watch:yode": "node scripts/yode.ts --watch build/index.cjs",
+    "watch:build": "vite build --watch",
+    "watch:yode": "node scripts/yode.ts --watch --enable-source-maps build/index.cjs",
     "release": "rimraf release && npm run build && node scripts/release.ts"
   },
   "dependencies": {
