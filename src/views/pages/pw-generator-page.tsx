@@ -15,6 +15,7 @@ import {
 import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import { createListeners } from '#/utils/listen-util';
+import { autoUnfocus } from '#/utils/ui-util';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
 import { NumericEntry } from '#/views/components/numeric-entry';
@@ -256,20 +257,24 @@ function PwGeneratorPage() {
             <Expand direction="row" />
             <button
               enabled={password().length > 0}
-              onClick={() => {
-                pwListeners.notifyListeners(password());
-                navigator.pop();
-                setPassword('');
-              }}
+              onClick={(b) =>
+                autoUnfocus(b, () => {
+                  pwListeners.notifyListeners(password());
+                  navigator.pop();
+                  setPassword('');
+                })
+              }
               style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
               title={t('applyPassword')}
               visible={requestInProgress()}
             />
             <button
-              onClick={() => {
-                navigator.pop();
-                setPassword('');
-              }}
+              onClick={(b) =>
+                autoUnfocus(b, () => {
+                  navigator.pop();
+                  setPassword('');
+                })
+              }
               style={{ ...SMALL_BUTTON_STYLE, 'margin-left': 10 }}
               title={t('close')}
             />

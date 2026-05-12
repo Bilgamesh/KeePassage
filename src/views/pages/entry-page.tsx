@@ -9,6 +9,7 @@ import { unlockedDbIndex } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
 import { encrypt } from '#/service/yubikey-service';
 import { createListeners } from '#/utils/listen-util';
+import { autoUnfocus } from '#/utils/ui-util';
 import { EntryLine } from '#/views/components/entry-line';
 import { EntryTextArea } from '#/views/components/entry-text-area';
 import { Expand } from '#/views/components/expand';
@@ -132,11 +133,16 @@ function EntryPage() {
       >
         <IconButton
           imageSize={{ height: 13, width: 13 }}
-          onClick={async () => {
-            const oldEntry = getRawEntry();
-            const pw = await getGeneratedPassword();
-            restoreRawEntry({ ...oldEntry, password: pw || oldEntry.password });
-          }}
+          onClick={(b) =>
+            autoUnfocus(b, async () => {
+              const oldEntry = getRawEntry();
+              const pw = await getGeneratedPassword();
+              restoreRawEntry({
+                ...oldEntry,
+                password: pw || oldEntry.password
+              });
+            })
+          }
           size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}
           src={diceIcon}
           style={{
@@ -171,17 +177,17 @@ function EntryPage() {
         <Expand direction="row" />
         <button
           enabled={title().trim().length > 0}
-          onClick={() => {
-            setModified(Date.now());
-            onEntrySubmit();
-          }}
+          onClick={(b) =>
+            autoUnfocus(b, () => {
+              setModified(Date.now());
+              onEntrySubmit();
+            })
+          }
           style={LARGE_BUTTON_STYLE}
           title={t('ok')}
         />
         <button
-          onClick={(_button) => {
-            controller.abort('Cancel');
-          }}
+          onClick={(b) => autoUnfocus(b, () => controller.abort('Cancel'))}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 20 }}
           title={t('cancel')}
         />
