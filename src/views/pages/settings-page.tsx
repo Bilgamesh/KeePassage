@@ -9,7 +9,7 @@ import { dictionaries, t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import { appSettings } from '#/data/shared-state';
 import { updateSettings } from '#/service/config-service';
-import { autoUnfocus } from '#/utils/ui-util';
+import { blur } from '#/utils/ui-util';
 import { Expand } from '#/views/components/expand';
 import { TimeoutEntry } from '#/views/components/timeout-entry';
 
@@ -240,22 +240,20 @@ function SettingsPage(props: { window: Window }) {
         />
         <Expand direction="row" />
         <button
-          onClick={(b) =>
-            autoUnfocus(b, () => {
-              navigator.pop();
-              updateSettings(() => unsavedAppSettings());
-            })
-          }
+          onClick={(b) => {
+            navigator.pop();
+            updateSettings(() => unsavedAppSettings());
+            blur(b);
+          }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           title={t('ok')}
         />
         <button
-          onClick={(b) =>
-            autoUnfocus(b, () => {
-              navigator.pop();
-              reset();
-            })
-          }
+          onClick={(b) => {
+            navigator.pop();
+            reset();
+            blur(b);
+          }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
           title={t('cancel')}
         />

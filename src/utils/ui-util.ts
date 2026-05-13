@@ -1,9 +1,8 @@
-import type { Button } from 'gui';
+import type { View } from 'gui';
 
-function autoUnfocus(button: Button, callback: () => void) {
-  button.setEnabled(false);
-  callback();
-  setImmediate(() => button.setEnabled(true));
+function blur(view: View) {
+  view.setEnabled(false);
+  setImmediate(() => view.setEnabled(true));
 }
 
-export { autoUnfocus };
+export { blur };
