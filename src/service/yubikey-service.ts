@@ -15,9 +15,15 @@ import { YubiKeyIdentity } from '#/service/lib/yubikey-identity';
 import { YubiKeyRecipient } from '#/service/lib/yubikey-recipient';
 import { createListeners } from '#/utils/listen-util';
 
+type Slot = (typeof RETIRED_SLOTS)[number] & {
+  publicKey: string | null;
+  serial: number;
+};
+
 async function detectYubiKey(options?: {
   timeoutMs?: number | undefined;
   signal?: AbortSignal | undefined;
+  condition?: (value: DetectionSuccess | DetectionError) => boolean;
 }) {
   const listeners = createListeners<DetectionSuccess | DetectionError>();
 
@@ -108,6 +114,58 @@ async function encrypt(
   return resp.body;
 }
 
+function generate(slot: { id: number; objectId: number }, pin: string) {
+  return new Promise<void>((resolve, reject) =>
+    withYubiKeyClient(
+      async (client) => {
+        await client.selectPiv();
+        await client.authenticateMgmKey();
+        await client.generateKey(slot.id);
+
+        const certDer = await client.generateSelfSignedCertificate({
+          slot: slot.id,
+          authenticate: async () => {
+            // DODAĆ WYCIĄGANIE KLUCZA Z PROTECTED SLOT
+            await client.authenticateMgmKey();
+            await client.verifyPin(pin);
+          }
+        });
+        await client.writeCertificate(slot.objectId, certDer);
+        resolve();
+      },
+      (error) => reject(error)
+    )
+  );
+}
+
+function getSlots() {
+  return new Promise<Slot[]>((resolve, reject) =>
+    withYubiKeyClient(
+      async (client) => {
+        try {
+          await client.selectYubicoOtp();
+          const serial = await client.getSerialNumber();
+          await client.selectPiv();
+          const publicKeys: (string | null)[] = [];
+          for (const { objectId } of RETIRED_SLOTS) {
+            const publicKey = await client.getPublicKey(objectId);
+            publicKeys.push(publicKey);
+          }
+          const slots = RETIRED_SLOTS.map((slot, index) => ({
+            ...slot,
+            serial,
+            publicKey: publicKeys[index] ?? null
+          }));
+          resolve(slots);
+        } catch (err) {
+          reject(err);
+        }
+      },
+      (err) => reject(err)
+    )
+  );
+}
+
 function detectYubiKeys(
   requestId: string,
   onSuccess: (resp: DetectionSuccess) => void,
@@ -147,13 +205,12 @@ function detectYubiKeys(
         });
       }
     },
-    (error) => {
+    (error) =>
       onError({
         id: requestId,
         status: 'DETECT_YUBIKEYS_ERROR',
         error: `${error}`
-      });
-    }
+      })
   );
 }
 
@@ -189,7 +246,7 @@ async function ageEncrypt(
 
 async function decrypt(
   encrypted: string,
-  pin: number,
+  pin: string,
   publicKey: string,
   slot: number,
   options?: {
@@ -220,7 +277,7 @@ async function ageDecrypt(
   requestId: string,
   publicKey: string,
   encrypted: string,
-  pin: number,
+  pin: string,
   slot: number,
   onSuccess: (resp: DecryptionSuccess) => void,
   onError: (resp: DecryptionError) => void
@@ -254,13 +311,12 @@ async function ageDecrypt(
         body: decrypted
       });
     },
-    (error) => {
+    (error) =>
       onError({
         id: requestId,
         status: 'AGE_DECRYPT_ERROR',
         error: `${error}`
-      });
-    }
+      })
   );
 }
 
@@ -271,5 +327,8 @@ export {
   ageEncrypt,
   ageDecrypt,
   decrypt,
-  monitorYubiKeys
+  monitorYubiKeys,
+  getSlots,
+  generate,
+  type Slot
 };

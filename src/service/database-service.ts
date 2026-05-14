@@ -8,9 +8,8 @@ import { decrypt, detectYubiKey, encrypt } from '#/service/yubikey-service';
 async function writeDatabase(path: string, dbFile: DbFile) {
   const stringified = JSON.stringify(dbFile);
   const encoded = Buffer.from(stringified).toString('base64');
-  if (!path.toLowerCase().endsWith(`.${DATABASE_EXTENSION.toLowerCase()}`)) {
+  if (!path.toLowerCase().endsWith(`.${DATABASE_EXTENSION.toLowerCase()}`))
     path = `${path}.${DATABASE_EXTENSION.toLowerCase()}`;
-  }
   await writeFile(path, encoded);
 }
 
@@ -50,7 +49,16 @@ async function addDatabase(config: {
 async function getMatchingKey(dbFile: DbFile, timeoutMs?: number) {
   try {
     const { publicKey, serial, slot } = await detectYubiKey({
-      timeoutMs
+      timeoutMs,
+      condition: (v) => {
+        for (let i = 0; i < dbFile.s.length; i++)
+          if (
+            v.status === 'DETECT_YUBIKEYS_SUCCESS' &&
+            v.publicKey === dbFile.s[i]?.publicKey
+          )
+            return true;
+        return false;
+      }
     });
     for (let i = 0; i < dbFile.s.length; i++) {
       const { publicKey: requiredKey } = dbFile.s[i]!;
@@ -75,7 +83,7 @@ async function unlockDatabase(
   dbFile: DbFile,
   key: {
     encryptedIndexKey: string;
-    pin: number;
+    pin: string;
     publicKey: string;
     slot: number;
   },

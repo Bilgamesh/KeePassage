@@ -25,9 +25,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
 
   const cleanup = monitorYubiKeys(
     (key) => {
-      if (!keyExists(key.publicKey)) {
-        addKey(key);
-      }
+      if (!keyExists(key.publicKey)) addKey(key);
     },
     { immediate: true }
   );

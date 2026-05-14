@@ -7,7 +7,7 @@ import { selectedDbPath } from '#/data/shared-state';
 import { createListeners } from '#/utils/listen-util';
 import { Expand } from '#/views/components/expand';
 
-type Pin = number | null;
+type Pin = string | null;
 
 const pinListeners = createListeners<Pin>();
 let entryNode: Entry;
@@ -106,7 +106,7 @@ function PinentryPage() {
                     const text = entry.getText();
                     if (text) {
                       if (validatePin(text)) {
-                        setPin(Number(text));
+                        setPin(text);
                       } else {
                         entry.setText(`${pin() || ''}`);
                       }

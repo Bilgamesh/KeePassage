@@ -20,10 +20,12 @@ import { render } from '#/renderer';
 import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
 import { DatabaseCreationPage } from '#/views/pages/database-creation-page';
+import { YubiKeyConfigPage } from '#/views/pages/yubikey-config-page';
 import {
   getDatabaseWindow,
   hasDatabaseWindow
 } from '#/windows/database-window';
+import { getYubiKeyConfigWindow } from '#/windows/yubikey-config-window';
 
 function WelcomePage(props: { window: Window }) {
   const [dbTable, setDbTable] = createSignal(SimpleTableModel.create(1));
@@ -95,9 +97,18 @@ function WelcomePage(props: { window: Window }) {
           title={t('openDb')}
         />
         <button
-          enabled={false}
+          onClick={() => {
+            const win = getYubiKeyConfigWindow();
+            render(
+              () => (
+                <YubiKeyConfigPage mainWindow={props.window} window={win} />
+              ),
+              win
+            );
+            win.activate();
+          }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
-          title={t('importFile')}
+          title={t('configureYubikey')}
         />
         <Expand />
       </container>

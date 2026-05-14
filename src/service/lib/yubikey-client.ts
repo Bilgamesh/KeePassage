@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import { bech32 } from '@scure/base';
 import {
   type Card,
@@ -7,6 +8,15 @@ import {
   type Err,
   ReaderStatus
 } from 'pcsc-mini';
+import {
+  decryptManagementChallenge3DES,
+  generateSelfSignedCertificate
+} from '#/service/x509';
+
+const ALGORITHM = {
+  TAG: 0x80,
+  VALUE: { P256ECDH: 0x11 }
+} as const;
 
 const APDU_KEYS = {
   CLASS_BYTE: { STANDARD_COMMAND: 0x00 },
@@ -16,13 +26,16 @@ const APDU_KEYS = {
     PIN: 0x20,
     GENERAL_AUTHENTICATE: 0x87,
     GET_DATA: 0xcb,
-    GET_RESPONSE: 0xc0
+    GET_RESPONSE: 0xc0,
+    GENERATE_ASYMMETRIC_KEY: 0x47,
+    GET_METADATA: 0xf7,
+    PUT_DATA: 0xdb
   },
   P1: {
     BY_AID: 0x04,
     BY_FID: 0x00,
     SERIAL: 0x10,
-    P256ECDH: 0x11,
+    P256ECDH: ALGORITHM.VALUE.P256ECDH,
     PUBLIC_KEY: 0x3f
   },
   P2: {
@@ -32,10 +45,22 @@ const APDU_KEYS = {
   }
 } as const;
 
+const PIN_POLICY = {
+  TAG: 0xaa,
+  POLICY: { ALWAYS: 0x03 }
+} as const;
+
+const TOUCH_POLICY = {
+  TAG: 0xab,
+  POLICY: { ALWAYS: 0x02 }
+} as const;
+
 const SW_CODES = {
   OK: 0x9000,
   MORE_DATA: 0x61
 } as const;
+
+const TAG_DYN_AUTH = 0x7c;
 
 const KEY_PREFIX = 'age1yubikey';
 
@@ -62,6 +87,11 @@ const RETIRED_SLOTS = [
   { index: 19, number: 20, objectId: 0x005fc120, id: 0x95, name: 'R20' }
 ] as const;
 
+const DEFAULT_MANAGEMENT_KEY = new Uint8Array([
+  0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05,
+  0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08
+]);
+
 class YubiKeyClient {
   private card: Card;
 
@@ -71,16 +101,28 @@ class YubiKeyClient {
 
   private async transmit(
     header: { CLA: number; INS: number; P1: number; P2: number },
-    payload?: number[]
+    data?: number[]
   ) {
+    const extended = data && data.length > 255;
+
+    const payload = extended
+      ? [
+          0x00,
+          (data.length >> 8) & 0xff,
+          data.length & 0xff,
+          ...data,
+          0x00,
+          0x00
+        ]
+      : [(data ?? []).length, ...(data ?? [])];
+
     const resp = await this.card.transmit(
-      payload
+      data
         ? new Uint8Array([
             header.CLA,
             header.INS,
             header.P1,
             header.P2,
-            payload.length,
             ...payload
           ])
         : new Uint8Array([header.CLA, header.INS, header.P1, header.P2])
@@ -111,9 +153,8 @@ class YubiKeyClient {
       P1: APDU_KEYS.P1.SERIAL,
       P2: APDU_KEYS.P2.FIRST
     });
-    if (sw !== SW_CODES.OK) {
+    if (sw !== SW_CODES.OK)
       throw new Error(`Get serial number failed: SW=${sw.toString(16)}`);
-    }
     const serial =
       (resp[0]! << 24) | (resp[1]! << 16) | (resp[2]! << 8) | resp[3]!;
     return serial >>> 0;
@@ -129,19 +170,14 @@ class YubiKeyClient {
       },
       [0xa0, 0x00, 0x00, 0x03, 0x08]
     );
-    if (sw !== SW_CODES.OK) {
+    if (sw !== SW_CODES.OK)
       throw new Error(`Select PIV failed: SW=${sw.toString(16)}`);
-    }
   }
 
   private encodeLength(len: number): number[] {
-    if (len < 0x80) {
-      return [len];
-    } else if (len <= 0xff) {
-      return [0x81, len];
-    } else {
-      return [0x82, (len >> 8) & 0xff, len & 0xff];
-    }
+    if (len < 0x80) return [len];
+    else if (len <= 0xff) return [0x81, len];
+    else return [0x82, (len >> 8) & 0xff, len & 0xff];
   }
 
   async verifyPin(pin: string) {
@@ -155,22 +191,20 @@ class YubiKeyClient {
       },
       Array.from(pinBytes)
     );
-    if (sw !== SW_CODES.OK) {
+    if (sw !== SW_CODES.OK)
       throw new Error(`Verify PIN failed: SW=${sw.toString(16)}`);
-    }
   }
 
   async p256ecdh(epkBytes: Uint8Array, slot: number) {
-    if (epkBytes.length !== 65) {
+    if (epkBytes.length !== 65)
       throw new Error('Invalid EPK length for P-256 (expected 65 bytes)');
-    }
 
     const tlv82 = [0x82, 0x00];
     const len85 = this.encodeLength(epkBytes.length);
     const tlv85 = [0x85, ...len85, ...epkBytes];
     const innerValue = [...tlv82, ...tlv85];
     const len7c = this.encodeLength(innerValue.length);
-    const tlv7c = [0x7c, ...len7c, ...innerValue];
+    const tlv7c = [TAG_DYN_AUTH, ...len7c, ...innerValue];
 
     const { resp } = await this.transmit(
       {
@@ -220,9 +254,8 @@ class YubiKeyClient {
     while (true) {
       const sw1 = resp.at(-2)!;
       const sw2 = resp.at(-1)!;
-      if (sw1 !== SW_CODES.MORE_DATA) {
-        break;
-      }
+      if (sw1 !== SW_CODES.MORE_DATA) break;
+
       const le = sw2 === 0x00 ? 256 : sw2;
       const getResponse = new Uint8Array([
         APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
@@ -237,9 +270,7 @@ class YubiKeyClient {
 
     const { xBytes, yBytes } = this.extractEccPublicKey(data);
 
-    if (!xBytes) {
-      return null;
-    }
+    if (!xBytes) return null;
 
     const prefix = yBytes[yBytes.length - 1]! % 2 === 0 ? 0x02 : 0x03;
 
@@ -247,6 +278,206 @@ class YubiKeyClient {
       KEY_PREFIX,
       new Uint8Array([prefix, ...xBytes])
     );
+  }
+
+  async authenticateMgmKey(key = DEFAULT_MANAGEMENT_KEY) {
+    const ALGORITHM_ID = 0x03;
+    const KEY_CARDMGM = 0x9b;
+
+    const firstApdu = {
+      CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
+      INS: APDU_KEYS.INSTRUCTION.GENERAL_AUTHENTICATE,
+      P1: ALGORITHM_ID,
+      P2: KEY_CARDMGM
+    };
+
+    const firstData = [TAG_DYN_AUTH, 0x02, 0x80, 0x00];
+
+    const { sw: sw1, resp: resp1 } = await this.transmit(firstApdu, firstData);
+
+    if (sw1 !== SW_CODES.OK)
+      throw new Error(`Failed to get challenge: SW=${sw1.toString(16)}`);
+
+    const resp1len = resp1.length;
+    if (resp1len < 12) throw new Error(`Response too short: ${resp1len}`);
+
+    const cardChallengeDecrypted = decryptManagementChallenge3DES(
+      key,
+      resp1.slice(4, 12)
+    );
+    const challengeLen = cardChallengeDecrypted.length;
+
+    if (challengeLen !== 8)
+      throw new Error(`Invalid challenge length: ${challengeLen}`);
+
+    const hostChallenge = new Uint8Array(8);
+    crypto.getRandomValues(hostChallenge);
+
+    const secondData = [
+      TAG_DYN_AUTH,
+      20,
+      0x80,
+      8,
+      ...cardChallengeDecrypted,
+      0x81,
+      8,
+      ...hostChallenge
+    ];
+
+    const secondApdu = {
+      CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
+      INS: APDU_KEYS.INSTRUCTION.GENERAL_AUTHENTICATE,
+      P1: ALGORITHM_ID,
+      P2: KEY_CARDMGM
+    };
+
+    const { sw: sw2, resp: resp2 } = await this.transmit(
+      secondApdu,
+      secondData
+    );
+
+    if (sw2 !== SW_CODES.OK)
+      throw new Error(`Authentication failed: SW=${sw2.toString(16)}`);
+
+    const cardResponse = decryptManagementChallenge3DES(
+      key,
+      resp2.slice(4, 12)
+    );
+
+    for (let i = 0; i < cardResponse.length; i++)
+      if (cardResponse[i] !== hostChallenge[i])
+        throw new Error('Invalid management key');
+  }
+
+  async generateKey(slot: number) {
+    const algoTlv = [ALGORITHM.TAG, 0x01, ALGORITHM.VALUE.P256ECDH];
+    const pinTlv = [PIN_POLICY.TAG, 0x01, PIN_POLICY.POLICY.ALWAYS];
+    const touchTlv = [TOUCH_POLICY.TAG, 0x01, TOUCH_POLICY.POLICY.ALWAYS];
+
+    const innerData = [...algoTlv, ...pinTlv, ...touchTlv];
+    const inData = [0xac, innerData.length, ...innerData];
+
+    const header = {
+      CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
+      INS: APDU_KEYS.INSTRUCTION.GENERATE_ASYMMETRIC_KEY,
+      P1: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
+      P2: slot
+    };
+
+    const { sw } = await this.transmit(header, inData);
+
+    if (sw !== SW_CODES.OK)
+      throw new Error(`Failed to generate key: SW=${sw.toString(16)}`);
+  }
+
+  async sign(slot: number, digest: Uint8Array) {
+    if (digest.length > 32)
+      throw new Error(`Invalid digest length: ${digest.length}`);
+    const lenBytes = this.encodeLength(digest.length);
+    const inner = [0x82, 0x00, 0x81, ...lenBytes, ...digest];
+    const outer = [0x7c, ...this.encodeLength(inner.length), ...inner];
+    const { sw, resp } = await this.transmit(
+      {
+        CLA: 0x00,
+        INS: 0x87,
+        P1: 0x11,
+        P2: slot
+      },
+      outer
+    );
+    if (sw !== 0x9000) throw new Error(`SIGN failed: SW=${sw.toString(16)}`);
+    return this.extractSignature(resp);
+  }
+
+  private extractSignature(resp: Uint8Array) {
+    const i = resp.indexOf(0x82);
+    if (i === -1) throw new Error('Signature not found');
+    const len = resp[i + 1]!;
+    return resp.slice(i + 2, i + 2 + len);
+  }
+
+  private wrapCertificate(certDer: Uint8Array) {
+    return new Uint8Array([
+      0x70,
+      ...this.encodeLength(certDer.length),
+      ...certDer,
+      0x71,
+      0x01,
+      0x00,
+      0xfe,
+      0x00
+    ]);
+  }
+
+  async writeCertificate(slotObject: number, certDer: Uint8Array) {
+    const wrapped = this.wrapCertificate(certDer);
+    const payload = new Uint8Array([
+      0x5c,
+      0x03,
+      (slotObject >> 16) & 0xff,
+      (slotObject >> 8) & 0xff,
+      slotObject & 0xff,
+      0x53,
+      ...this.encodeLength(wrapped.length),
+      ...wrapped
+    ]);
+    const { sw } = await this.transmit(
+      {
+        CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
+        INS: APDU_KEYS.INSTRUCTION.PUT_DATA,
+        P1: APDU_KEYS.P1.PUBLIC_KEY,
+        P2: APDU_KEYS.P2.PUBLIC_KEY
+      },
+      Array.from(payload)
+    );
+
+    if (sw !== 0x9000) throw new Error(`PUT CERT failed ${sw.toString(16)}`);
+  }
+
+  async generateSelfSignedCertificate(options: {
+    slot: number;
+    authenticate: () => Promise<void>;
+  }) {
+    const { publicKey } = await this.getMetadata(options.slot);
+    if (!publicKey) throw new Error('Failed to get public key');
+    return generateSelfSignedCertificate({
+      publicKey,
+      sign: async (digest) => {
+        await options.authenticate();
+        return await this.sign(options.slot, digest);
+      }
+    });
+  }
+
+  async getMetadata(slot: number) {
+    const { sw, resp } = await this.transmit({
+      CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
+      INS: APDU_KEYS.INSTRUCTION.GET_METADATA,
+      P1: APDU_KEYS.P1.BY_FID,
+      P2: slot
+    });
+    if (sw !== SW_CODES.OK)
+      throw new Error(`GET METADATA failed: SW=${sw.toString(16)}`);
+    const tlv = this.parseSimpleTlv(resp.slice(0, -2));
+    const publicKey = tlv.get(0x04) ?? null;
+    return { publicKey };
+  }
+
+  private parseSimpleTlv(data: Uint8Array) {
+    const result = new Map<number, Uint8Array>();
+    let offset = 0;
+    while (offset < data.length) {
+      const tag = data[offset++]!;
+      let len = data[offset++]!;
+      if (len & 0x80) {
+        const bytes = len & 0x7f;
+        len = 0;
+        for (let i = 0; i < bytes; i++) len = (len << 8) | data[offset++]!;
+      }
+      result.set(tag, data.slice(offset, offset + len));
+      offset += len;
+    }
+    return result;
   }
 }
 
@@ -260,15 +491,9 @@ function withYubiKeyClient(
       reader.on('change', async (status) => {
         let card: Card | null = null;
         try {
-          if (!status.has(ReaderStatus.PRESENT)) {
-            return;
-          }
-          if (status.hasAny(ReaderStatus.MUTE, ReaderStatus.IN_USE)) {
-            return;
-          }
-          if (started) {
-            return;
-          }
+          if (!status.has(ReaderStatus.PRESENT)) return;
+          if (status.hasAny(ReaderStatus.MUTE, ReaderStatus.IN_USE)) return;
+          if (started) return;
           started = true;
           card = await reader.connect(CardMode.SHARED);
           const yubiKey = new YubiKeyClient(card);
@@ -281,9 +506,7 @@ function withYubiKeyClient(
         }
       });
     })
-    .on('error', (error) => {
-      onError(error);
-    })
+    .on('error', onError)
     .start();
 }
 

@@ -1,5 +1,4 @@
-import type { TableColumnOptions } from 'gui';
-import { SimpleTableModel } from 'gui';
+import { SimpleTableModel, type TableColumnOptions } from 'gui';
 import { type Accessor, createEffect, type Setter } from 'solid-js';
 import { t } from '#/data/i18n';
 import type { YubiKey } from '#/schemas/yubikey-schema';

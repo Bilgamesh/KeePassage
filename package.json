@@ -20,9 +20,11 @@
     "@scure/base": "^2.0.0",
     "@solid-primitives/i18n": "^2.2.1",
     "age-encryption": "^0.2.4",
+    "asn1js": "^3.0.10",
     "gui": "^0.15.6",
     "libsodium-wrappers": "^0.7.15",
     "pcsc-mini": "^0.1.3",
+    "pkijs": "^3.4.0",
     "qrcode": "^1.5.4",
     "solid-js": "^1.9.11",
     "zod": "^4.2.1"
