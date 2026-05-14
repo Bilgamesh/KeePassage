@@ -73,7 +73,7 @@ function YubiKeyConfigPage(props: { mainWindow: Window; window: Window }) {
             <button
               enabled={selectedSlot() !== null}
               onClick={() => {
-                // generate({ id: 0x88, objectId: 0x005fc113 }, '');
+                // generate({ slot: { id: 0x88, objectId: 0x005fc113 }, pin: });
               }}
               style={{
                 height: 30,

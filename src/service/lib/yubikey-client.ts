@@ -92,6 +92,13 @@ const DEFAULT_MANAGEMENT_KEY = new Uint8Array([
   0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08
 ]);
 
+class ObjectNotFoundError extends Error {
+  constructor(objectId: number) {
+    super(`Object ${objectId} not found`);
+    this.name = 'ObjectNotFoundError';
+  }
+}
+
 class YubiKeyClient {
   private card: Card;
 
@@ -280,7 +287,13 @@ class YubiKeyClient {
     );
   }
 
-  async authenticateMgmKey(key = DEFAULT_MANAGEMENT_KEY) {
+  async authenticateMgmKey(key: Uint8Array<ArrayBuffer> | null) {
+    if (!key) {
+      console.log(
+        'PIN-protected management key not found. Falling back to the default key.'
+      );
+      key = DEFAULT_MANAGEMENT_KEY;
+    }
     const ALGORITHM_ID = 0x03;
     const KEY_CARDMGM = 0x9b;
 
@@ -478,6 +491,69 @@ class YubiKeyClient {
       offset += len;
     }
     return result;
+  }
+
+  async getObject(objectId: number) {
+    const data = [
+      0x5c,
+      0x03,
+      (objectId >> 16) & 0xff,
+      (objectId >> 8) & 0xff,
+      objectId & 0xff
+    ];
+    let { sw, resp } = await this.transmit(
+      {
+        CLA: APDU_KEYS.CLASS_BYTE.STANDARD_COMMAND,
+        INS: APDU_KEYS.INSTRUCTION.GET_DATA,
+        P1: APDU_KEYS.P1.PUBLIC_KEY,
+        P2: APDU_KEYS.P2.PUBLIC_KEY
+      },
+      data
+    );
+
+    const chunks: number[] = [...resp.slice(0, -2)];
+
+    while (sw >> 8 === 0x61) {
+      const le = sw & 0xff;
+      const getResponse = new Uint8Array([
+        0x00,
+        0xc0,
+        0x00,
+        0x00,
+        le === 0 ? 0x00 : le
+      ]);
+      resp = await this.card.transmit(getResponse);
+      sw = (resp[resp.length - 2]! << 8) | resp[resp.length - 1]!;
+      chunks.push(...resp.slice(0, -2));
+    }
+
+    if (sw === 0x6a82) throw new ObjectNotFoundError(objectId);
+    if (sw !== 0x9000)
+      throw new Error(
+        `Failed to get object ${objectId}: sw=${sw.toString(16)}`
+      );
+    const tlv = this.parseSimpleTlv(new Uint8Array(chunks));
+    const object = tlv.get(0x53);
+    if (!object) throw new Error('Missing object data tag 0x53');
+    return object;
+  }
+
+  async getProtectedMgmtKey() {
+    try {
+      const object = await this.getObject(0x005fc109);
+      const outer = this.parseSimpleTlv(object);
+      const wrapped = outer.get(0x88);
+      if (!wrapped) throw new Error('Missing protected data container');
+      const inner = this.parseSimpleTlv(wrapped);
+      const key = inner.get(0x89);
+      if (!key) throw new Error('Missing management key');
+      return key as Uint8Array<ArrayBuffer>;
+    } catch (err) {
+      if (err instanceof ObjectNotFoundError) {
+        return null;
+      }
+      throw err;
+    }
   }
 }
 

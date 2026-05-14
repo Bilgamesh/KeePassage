@@ -114,23 +114,26 @@ async function encrypt(
   return resp.body;
 }
 
-function generate(slot: { id: number; objectId: number }, pin: string) {
+function generate(options: {
+  slot: { id: number; objectId: number };
+  pin: string;
+}) {
   return new Promise<void>((resolve, reject) =>
     withYubiKeyClient(
       async (client) => {
         await client.selectPiv();
-        await client.authenticateMgmKey();
-        await client.generateKey(slot.id);
-
+        await client.verifyPin(options.pin);
+        const key = await client.getProtectedMgmtKey();
+        await client.authenticateMgmKey(key);
+        await client.generateKey(options.slot.id);
         const certDer = await client.generateSelfSignedCertificate({
-          slot: slot.id,
+          slot: options.slot.id,
           authenticate: async () => {
-            // DODAĆ WYCIĄGANIE KLUCZA Z PROTECTED SLOT
-            await client.authenticateMgmKey();
-            await client.verifyPin(pin);
+            await client.authenticateMgmKey(key);
+            await client.verifyPin(options.pin);
           }
         });
-        await client.writeCertificate(slot.objectId, certDer);
+        await client.writeCertificate(options.slot.objectId, certDer);
         resolve();
       },
       (error) => reject(error)
