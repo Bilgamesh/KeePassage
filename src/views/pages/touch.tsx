@@ -58,7 +58,7 @@ function TouchPage() {
                   ? { tint: DARK_MODE_FONT_COLOR }
                   : {})}
               />
-              <button
+              {/* <button
                 onClick={() => {
                   controller.abort('Cancel');
                 }}
@@ -69,7 +69,7 @@ function TouchPage() {
                   'margin-top': 100
                 }}
                 title={t('cancel')}
-              />
+              /> */}
             </container>
             <Expand />
           </container>

@@ -5,7 +5,7 @@ import type { Slot } from '#/service/yubikey';
 
 function YubiKeyConfigTable(props: {
   slots: Accessor<Slot[]>;
-  onSelection?: (slot: Slot) => void;
+  onSelection?: (slot: Slot | null) => void;
 }) {
   const columns = [
     {
@@ -47,7 +47,7 @@ function YubiKeyConfigTable(props: {
         multipleSelections={false}
         onSelectionChange={(table) => {
           const row = table.getSelectedRow();
-          if (props.onSelection) props.onSelection(props.slots()[row]!);
+          if (props.onSelection) props.onSelection(props.slots()[row] ?? null);
         }}
         style={{ flex: 1 }}
       />

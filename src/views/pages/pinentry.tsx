@@ -7,11 +7,10 @@ import { createListeners } from '#/utils/listen';
 import { Expand } from '#/views/components/expand';
 import type { Navigator } from '#/views/components/router';
 
-type Pin = string | null;
 type NavigationIndex = { PINTENTRY: number };
 
-const pinListeners = createListeners<Pin>();
-let entryNode: Entry;
+const pinListeners = createListeners<string | null>();
+const entryNodes: Record<string, Entry> = {};
 let controller: AbortController;
 
 const [serial, setSerial] = createSignal<number | null>(null);
@@ -20,13 +19,13 @@ const [purpose, setPurpose] = createSignal(`${APP_NAME} Database`);
 async function requestPin<T extends NavigationIndex>(
   navigator: Navigator<T>,
   serial: number,
-  entryName?: string
+  entryName?: string | null,
+  purpose?: string
 ) {
-  if (entryName) {
-    setPurpose(`${t('unlockEntry')}: ${entryName}`);
-  } else {
-    setPurpose(t('unlockDb'));
-  }
+  if (entryName) setPurpose(`${t('unlockEntry')}: ${entryName}`);
+  else if (purpose) setPurpose(purpose);
+  else setPurpose(t('unlockDb'));
+
   setSerial(serial);
   controller = new AbortController();
   navigator.push((pages) => ({
@@ -36,7 +35,7 @@ async function requestPin<T extends NavigationIndex>(
         controller.abort('Page cleanup');
     }
   }));
-  entryNode.focus();
+  entryNodes[navigator.id]?.focus();
   try {
     const pin = await pinListeners.waitForValue({ signal: controller?.signal });
     return pin;
@@ -49,7 +48,7 @@ async function requestPin<T extends NavigationIndex>(
 function PinentryPage<T extends NavigationIndex>(props: {
   navigator: Navigator<T>;
 }) {
-  const [pin, setPin] = createSignal<Pin>(null);
+  const [pin, setPin] = createSignal<string | null>(null);
 
   function validatePin(pin: string) {
     if (pin.length > 8) {
@@ -122,7 +121,7 @@ function PinentryPage<T extends NavigationIndex>(props: {
                     }
                   }}
                   ref={(element) => {
-                    entryNode = element.node;
+                    entryNodes[props.navigator.id] = element.node;
                   }}
                   style={{ 'margin-top': 5, 'margin-bottom': 30 }}
                   text={`${pin() || ''}`}

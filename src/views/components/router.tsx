@@ -24,6 +24,7 @@ type pageChecker<T extends Record<string, number>> = (
 ) => number | number[];
 
 class Navigator<T extends Record<string, number>> {
+  public id: string;
   private history: Accessor<historyItem[]>;
   private setHistory: Setter<historyItem[]>;
   public pageIndex: Accessor<number>;
@@ -39,6 +40,7 @@ class Navigator<T extends Record<string, number>> {
         cleanup: null
       }
     ]);
+    this.id = randomUUID();
     this.history = history;
     this.setHistory = setHistory;
     this.pageIndex = pageIndex;
