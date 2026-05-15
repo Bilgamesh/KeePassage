@@ -1,5 +1,6 @@
 import { AttributedText, type Window } from 'gui';
 import { createEffect, createSignal } from 'solid-js';
+import { navigator } from '#/app';
 import clipboardIcon from '#/assets/icons/clipboard.png';
 import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
@@ -11,7 +12,6 @@ import type { Entry } from '#/schemas/database-schema';
 import { copyPassword, getPassword, showQrCode } from '#/service/database';
 import { IconButton } from '#/views/components/icon-button';
 import { PreviewLine } from '#/views/components/preview-line';
-import * as navigator from '#/views/navigator';
 
 function PreviewPanel(props: {
   window: Window;

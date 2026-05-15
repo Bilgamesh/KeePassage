@@ -1,5 +1,6 @@
 import { Clipboard, FileSaveDialog, MessageBox, type Window } from 'gui';
 import type { Accessor } from 'solid-js';
+import { navigator } from '#/app';
 import { DATABASE_EXTENSION } from '#/data/constants';
 import { t } from '#/data/i18n';
 import {
@@ -23,7 +24,6 @@ import {
 import { decrypt } from '#/service/yubikey';
 import { showError } from '#/utils/message-box';
 import { showQrCodeWindow } from '#/utils/qr-code';
-import * as navigator from '#/views/navigator';
 import { requestEntry } from '#/views/pages/entry';
 import { requestPin } from '#/views/pages/pinentry';
 import { requestTouch } from '#/views/pages/touch';
@@ -44,14 +44,14 @@ async function openDatabase(window: Window, path: string) {
     );
     return;
   }
-  const pin = await requestPin(key.serial);
+  const pin = await requestPin(navigator, key.serial);
   if (!pin) {
     setSelectedDbPath(previousPath);
     navigator.pop();
     return;
   }
   try {
-    const signal = requestTouch();
+    const signal = requestTouch(navigator);
     const index = await unlockDatabase(
       dbFile,
       {
@@ -154,7 +154,7 @@ async function getPassword(options: { entry: Entry; window: Window }) {
     );
     return null;
   }
-  const pin = await requestPin(key.serial, entry.title);
+  const pin = await requestPin(navigator, key.serial, entry.title);
   if (!pin) {
     navigator.replace({
       from: (pages) => [pages.TOUCH, pages.PINTENTRY],
@@ -163,7 +163,7 @@ async function getPassword(options: { entry: Entry; window: Window }) {
     return null;
   }
   try {
-    const signal = requestTouch();
+    const signal = requestTouch(navigator);
     const { password } = await decrypt(
       entry.encryptedPayloads[key.index]!,
       pin,

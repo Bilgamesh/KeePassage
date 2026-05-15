@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js';
+import { navigator } from '#/app';
 import diceIcon from '#/assets/icons/dice-3.png';
 import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
@@ -13,7 +14,6 @@ import { EntryLine } from '#/views/components/entry-line';
 import { EntryTextArea } from '#/views/components/entry-text-area';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
-import * as navigator from '#/views/navigator';
 import { getGeneratedPassword } from '#/views/pages/pw-generator';
 
 let controller: AbortController;

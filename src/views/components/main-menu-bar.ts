@@ -6,6 +6,7 @@ import {
   MessageLoop,
   type Window
 } from 'gui';
+import { navigator } from '#/app';
 import { DATABASE_EXTENSION } from '#/data/constants';
 import { t } from '#/data/i18n';
 import {
@@ -31,7 +32,6 @@ import {
   showQrCode
 } from '#/service/database';
 import { open } from '#/utils/url';
-import * as navigator from '#/views/navigator';
 import { DatabaseCreationPage } from '#/views/pages/database-creation';
 import { openPasswordGenerator } from '#/views/pages/pw-generator';
 import { openSettingsPage } from '#/views/pages/settings';

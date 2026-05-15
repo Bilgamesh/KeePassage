@@ -1,6 +1,7 @@
 import { getRandomValues } from 'node:crypto';
 import { Clipboard } from 'gui';
 import { createSignal } from 'solid-js';
+import { navigator } from '#/app';
 import clipboardIcon from '#/assets/icons/clipboard.png';
 import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
@@ -18,7 +19,6 @@ import { blur } from '#/utils/ui';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
 import { NumericEntry } from '#/views/components/numeric-entry';
-import * as navigator from '#/views/navigator';
 
 const DEFAULT_PASSWORD_POLICY = {
   lowerCase: true,

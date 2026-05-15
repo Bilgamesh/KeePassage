@@ -6,11 +6,13 @@ import { t } from '#/data/i18n';
 import { isDark } from '#/data/shared-state';
 import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
-import * as navigator from '#/views/navigator';
+import type { Navigator } from '#/views/components/router';
+
+type NavigationIndex = { TOUCH: number };
 
 let controller: AbortController;
 
-function requestTouch() {
+function requestTouch<T extends NavigationIndex>(navigator: Navigator<T>) {
   controller = new AbortController();
   const previousPageId = navigator.pageIndex();
   // In case of incorrect PIN, PSCS usually returns an error in less than 10ms,

@@ -5,9 +5,10 @@ import { t } from '#/data/i18n';
 import { selectedDbPath } from '#/data/shared-state';
 import { createListeners } from '#/utils/listen';
 import { Expand } from '#/views/components/expand';
-import * as navigator from '#/views/navigator';
+import type { Navigator } from '#/views/components/router';
 
 type Pin = string | null;
+type NavigationIndex = { PINTENTRY: number };
 
 const pinListeners = createListeners<Pin>();
 let entryNode: Entry;
@@ -16,7 +17,11 @@ let controller: AbortController;
 const [serial, setSerial] = createSignal<number | null>(null);
 const [purpose, setPurpose] = createSignal(`${APP_NAME} Database`);
 
-async function requestPin(serial: number, entryName?: string) {
+async function requestPin<T extends NavigationIndex>(
+  navigator: Navigator<T>,
+  serial: number,
+  entryName?: string
+) {
   if (entryName) {
     setPurpose(`${t('unlockEntry')}: ${entryName}`);
   } else {
@@ -41,7 +46,9 @@ async function requestPin(serial: number, entryName?: string) {
   }
 }
 
-function PinentryPage() {
+function PinentryPage<T extends NavigationIndex>(props: {
+  navigator: Navigator<T>;
+}) {
   const [pin, setPin] = createSignal<Pin>(null);
 
   function validatePin(pin: string) {
@@ -51,7 +58,7 @@ function PinentryPage() {
     return /^\d+$/.test(pin);
   }
 
-  navigator.subscribe(() => {
+  props.navigator.subscribe(() => {
     setPin(null);
   });
 

@@ -6,6 +6,7 @@ import {
   type Window
 } from 'gui';
 import { createEffect } from 'solid-js';
+import { navigator } from '#/app';
 import copyIcon from '#/assets/icons/copy.png';
 import diceIcon from '#/assets/icons/dice-3.png';
 import editIcon from '#/assets/icons/edit.png';
@@ -45,7 +46,6 @@ import {
 } from '#/service/database';
 import { IconButton } from '#/views/components/icon-button';
 import { Image } from '#/views/components/image';
-import * as navigator from '#/views/navigator';
 import { openPasswordGenerator } from '#/views/pages/pw-generator';
 import { openSettingsPage } from '#/views/pages/settings';
 

@@ -3,11 +3,11 @@ import { createSignal } from 'solid-js';
 import yubiKeyImage from '#/assets/img/yubikey.png';
 import { TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
-import { generate, getSlots, type Slot } from '#/service/yubikey';
+import { getSlots, type Slot } from '#/service/yubikey';
+import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
-import { Router } from '#/views/components/router';
+import { Navigator, Router } from '#/views/components/router';
 import { YubiKeyConfigTable } from '#/views/components/yubikey-config-table';
-import { Expand } from '../components/expand';
 
 function YubiKeyConfigPage(props: { mainWindow: Window; window: Window }) {
   const [slots, setSlots] = createSignal<Slot[]>([]);
@@ -18,16 +18,24 @@ function YubiKeyConfigPage(props: { mainWindow: Window; window: Window }) {
       setSlots(newSlots);
   };
 
-  getSlots().then(addSlots).catch(console.error);
-  const interval = setInterval(async () => {
-    getSlots().then(addSlots).catch(console.error);
-  }, 3000);
+  const tryGetSlots = () =>
+    getSlots().catch((error) => {
+      console.error(error);
+      return [] as Slot[];
+    });
 
-  function cleanup() {
-    clearInterval(interval);
-  }
+  const refreshSlots = () => tryGetSlots().then(addSlots);
 
+  refreshSlots();
+  const interval = setInterval(refreshSlots, 3000);
+  const cleanup = () => clearInterval(interval);
   props.window.onClose.connect(cleanup);
+
+  const navigator = new Navigator({
+    KEY_SELECTION: 0,
+    PINTENTRY: 1,
+    TOUCH: 2
+  });
 
   return (
     <container style={{ flex: 1 }}>
@@ -48,7 +56,7 @@ function YubiKeyConfigPage(props: { mainWindow: Window; window: Window }) {
             style={{ 'margin-left': 10 }}
           />
           <group style={{ flex: 3 }} title={t('generateIdentity')}>
-            <Router selectedPageIndex={() => 0}>
+            <Router navigator={navigator}>
               <container style={{ flex: 1, margin: 5 }}>
                 <label
                   align="start"

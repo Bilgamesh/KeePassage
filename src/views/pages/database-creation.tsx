@@ -10,11 +10,10 @@ import { DatabaseGeneralInfo } from '#/views/components/database-general-info';
 import { DatabaseKeys } from '#/views/components/database-keys';
 import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
-import { Router } from '#/views/components/router';
+import { Navigator, Router } from '#/views/components/router';
 
 function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
   const titles = (index: number) => [t('generalDbInfo'), t('pairKeys')][index];
-  const [page, setPage] = createSignal(0);
   const [dbName, setDbName] = createSignal(t('passwords'));
   const [description, setDescription] = createSignal('');
   const [yubiKeys, setYubiKeys] = createSignal([] as YubiKey[]);
@@ -31,12 +30,19 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
   );
   props.window.onClose.connect(cleanup);
 
+  const navigator = new Navigator({
+    DB_GENERAL_PAGE: 0,
+    DB_KEYS_PAGE: 1
+  });
+
   return (
     <container style={{ flex: 1 }}>
       <container style={{ flex: 5, flexDirection: 'row', 'margin-top': 20 }}>
         <Image
           size={{ height: 200, width: 200 }}
-          src={page() === 1 ? yubiKeyImage : null}
+          src={
+            navigator.isCurrentPage((p) => p.DB_KEYS_PAGE) ? yubiKeyImage : null
+          }
         />
         <container
           style={{
@@ -46,14 +52,17 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
           }}
         >
           <label
-            attributedText={AttributedText.create(titles(page()) || '404', {
-              font: TITLE_FONT,
-              align: 'start'
-            })}
+            attributedText={AttributedText.create(
+              titles(navigator.pageIndex()) || '404',
+              {
+                font: TITLE_FONT,
+                align: 'start'
+              }
+            )}
             style={{ 'margin-left': 10 }}
           />
           <group style={{ flex: 3 }} title={t('dbCreation')}>
-            <Router selectedPageIndex={page}>
+            <Router navigator={navigator}>
               <DatabaseGeneralInfo
                 dbName={dbName}
                 description={description}
@@ -72,18 +81,21 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
           >
             <Expand />
             <button
-              enabled={page() !== 0}
+              enabled={!navigator.isCurrentPage((p) => p.DB_GENERAL_PAGE)}
               onClick={() => {
-                setPage((p) => p - 1);
+                navigator.pop();
               }}
               style={{ height: 30, width: 80 }}
               title={t('goBack')}
             />
             <button
-              enabled={page() === 0 || selectedKeys().length > 0}
+              enabled={
+                navigator.isCurrentPage((p) => p.DB_GENERAL_PAGE) ||
+                selectedKeys().length > 0
+              }
               onClick={() => {
-                if (page() !== 1) {
-                  setPage((p) => p + 1);
+                if (!navigator.isCurrentPage((p) => p.DB_KEYS_PAGE)) {
+                  navigator.push((p) => p.DB_KEYS_PAGE);
                 } else {
                   saveNewDatabase({
                     dbName,
@@ -99,7 +111,11 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                 width: 100,
                 'margin-left': 10
               }}
-              title={page() !== 1 ? t('continue') : t('save')}
+              title={
+                !navigator.isCurrentPage((p) => p.DB_KEYS_PAGE)
+                  ? t('continue')
+                  : t('save')
+              }
             />
             <button
               onClick={() => {
