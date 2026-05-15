@@ -4,7 +4,7 @@ import { APP_ID, APP_NAME } from '#/data/constants';
 import { render } from '#/renderer';
 import { initConfigFile } from '#/service/config';
 import { SingleInstance } from '#/utils/single-instance';
-import { createMainWindow, getMainWindow } from '#/views/windows/main';
+import { MainWindow } from '#/views/windows/main';
 
 async function main() {
   app.setName(APP_NAME);
@@ -12,7 +12,7 @@ async function main() {
 
   await initConfigFile();
 
-  const window = createMainWindow();
+  const window = MainWindow();
 
   render(() => <App window={window} />, window);
 
@@ -42,6 +42,6 @@ locker
   });
 
 locker.on('connection-attempt', () => {
-  getMainWindow()?.restore();
-  getMainWindow()?.setSkipTaskbar(false);
+  MainWindow().restore();
+  MainWindow().setSkipTaskbar(false);
 });

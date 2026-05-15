@@ -7,30 +7,19 @@ import {
   WINDOWS_APP_BACKGROUND_COLOR
 } from '#/data/constants';
 import { appSettings } from '#/data/shared-state';
+import { createWindow, deleteWindow } from '#/utils/ui';
 import { AppIcon } from '#/views/components/app-icon';
 import { MainMenuBar } from '#/views/components/main-menu-bar';
 import { TrayMenu } from '#/views/components/tray-menu';
-import { createWindow, deleteWindow, getWindow } from '#/views/window-manager';
+
+type ToggleableWindow = Window & { toggleVisibility: (show: boolean) => void };
 
 let tray: Tray | null = null;
+let win: ToggleableWindow;
 
-function toggleVisibility(window: Window, show: boolean) {
-  if (show) {
-    window.restore();
-    window.setSkipTaskbar(false);
-    window.activate();
-  } else {
-    window.minimize();
-    window.setSkipTaskbar(true);
-  }
-}
-
-function getMainWindow() {
-  return getWindow(APP_NAME);
-}
-
-function createMainWindow() {
-  const win = createWindow(APP_NAME);
+function MainWindow() {
+  if (win) return win;
+  win = createWindow(APP_NAME) as ToggleableWindow;
   const contentView = Container.create();
   contentView.setStyle({ flex: 1 });
   win.setContentView(contentView);
@@ -50,17 +39,18 @@ function createMainWindow() {
   win.setContentSize(MIN_SIZE);
 
   createEffect(() => {
-    if (appSettings().showTrayIcon && !tray) {
+    if (appSettings().showTrayIcon && !tray)
       tray = Tray.createWithImage(AppIcon());
-    }
+
     if (!appSettings().showTrayIcon && tray) {
       tray.remove();
       tray = null;
     }
+
     if (tray) {
-      tray.setMenu(TrayMenu({ win, toggleVisibility }));
+      tray.setMenu(TrayMenu({ win }));
       tray.onClick = () => {
-        toggleVisibility(win, true);
+        win.toggleVisibility(true);
         win.activate();
       };
     }
@@ -69,7 +59,7 @@ function createMainWindow() {
   // Kill program when main window is closed
   win.onClose.connect(() => {
     if (tray && appSettings().minimiseInsteadOfExit) {
-      deleteWindow(APP_NAME);
+      // Don't close
     } else {
       deleteWindow(APP_NAME);
       MessageLoop.quit();
@@ -79,11 +69,8 @@ function createMainWindow() {
 
   win.shouldClose = () => {
     if (appSettings().minimiseInsteadOfExit) {
-      if (tray) {
-        toggleVisibility(win, false);
-      } else {
-        win.minimize();
-      }
+      if (tray) win.toggleVisibility(false);
+      else win.minimize();
       return false;
     }
     return true;
@@ -93,9 +80,20 @@ function createMainWindow() {
     win.setAlwaysOnTop(appSettings().alwaysOnTop);
   });
 
+  win.toggleVisibility = (show: boolean) => {
+    if (show) {
+      win.restore();
+      win.setSkipTaskbar(false);
+      win.activate();
+    } else {
+      win.minimize();
+      win.setSkipTaskbar(true);
+    }
+  };
+
   win.center();
 
   return win;
 }
 
-export { createMainWindow, getMainWindow };
+export { MainWindow, type ToggleableWindow };

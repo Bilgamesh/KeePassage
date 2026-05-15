@@ -21,8 +21,8 @@ import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
 import { DatabaseCreationPage } from '#/views/pages/database-creation';
 import { YubiKeyConfigPage } from '#/views/pages/yubikey-config';
-import { getDatabaseWindow, hasDatabaseWindow } from '#/views/windows/database';
-import { getYubiKeyConfigWindow } from '#/views/windows/yubikey-config';
+import { DatabaseWindow } from '#/views/windows/database';
+import { YubiKeyConfigWindow } from '#/views/windows/yubikey-config';
 
 function WelcomePage(props: { window: Window }) {
   const [dbTable, setDbTable] = createSignal(SimpleTableModel.create(1));
@@ -60,7 +60,7 @@ function WelcomePage(props: { window: Window }) {
         <Expand />
         <button
           onClick={() => {
-            const win = getDatabaseWindow();
+            const win = DatabaseWindow(true)!;
             render(
               () => (
                 <DatabaseCreationPage mainWindow={props.window} window={win} />
@@ -74,10 +74,9 @@ function WelcomePage(props: { window: Window }) {
         />
         <button
           onClick={async () => {
-            if (hasDatabaseWindow()) {
-              getDatabaseWindow().activate();
-              return;
-            }
+            const win = DatabaseWindow();
+            if (win) return win.activate();
+
             const dialog = FileOpenDialog.create();
             dialog.setFilters([
               {
@@ -95,7 +94,7 @@ function WelcomePage(props: { window: Window }) {
         />
         <button
           onClick={() => {
-            const win = getYubiKeyConfigWindow();
+            const win = YubiKeyConfigWindow(true)!;
             render(() => <YubiKeyConfigPage window={win} />, win);
             win.activate();
           }}
@@ -129,10 +128,9 @@ function WelcomePage(props: { window: Window }) {
             hasBorder={true}
             model={dbTable()}
             onRowActivate={async (_table, row) => {
-              if (hasDatabaseWindow()) {
-                getDatabaseWindow().activate();
-                return;
-              }
+              const win = DatabaseWindow();
+              if (win) return win.activate();
+
               const path = recent()[row]!;
               openDatabase(props.window, path);
             }}

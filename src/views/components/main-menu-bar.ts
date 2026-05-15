@@ -35,7 +35,7 @@ import { open } from '#/utils/url';
 import { DatabaseCreationPage } from '#/views/pages/database-creation';
 import { openPasswordGenerator } from '#/views/pages/pw-generator';
 import { openSettingsPage } from '#/views/pages/settings';
-import { getDatabaseWindow } from '#/views/windows/database';
+import { DatabaseWindow } from '#/views/windows/database';
 
 const rules = () => [
   {
@@ -110,7 +110,7 @@ function MainMenuBar(props: { window: Window }) {
                 pages.DB_INDEX
               ])
             ) {
-              const win = getDatabaseWindow();
+              const win = DatabaseWindow(true)!;
               render(
                 () =>
                   DatabaseCreationPage({

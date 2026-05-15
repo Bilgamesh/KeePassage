@@ -5,7 +5,7 @@ import { render } from '#/renderer';
 import type { YubiKey } from '#/schemas/yubikey-schema';
 import { KeysTable } from '#/views/components/keys-table';
 import { YubiKeyConfigPage } from '#/views/pages/yubikey-config';
-import { getYubiKeyConfigWindow } from '#/views/windows/yubikey-config';
+import { YubiKeyConfigWindow } from '#/views/windows/yubikey-config';
 
 function DatabaseKeys(props: {
   window: Window;
@@ -31,7 +31,7 @@ function DatabaseKeys(props: {
           color="#0000FF"
           cursor="hand"
           onMouseDown={() => {
-            const win = getYubiKeyConfigWindow();
+            const win = YubiKeyConfigWindow(true)!;
             render(() => <YubiKeyConfigPage window={win} />, win);
             props.window.close();
             win.activate();

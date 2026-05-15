@@ -1,4 +1,5 @@
 import { Clipboard, FileSaveDialog, MessageBox, type Window } from 'gui';
+import { toString as qrCodeToString } from 'qrcode';
 import type { Accessor } from 'solid-js';
 import { navigator } from '#/app';
 import { DATABASE_EXTENSION } from '#/data/constants';
@@ -11,6 +12,7 @@ import {
   setUnlockedDbIndex,
   unlockedDbIndex
 } from '#/data/shared-state';
+import { render } from '#/renderer';
 import type { Entry } from '#/schemas/database-schema';
 import type { YubiKey } from '#/schemas/yubikey-schema';
 import { updateSettings } from '#/service/config';
@@ -23,11 +25,12 @@ import {
 } from '#/service/lib/database/database-client';
 import { decrypt } from '#/service/yubikey';
 import { showError } from '#/utils/message-box';
-import { showQrCodeWindow } from '#/utils/qr-code';
+import { QRCode } from '#/views/components/qrcode';
 import { requestEntry } from '#/views/pages/entry';
 import { requestPin } from '#/views/pages/pinentry';
 import { requestTouch } from '#/views/pages/touch';
-import { getMainWindow } from '#/views/windows/main';
+import { MainWindow } from '#/views/windows/main';
+import { QrCodeWindow } from '#/views/windows/qr-code';
 
 async function openDatabase(window: Window, path: string) {
   const previousPath = selectedDbPath();
@@ -292,7 +295,11 @@ async function showQrCode(window: Window) {
       to: (pages) => pages.DB_INDEX
     });
     if (password) {
-      showQrCodeWindow(`${entry.title} - Password`, password);
+      const code = await qrCodeToString(password);
+      const window = QrCodeWindow({ title: `${entry.title} - Password` });
+      render(() => QRCode({ code, window }), window);
+      window.fitSize();
+      window.activate();
     }
   }
 }
@@ -308,8 +315,8 @@ let clipboardTimeout: NodeJS.Timeout | null = null;
 let secondsSinceInactive = 0;
 
 function refreshDbLock() {
-  const isMinimised = getMainWindow()?.isMinimized() || false;
-  const isActive = getMainWindow()?.isActive() || false;
+  const isMinimised = MainWindow().isMinimized() || false;
+  const isActive = MainWindow().isActive() || false;
 
   if (!isActive && unlockedDbIndex() !== null) {
     secondsSinceInactive++;

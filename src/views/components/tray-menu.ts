@@ -1,4 +1,4 @@
-import { Menu, MessageLoop, type Window } from 'gui';
+import { Menu, MessageLoop } from 'gui';
 import { navigator } from '#/app';
 import { t } from '#/data/i18n';
 import {
@@ -6,19 +6,17 @@ import {
   setUnlockedDbIndex,
   unlockedDbIndex
 } from '#/data/shared-state';
+import type { ToggleableWindow } from '#/views/windows/main';
 
-function TrayMenu(props: {
-  win: Window;
-  toggleVisibility: (win: Window, show: boolean) => void;
-}) {
+function TrayMenu(props: { win: ToggleableWindow }) {
   const menu = Menu.create([
     {
       label: t('toggleWindow'),
       onClick: () => {
         if (props.win.isMinimized()) {
-          props.toggleVisibility(props.win, true);
+          props.win.toggleVisibility(true);
         } else {
-          props.toggleVisibility(props.win, false);
+          props.win.toggleVisibility(false);
         }
       }
     },
