@@ -13,23 +13,25 @@ type NavigationIndex = { TOUCH: number };
 let controller: AbortController;
 
 function requestTouch<T extends NavigationIndex>(navigator: Navigator<T>) {
-  controller = new AbortController();
+  if (!controller?.signal.aborted) controller?.abort(); // Abort potential parallel touch request in other window
+  const newAbortController = new AbortController();
   const previousPageId = navigator.pageIndex();
   // In case of incorrect PIN, PSCS usually returns an error in less than 10ms,
   // but if the PIN is correct, PCSC stays silent until user touches the key sensor.
   // We assume that if there was no error within the initial 50ms, PIN must be correct and we prompt the user to tap the key.
   setTimeout(50).then(() => {
     const stillOnSamePage = navigator.isCurrentPage(() => previousPageId);
-    if (!controller.signal.aborted && stillOnSamePage) {
+    if (!newAbortController.signal.aborted && stillOnSamePage) {
       navigator.push((pages) => ({
         index: pages.TOUCH,
         cleanup: () => {
-          if (controller && !controller.signal.aborted)
-            controller.abort('Page cleanup');
+          if (!newAbortController.signal.aborted)
+            newAbortController.abort('Page cleanup');
         }
       }));
     }
   });
+  controller = newAbortController;
   return controller.signal;
 }
 

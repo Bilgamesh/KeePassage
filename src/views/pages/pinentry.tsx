@@ -22,20 +22,22 @@ async function requestPin<T extends NavigationIndex>(
   entryName?: string | null,
   purpose?: string
 ) {
+  if (!controller?.signal.aborted) controller?.abort(); // Abort potential parallel PIN request in other window
   if (entryName) setPurpose(`${t('unlockEntry')}: ${entryName}`);
   else if (purpose) setPurpose(purpose);
   else setPurpose(t('unlockDb'));
 
   setSerial(serial);
-  controller = new AbortController();
+  const newAbortController = new AbortController();
   navigator.push((pages) => ({
     index: pages.PINTENTRY,
-    cleanup: () => {
-      if (controller && !controller.signal.aborted)
-        controller.abort('Page cleanup');
-    }
+    cleanup: () =>
+      newAbortController.signal.aborted
+        ? null
+        : controller.abort('Page cleanup')
   }));
   entryNodes[navigator.id]?.focus();
+  controller = newAbortController;
   try {
     const pin = await pinListeners.waitForValue({ signal: controller?.signal });
     return pin;
