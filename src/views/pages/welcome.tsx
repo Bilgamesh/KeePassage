@@ -96,12 +96,7 @@ function WelcomePage(props: { window: Window }) {
         <button
           onClick={() => {
             const win = getYubiKeyConfigWindow();
-            render(
-              () => (
-                <YubiKeyConfigPage mainWindow={props.window} window={win} />
-              ),
-              win
-            );
+            render(() => <YubiKeyConfigPage window={win} />, win);
             win.activate();
           }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}

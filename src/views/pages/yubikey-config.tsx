@@ -17,7 +17,7 @@ import { YubiKeyConfigTable } from '#/views/components/yubikey-config-table';
 import { PinentryPage, requestPin } from '#/views/pages/pinentry';
 import { requestTouch, TouchPage } from '#/views/pages/touch';
 
-function YubiKeyConfigPage(props: { mainWindow: Window; window: Window }) {
+function YubiKeyConfigPage(props: { window: Window }) {
   const [slots, setSlots] = createSignal<Slot[]>([]);
   const [selectedSlot, setSelectedSlot] = createSignal<Slot | null>(null);
 
@@ -163,8 +163,8 @@ function YubiKeyConfigPage(props: { mainWindow: Window; window: Window }) {
           </container>
         </container>
       </container>
-      <PinentryPage navigator={navigator} />
-      <TouchPage />
+      <PinentryPage navigator={navigator} window={props.window} />
+      <TouchPage window={props.window} />
     </Router>
   );
 }

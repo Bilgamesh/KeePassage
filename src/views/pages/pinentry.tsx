@@ -1,4 +1,4 @@
-import { AttributedText, type Entry } from 'gui';
+import { AttributedText, type Entry, type Window } from 'gui';
 import { createSignal } from 'solid-js';
 import { APP_NAME, LARGE_BUTTON_STYLE, TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
@@ -46,6 +46,7 @@ async function requestPin<T extends NavigationIndex>(
 }
 
 function PinentryPage<T extends NavigationIndex>(props: {
+  window: Window;
   navigator: Navigator<T>;
 }) {
   const [pin, setPin] = createSignal<string | null>(null);
@@ -60,6 +61,8 @@ function PinentryPage<T extends NavigationIndex>(props: {
   props.navigator.subscribe(() => {
     setPin(null);
   });
+
+  props.window.onClose.connect(() => controller?.abort('Cancel'));
 
   return (
     <container style={{ flex: 1, flexDirection: 'column' }}>

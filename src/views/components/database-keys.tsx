@@ -9,7 +9,6 @@ import { getYubiKeyConfigWindow } from '#/views/windows/yubikey-config';
 
 function DatabaseKeys(props: {
   window: Window;
-  mainWindow: Window;
   yubiKeys: Accessor<YubiKey[]>;
   setYubiKeys: Setter<YubiKey[]>;
 }) {
@@ -33,12 +32,7 @@ function DatabaseKeys(props: {
           cursor="hand"
           onMouseDown={() => {
             const win = getYubiKeyConfigWindow();
-            render(
-              () => (
-                <YubiKeyConfigPage mainWindow={props.mainWindow} window={win} />
-              ),
-              win
-            );
+            render(() => <YubiKeyConfigPage window={win} />, win);
             props.window.close();
             win.activate();
           }}

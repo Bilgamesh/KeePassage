@@ -70,7 +70,6 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                 setDescription={setDescription}
               />
               <DatabaseKeys
-                mainWindow={props.mainWindow}
                 setYubiKeys={setYubiKeys}
                 window={props.window}
                 yubiKeys={yubiKeys}

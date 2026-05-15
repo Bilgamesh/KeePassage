@@ -1,5 +1,5 @@
 import { setTimeout } from 'node:timers/promises';
-import { AttributedText } from 'gui';
+import { AttributedText, type Window } from 'gui';
 import touchIcon from '#/assets/icons/touch.png';
 import { DARK_MODE_FONT_COLOR, TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
@@ -33,7 +33,9 @@ function requestTouch<T extends NavigationIndex>(navigator: Navigator<T>) {
   return controller.signal;
 }
 
-function TouchPage() {
+function TouchPage(props: { window: Window }) {
+  props.window.onClose.connect(() => controller?.abort('Cancel'));
+
   return (
     <container style={{ flex: 1 }}>
       <Expand />
