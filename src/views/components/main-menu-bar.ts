@@ -31,7 +31,7 @@ import {
   openDatabase,
   showQrCode
 } from '#/service/database';
-import { open } from '#/utils/url-util';
+import { open } from '#/utils/url';
 import { DatabaseCreationPage } from '#/views/pages/database-creation';
 import { openPasswordGenerator } from '#/views/pages/pw-generator';
 import { openSettingsPage } from '#/views/pages/settings';

@@ -22,8 +22,8 @@ import {
   unlockDatabase
 } from '#/service/lib/database/database-client';
 import { decrypt } from '#/service/yubikey';
-import { showError } from '#/utils/message-box-util';
-import { showQrCodeWindow } from '#/utils/qr-code-util';
+import { showError } from '#/utils/message-box';
+import { showQrCodeWindow } from '#/utils/qr-code';
 import { requestEntry } from '#/views/pages/entry';
 import { requestPin } from '#/views/pages/pinentry';
 import { requestTouch } from '#/views/pages/touch';

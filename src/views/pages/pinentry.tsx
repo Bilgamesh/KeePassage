@@ -4,7 +4,7 @@ import { APP_NAME, LARGE_BUTTON_STYLE, TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import { selectedDbPath } from '#/data/shared-state';
-import { createListeners } from '#/utils/listen-util';
+import { createListeners } from '#/utils/listen';
 import { Expand } from '#/views/components/expand';
 
 type Pin = string | null;

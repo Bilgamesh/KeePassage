@@ -6,7 +6,7 @@ import {
 } from '#/data/constants';
 import { setCopyingEnabled } from '#/data/shared-state';
 import type { Style } from '#/renderer/types';
-import { open } from '#/utils/url-util';
+import { open } from '#/utils/url';
 import { LabelContextMenu } from '#/views/components/label-context-menu';
 import { Space } from '#/views/components/space';
 import { TextContextMenu } from '#/views/components/text-context-menu';

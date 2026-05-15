@@ -14,8 +14,8 @@ import {
 } from '#/data/constants';
 import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
-import { createListeners } from '#/utils/listen-util';
-import { blur } from '#/utils/ui-util';
+import { createListeners } from '#/utils/listen';
+import { blur } from '#/utils/ui';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
 import { NumericEntry } from '#/views/components/numeric-entry';

@@ -16,7 +16,7 @@ import {
 } from '#/service/lib/yubikey/yubikey-client';
 import { YubiKeyIdentity } from '#/service/lib/yubikey/yubikey-identity';
 import { YubiKeyRecipient } from '#/service/lib/yubikey/yubikey-recipient';
-import { createListeners } from '#/utils/listen-util';
+import { createListeners } from '#/utils/listen';
 
 type Slot = (typeof RETIRED_SLOTS)[number] & {
   publicKey: string | null;

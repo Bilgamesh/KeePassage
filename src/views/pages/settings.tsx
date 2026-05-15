@@ -9,7 +9,7 @@ import { dictionaries, t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import { appSettings } from '#/data/shared-state';
 import { updateSettings } from '#/service/config';
-import { blur } from '#/utils/ui-util';
+import { blur } from '#/utils/ui';
 import { Expand } from '#/views/components/expand';
 import { TimeoutEntry } from '#/views/components/timeout-entry';
 

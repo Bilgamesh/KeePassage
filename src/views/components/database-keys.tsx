@@ -1,7 +1,7 @@
 import type { Accessor, Setter } from 'solid-js';
 import { t } from '#/data/i18n';
 import type { YubiKey } from '#/schemas/yubikey-schema';
-import { open } from '#/utils/url-util';
+import { open } from '#/utils/url';
 import { KeysTable } from '#/views/components/keys-table';
 
 function DatabaseKeys(props: {
