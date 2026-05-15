@@ -1,11 +1,11 @@
 import { Menu, MessageLoop, type Window } from 'gui';
 import { t } from '#/data/i18n';
-import * as navigator from '#/data/navigator';
 import {
   setSelectedDbPath,
   setUnlockedDbIndex,
   unlockedDbIndex
 } from '#/data/shared-state';
+import * as navigator from '#/views/navigator';
 
 function TrayMenu(props: {
   win: Window;

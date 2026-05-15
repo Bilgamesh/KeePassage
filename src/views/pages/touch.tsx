@@ -3,10 +3,10 @@ import { AttributedText } from 'gui';
 import touchIcon from '#/assets/icons/touch.png';
 import { DARK_MODE_FONT_COLOR, TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
-import * as navigator from '#/data/navigator';
 import { isDark } from '#/data/shared-state';
 import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
+import * as navigator from '#/views/navigator';
 
 let controller: AbortController;
 

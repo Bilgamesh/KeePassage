@@ -2,7 +2,6 @@ import { Clipboard, FileSaveDialog, MessageBox, type Window } from 'gui';
 import type { Accessor } from 'solid-js';
 import { DATABASE_EXTENSION } from '#/data/constants';
 import { t } from '#/data/i18n';
-import * as navigator from '#/data/navigator';
 import {
   appSettings,
   selectedDbPath,
@@ -24,10 +23,11 @@ import {
 import { decrypt } from '#/service/yubikey';
 import { showError } from '#/utils/message-box';
 import { showQrCodeWindow } from '#/utils/qr-code';
+import * as navigator from '#/views/navigator';
 import { requestEntry } from '#/views/pages/entry';
 import { requestPin } from '#/views/pages/pinentry';
 import { requestTouch } from '#/views/pages/touch';
-import { getMainWindow } from '#/windows/main-window';
+import { getMainWindow } from '#/views/windows/main';
 
 async function openDatabase(window: Window, path: string) {
   const previousPath = selectedDbPath();

@@ -4,7 +4,7 @@ import { APP_ID, APP_NAME } from '#/data/constants';
 import { render } from '#/renderer';
 import { initConfigFile } from '#/service/config';
 import { SingleInstance } from '#/utils/single-instance';
-import { createMainWindow, getMainWindow } from '#/windows/main-window';
+import { createMainWindow, getMainWindow } from '#/views/windows/main';
 
 async function main() {
   app.setName(APP_NAME);

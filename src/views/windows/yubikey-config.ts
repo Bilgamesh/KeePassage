@@ -2,11 +2,11 @@ import { Container } from 'gui';
 import { createEffect } from 'solid-js';
 import { MAX_SIZE, SUBWINDOW_MIN_SIZE } from '#/data/constants';
 import { t } from '#/data/i18n';
-import { createWindow, deleteWindow, getWindow } from '#/data/window-manager';
+import { createWindow, deleteWindow, getWindow } from '#/views/window-manager';
 
-const title = () => t('createNewKeePassageDb');
+const title = () => t('configureYubikey');
 
-function createDatabaseWindow() {
+function createYubiKeyConfigWindow() {
   let isClosed = false;
   const win = createWindow(title());
   const contentView = Container.create();
@@ -30,15 +30,14 @@ function createDatabaseWindow() {
   return win;
 }
 
-function hasDatabaseWindow() {
+function hasYubiKeyConfigWindow() {
   return !!getWindow(title());
 }
 
-function getDatabaseWindow() {
+function getYubiKeyConfigWindow() {
   const win = getWindow(title());
   if (win) return win;
-
-  return createDatabaseWindow();
+  return createYubiKeyConfigWindow();
 }
 
-export { getDatabaseWindow, hasDatabaseWindow };
+export { getYubiKeyConfigWindow, hasYubiKeyConfigWindow };

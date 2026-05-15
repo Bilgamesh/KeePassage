@@ -4,7 +4,6 @@ import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
 import { LARGE_BUTTON_STYLE, SMALL_ENTRY_STYLE } from '#/data/constants';
 import { t } from '#/data/i18n';
-import * as navigator from '#/data/navigator';
 import { unlockedDbIndex } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
 import { encrypt } from '#/service/yubikey';
@@ -14,6 +13,7 @@ import { EntryLine } from '#/views/components/entry-line';
 import { EntryTextArea } from '#/views/components/entry-text-area';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
+import * as navigator from '#/views/navigator';
 import { getGeneratedPassword } from '#/views/pages/pw-generator';
 
 let controller: AbortController;

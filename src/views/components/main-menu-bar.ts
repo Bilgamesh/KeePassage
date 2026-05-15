@@ -8,7 +8,6 @@ import {
 } from 'gui';
 import { DATABASE_EXTENSION } from '#/data/constants';
 import { t } from '#/data/i18n';
-import * as navigator from '#/data/navigator';
 import {
   appSettings,
   copyingEnabled,
@@ -32,10 +31,11 @@ import {
   showQrCode
 } from '#/service/database';
 import { open } from '#/utils/url';
+import * as navigator from '#/views/navigator';
 import { DatabaseCreationPage } from '#/views/pages/database-creation';
 import { openPasswordGenerator } from '#/views/pages/pw-generator';
 import { openSettingsPage } from '#/views/pages/settings';
-import { getDatabaseWindow } from '#/windows/database-window';
+import { getDatabaseWindow } from '#/views/windows/database';
 
 const rules = () => [
   {

@@ -21,11 +21,8 @@ import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
 import { DatabaseCreationPage } from '#/views/pages/database-creation';
 import { YubiKeyConfigPage } from '#/views/pages/yubikey-config';
-import {
-  getDatabaseWindow,
-  hasDatabaseWindow
-} from '#/windows/database-window';
-import { getYubiKeyConfigWindow } from '#/windows/yubikey-config-window';
+import { getDatabaseWindow, hasDatabaseWindow } from '#/views/windows/database';
+import { getYubiKeyConfigWindow } from '#/views/windows/yubikey-config';
 
 function WelcomePage(props: { window: Window }) {
   const [dbTable, setDbTable] = createSignal(SimpleTableModel.create(1));

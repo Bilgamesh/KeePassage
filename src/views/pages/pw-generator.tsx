@@ -13,12 +13,12 @@ import {
   SMALL_BUTTON_STYLE
 } from '#/data/constants';
 import { t } from '#/data/i18n';
-import * as navigator from '#/data/navigator';
 import { createListeners } from '#/utils/listen';
 import { blur } from '#/utils/ui';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
 import { NumericEntry } from '#/views/components/numeric-entry';
+import * as navigator from '#/views/navigator';
 
 const DEFAULT_PASSWORD_POLICY = {
   lowerCase: true,

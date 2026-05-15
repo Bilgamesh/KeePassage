@@ -24,7 +24,6 @@ import {
   SMALL_ENTRY_STYLE
 } from '#/data/constants';
 import { t } from '#/data/i18n';
-import * as navigator from '#/data/navigator';
 import {
   appSettings,
   isDark,
@@ -46,6 +45,7 @@ import {
 } from '#/service/database';
 import { IconButton } from '#/views/components/icon-button';
 import { Image } from '#/views/components/image';
+import * as navigator from '#/views/navigator';
 import { openPasswordGenerator } from '#/views/pages/pw-generator';
 import { openSettingsPage } from '#/views/pages/settings';
 

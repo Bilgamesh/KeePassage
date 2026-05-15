@@ -1,8 +1,8 @@
 import { appearance, type Window } from 'gui';
-import { pageIndex } from '#/data/navigator';
 import { setDark } from '#/data/shared-state';
 import { Router } from '#/views/components/router';
 import { Toolbar } from '#/views/components/toolbar';
+import { pageIndex } from '#/views/navigator';
 import { DatabaseIndexPage } from '#/views/pages/database-index';
 import { EntryPage } from '#/views/pages/entry';
 import { PinentryPage } from '#/views/pages/pinentry';

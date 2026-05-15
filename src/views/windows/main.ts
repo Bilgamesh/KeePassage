@@ -7,10 +7,10 @@ import {
   WINDOWS_APP_BACKGROUND_COLOR
 } from '#/data/constants';
 import { appSettings } from '#/data/shared-state';
-import { createWindow, deleteWindow, getWindow } from '#/data/window-manager';
 import { AppIcon } from '#/views/components/app-icon';
 import { MainMenuBar } from '#/views/components/main-menu-bar';
 import { TrayMenu } from '#/views/components/tray-menu';
+import { createWindow, deleteWindow, getWindow } from '#/views/window-manager';
 
 let tray: Tray | null = null;
 
