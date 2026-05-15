@@ -1,4 +1,7 @@
 import { Menu, type Window } from 'gui';
+import { t } from '#/data/i18n';
+import { selectedEntry } from '#/data/shared-state';
+import type { MenuItemOptions } from '#/renderer/types';
 import {
   addNewEntry,
   copyPassword,
@@ -7,10 +10,7 @@ import {
   deleteEntry,
   editEntry,
   showQrCode
-} from '#/data/db-orchestrator';
-import { t } from '#/data/i18n';
-import { selectedEntry } from '#/data/shared-state';
-import type { MenuItemOptions } from '#/renderer/types';
+} from '#/service/database';
 
 function DatabaseIndexContextMenu(props: { window: Window }) {
   if (!selectedEntry()) {

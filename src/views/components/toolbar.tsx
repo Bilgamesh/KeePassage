@@ -23,16 +23,6 @@ import {
   DATABASE_EXTENSION,
   SMALL_ENTRY_STYLE
 } from '#/data/constants';
-import {
-  addNewEntry,
-  copyPassword,
-  copyUrl,
-  copyUsername,
-  deleteEntry,
-  editEntry,
-  openDatabase,
-  showQrCode
-} from '#/data/db-orchestrator';
 import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import {
@@ -44,10 +34,20 @@ import {
   setUnlockedDbIndex,
   unlockedDbIndex
 } from '#/data/shared-state';
+import {
+  addNewEntry,
+  copyPassword,
+  copyUrl,
+  copyUsername,
+  deleteEntry,
+  editEntry,
+  openDatabase,
+  showQrCode
+} from '#/service/database';
 import { IconButton } from '#/views/components/icon-button';
 import { Image } from '#/views/components/image';
-import { openPasswordGenerator } from '#/views/pages/pw-generator-page';
-import { openSettingsPage } from '#/views/pages/settings-page';
+import { openPasswordGenerator } from '#/views/pages/pw-generator';
+import { openSettingsPage } from '#/views/pages/settings';
 
 function Toolbar(props: { window: Window }) {
   function updateFilter(text: string) {

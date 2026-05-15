@@ -9,6 +9,14 @@ import {
   ReaderStatus
 } from 'pcsc-mini';
 import {
+  encodeLength,
+  extractEccPublicKey,
+  extractSignature,
+  getNestedTlv,
+  parseSimpleTlv,
+  wrapCertificate
+} from '#/service/tlv';
+import {
   decryptManagementChallenge3DES,
   generateSelfSignedCertificate
 } from '#/service/x509';
@@ -181,12 +189,6 @@ class YubiKeyClient {
       throw new Error(`Select PIV failed: SW=${sw.toString(16)}`);
   }
 
-  private encodeLength(len: number): number[] {
-    if (len < 0x80) return [len];
-    else if (len <= 0xff) return [0x81, len];
-    else return [0x82, (len >> 8) & 0xff, len & 0xff];
-  }
-
   async verifyPin(pin: string) {
     const pinBytes = new TextEncoder().encode(pin);
     const { sw } = await this.transmit(
@@ -207,10 +209,10 @@ class YubiKeyClient {
       throw new Error('Invalid EPK length for P-256 (expected 65 bytes)');
 
     const tlv82 = [0x82, 0x00];
-    const len85 = this.encodeLength(epkBytes.length);
+    const len85 = encodeLength(epkBytes.length);
     const tlv85 = [0x85, ...len85, ...epkBytes];
     const innerValue = [...tlv82, ...tlv85];
-    const len7c = this.encodeLength(innerValue.length);
+    const len7c = encodeLength(innerValue.length);
     const tlv7c = [TAG_DYN_AUTH, ...len7c, ...innerValue];
 
     const { resp } = await this.transmit(
@@ -223,26 +225,6 @@ class YubiKeyClient {
       tlv7c
     );
     return resp;
-  }
-
-  private extractEccPublicKey(fullData: number[]) {
-    for (let i = 0; i < fullData.length - 36; i++) {
-      const tag = fullData[i];
-      const len = fullData[i + 1];
-      const zeroPad = fullData[i + 2];
-      const prefix = fullData[i + 3];
-
-      if (tag === 0x03 && len === 0x42 && zeroPad === 0x00 && prefix === 0x04) {
-        const keyStart = i + 4;
-        const keyEnd = keyStart + 32;
-        if (keyEnd <= fullData.length) {
-          const xBytes = new Uint8Array(fullData.slice(keyStart, keyEnd));
-          const yBytes = new Uint8Array(fullData.slice(keyEnd, keyEnd + 32));
-          return { xBytes, yBytes };
-        }
-      }
-    }
-    return { xBytes: null, yBytes: null };
   }
 
   async getPublicKey(slot: number) {
@@ -275,7 +257,7 @@ class YubiKeyClient {
       data.push(...resp.slice(0, -2));
     }
 
-    const { xBytes, yBytes } = this.extractEccPublicKey(data);
+    const { xBytes, yBytes } = extractEccPublicKey(data);
 
     if (!xBytes) return null;
 
@@ -386,9 +368,9 @@ class YubiKeyClient {
   async sign(slot: number, digest: Uint8Array) {
     if (digest.length > 32)
       throw new Error(`Invalid digest length: ${digest.length}`);
-    const lenBytes = this.encodeLength(digest.length);
+    const lenBytes = encodeLength(digest.length);
     const inner = [0x82, 0x00, 0x81, ...lenBytes, ...digest];
-    const outer = [0x7c, ...this.encodeLength(inner.length), ...inner];
+    const outer = [0x7c, ...encodeLength(inner.length), ...inner];
     const { sw, resp } = await this.transmit(
       {
         CLA: 0x00,
@@ -399,31 +381,11 @@ class YubiKeyClient {
       outer
     );
     if (sw !== 0x9000) throw new Error(`SIGN failed: SW=${sw.toString(16)}`);
-    return this.extractSignature(resp);
-  }
-
-  private extractSignature(resp: Uint8Array) {
-    const i = resp.indexOf(0x82);
-    if (i === -1) throw new Error('Signature not found');
-    const len = resp[i + 1]!;
-    return resp.slice(i + 2, i + 2 + len);
-  }
-
-  private wrapCertificate(certDer: Uint8Array) {
-    return new Uint8Array([
-      0x70,
-      ...this.encodeLength(certDer.length),
-      ...certDer,
-      0x71,
-      0x01,
-      0x00,
-      0xfe,
-      0x00
-    ]);
+    return extractSignature(resp);
   }
 
   async writeCertificate(slotObject: number, certDer: Uint8Array) {
-    const wrapped = this.wrapCertificate(certDer);
+    const wrapped = wrapCertificate(certDer);
     const payload = new Uint8Array([
       0x5c,
       0x03,
@@ -431,7 +393,7 @@ class YubiKeyClient {
       (slotObject >> 8) & 0xff,
       slotObject & 0xff,
       0x53,
-      ...this.encodeLength(wrapped.length),
+      ...encodeLength(wrapped.length),
       ...wrapped
     ]);
     const { sw } = await this.transmit(
@@ -471,26 +433,9 @@ class YubiKeyClient {
     });
     if (sw !== SW_CODES.OK)
       throw new Error(`GET METADATA failed: SW=${sw.toString(16)}`);
-    const tlv = this.parseSimpleTlv(resp.slice(0, -2));
+    const tlv = parseSimpleTlv(resp.slice(0, -2));
     const publicKey = tlv.get(0x04) ?? null;
     return { publicKey };
-  }
-
-  private parseSimpleTlv(data: Uint8Array) {
-    const result = new Map<number, Uint8Array>();
-    let offset = 0;
-    while (offset < data.length) {
-      const tag = data[offset++]!;
-      let len = data[offset++]!;
-      if (len & 0x80) {
-        const bytes = len & 0x7f;
-        len = 0;
-        for (let i = 0; i < bytes; i++) len = (len << 8) | data[offset++]!;
-      }
-      result.set(tag, data.slice(offset, offset + len));
-      offset += len;
-    }
-    return result;
   }
 
   async getObject(objectId: number) {
@@ -532,7 +477,7 @@ class YubiKeyClient {
       throw new Error(
         `Failed to get object ${objectId}: sw=${sw.toString(16)}`
       );
-    const tlv = this.parseSimpleTlv(new Uint8Array(chunks));
+    const tlv = parseSimpleTlv(new Uint8Array(chunks));
     const object = tlv.get(0x53);
     if (!object) throw new Error('Missing object data tag 0x53');
     return object;
@@ -541,17 +486,9 @@ class YubiKeyClient {
   async getProtectedMgmtKey() {
     try {
       const object = await this.getObject(0x005fc109);
-      const outer = this.parseSimpleTlv(object);
-      const wrapped = outer.get(0x88);
-      if (!wrapped) throw new Error('Missing protected data container');
-      const inner = this.parseSimpleTlv(wrapped);
-      const key = inner.get(0x89);
-      if (!key) throw new Error('Missing management key');
-      return key as Uint8Array<ArrayBuffer>;
+      return getNestedTlv(object, 0x88, 0x89) as Uint8Array<ArrayBuffer>;
     } catch (err) {
-      if (err instanceof ObjectNotFoundError) {
-        return null;
-      }
+      if (err instanceof ObjectNotFoundError) return null;
       throw err;
     }
   }

@@ -13,14 +13,14 @@ import {
   TITLE_FONT,
   VERSION
 } from '#/data/constants';
-import { openDatabase } from '#/data/db-orchestrator';
 import { t } from '#/data/i18n';
 import { appSettings } from '#/data/shared-state';
 import { render } from '#/renderer';
+import { openDatabase } from '#/service/database';
 import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
-import { DatabaseCreationPage } from '#/views/pages/database-creation-page';
-import { YubiKeyConfigPage } from '#/views/pages/yubikey-config-page';
+import { DatabaseCreationPage } from '#/views/pages/database-creation';
+import { YubiKeyConfigPage } from '#/views/pages/yubikey-config';
 import {
   getDatabaseWindow,
   hasDatabaseWindow

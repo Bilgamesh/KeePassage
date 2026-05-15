@@ -5,11 +5,11 @@ import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
 import qrcodeIcon from '#/assets/icons/qrcode.png';
 import { TITLE_FONT } from '#/data/constants';
-import { copyPassword, getPassword, showQrCode } from '#/data/db-orchestrator';
 import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import { appSettings, selectedEntry } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
+import { copyPassword, getPassword, showQrCode } from '#/service/database';
 import { IconButton } from '#/views/components/icon-button';
 import { PreviewLine } from '#/views/components/preview-line';
 

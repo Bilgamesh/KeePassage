@@ -1,7 +1,6 @@
 import { setTimeout } from 'node:timers/promises';
 import { SimpleTableModel, type Window } from 'gui';
 import { For, Show } from 'solid-js';
-import { editEntry } from '#/data/db-orchestrator';
 import { currentDictionary, dictionaries } from '#/data/i18n';
 import {
   appSettings,
@@ -11,6 +10,7 @@ import {
   unlockedDbIndex
 } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
+import { editEntry } from '#/service/database';
 import { DatabaseColumns } from '#/views/components/database-columns';
 import { DatabaseIndexContextMenu } from '#/views/components/database-index-context-menu';
 import { PreviewPanel } from '#/views/components/preview-panel';

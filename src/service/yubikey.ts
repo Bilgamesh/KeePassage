@@ -10,9 +10,12 @@ import type {
   EncryptionSuccess,
   YubiKey
 } from '#/schemas/yubikey-schema';
-import { RETIRED_SLOTS, withYubiKeyClient } from '#/service/lib/yubikey-client';
-import { YubiKeyIdentity } from '#/service/lib/yubikey-identity';
-import { YubiKeyRecipient } from '#/service/lib/yubikey-recipient';
+import {
+  RETIRED_SLOTS,
+  withYubiKeyClient
+} from '#/service/lib/yubikey/yubikey-client';
+import { YubiKeyIdentity } from '#/service/lib/yubikey/yubikey-identity';
+import { YubiKeyRecipient } from '#/service/lib/yubikey/yubikey-recipient';
 import { createListeners } from '#/utils/listen-util';
 
 type Slot = (typeof RETIRED_SLOTS)[number] & {

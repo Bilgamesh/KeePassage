@@ -7,16 +7,6 @@ import {
   type Window
 } from 'gui';
 import { DATABASE_EXTENSION } from '#/data/constants';
-import {
-  addNewEntry,
-  copyPassword,
-  copyUrl,
-  copyUsername,
-  deleteEntry,
-  editEntry,
-  openDatabase,
-  showQrCode
-} from '#/data/db-orchestrator';
 import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import {
@@ -30,11 +20,21 @@ import {
 } from '#/data/shared-state';
 import { render } from '#/renderer';
 import type { MenuItemOptions } from '#/renderer/types';
-import { updateSettings } from '#/service/config-service';
+import { updateSettings } from '#/service/config';
+import {
+  addNewEntry,
+  copyPassword,
+  copyUrl,
+  copyUsername,
+  deleteEntry,
+  editEntry,
+  openDatabase,
+  showQrCode
+} from '#/service/database';
 import { open } from '#/utils/url-util';
-import { DatabaseCreationPage } from '#/views/pages/database-creation-page';
-import { openPasswordGenerator } from '#/views/pages/pw-generator-page';
-import { openSettingsPage } from '#/views/pages/settings-page';
+import { DatabaseCreationPage } from '#/views/pages/database-creation';
+import { openPasswordGenerator } from '#/views/pages/pw-generator';
+import { openSettingsPage } from '#/views/pages/settings';
 import { getDatabaseWindow } from '#/windows/database-window';
 
 const rules = () => [

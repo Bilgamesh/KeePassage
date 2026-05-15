@@ -7,14 +7,14 @@ import { t } from '#/data/i18n';
 import * as navigator from '#/data/navigator';
 import { unlockedDbIndex } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
-import { encrypt } from '#/service/yubikey-service';
+import { encrypt } from '#/service/yubikey';
 import { createListeners } from '#/utils/listen-util';
 import { blur } from '#/utils/ui-util';
 import { EntryLine } from '#/views/components/entry-line';
 import { EntryTextArea } from '#/views/components/entry-text-area';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
-import { getGeneratedPassword } from '#/views/pages/pw-generator-page';
+import { getGeneratedPassword } from '#/views/pages/pw-generator';
 
 let controller: AbortController;
 const [passwordVisible, setPasswordVisible] = createSignal(false);

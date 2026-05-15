@@ -1,7 +1,7 @@
 import { SimpleTableModel, type TableColumnOptions } from 'gui';
 import type { Accessor } from 'solid-js';
 import { t } from '#/data/i18n';
-import type { Slot } from '#/service/yubikey-service';
+import type { Slot } from '#/service/yubikey';
 
 function YubiKeyConfigTable(props: {
   slots: Accessor<Slot[]>;

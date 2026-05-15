@@ -3,13 +3,13 @@ import { pageIndex } from '#/data/navigator';
 import { setDark } from '#/data/shared-state';
 import { Router } from '#/views/components/router';
 import { Toolbar } from '#/views/components/toolbar';
-import { DatabaseIndexPage } from '#/views/pages/database-index-page';
-import { EntryPage } from '#/views/pages/entry-page';
-import { PinentryPage } from '#/views/pages/pinentry-page';
-import { PwGeneratorPage } from '#/views/pages/pw-generator-page';
-import { SettingsPage } from '#/views/pages/settings-page';
-import { TouchPage } from '#/views/pages/touch-page';
-import { WelcomePage } from '#/views/pages/welcome-page';
+import { DatabaseIndexPage } from '#/views/pages/database-index';
+import { EntryPage } from '#/views/pages/entry';
+import { PinentryPage } from '#/views/pages/pinentry';
+import { PwGeneratorPage } from '#/views/pages/pw-generator';
+import { SettingsPage } from '#/views/pages/settings';
+import { TouchPage } from '#/views/pages/touch';
+import { WelcomePage } from '#/views/pages/welcome';
 
 function App(props: { window: Window }) {
   appearance.onColorSchemeChange.connect(() =>

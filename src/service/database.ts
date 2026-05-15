@@ -13,20 +13,20 @@ import {
 } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
 import type { YubiKey } from '#/schemas/yubikey-schema';
-import { updateSettings } from '#/service/config-service';
+import { updateSettings } from '#/service/config';
 import {
   addDatabase,
   getMatchingKey,
   loadDatabase,
   saveDatabase,
   unlockDatabase
-} from '#/service/database-service';
-import { decrypt } from '#/service/yubikey-service';
+} from '#/service/lib/database/database-client';
+import { decrypt } from '#/service/yubikey';
 import { showError } from '#/utils/message-box-util';
 import { showQrCodeWindow } from '#/utils/qr-code-util';
-import { requestEntry } from '#/views/pages/entry-page';
-import { requestPin } from '#/views/pages/pinentry-page';
-import { requestTouch } from '#/views/pages/touch-page';
+import { requestEntry } from '#/views/pages/entry';
+import { requestPin } from '#/views/pages/pinentry';
+import { requestTouch } from '#/views/pages/touch';
 import { getMainWindow } from '#/windows/main-window';
 
 async function openDatabase(window: Window, path: string) {

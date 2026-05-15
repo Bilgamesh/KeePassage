@@ -3,7 +3,7 @@ import { createSignal } from 'solid-js';
 import yubiKeyImage from '#/assets/img/yubikey.png';
 import { TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
-import { generate, getSlots, type Slot } from '#/service/yubikey-service';
+import { generate, getSlots, type Slot } from '#/service/yubikey';
 import { Image } from '#/views/components/image';
 import { Router } from '#/views/components/router';
 import { YubiKeyConfigTable } from '#/views/components/yubikey-config-table';

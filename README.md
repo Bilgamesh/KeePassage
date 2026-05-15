@@ -48,4 +48,4 @@ npm run release
 
 # License
 
-This project is licensed under the terms of [GPL v3.0 license](./LICENSE), except for UI [renderer](./src/renderer/) and [YubiKey libs](./src/service/lib/) which are licensed under the terms of [MIT license](./src/renderer/LICENSE).
+This project is licensed under the terms of [GPL v3.0 license](./LICENSE), except for UI [renderer](./src/renderer/) and [YubiKey libs](./src/service/lib/yubikey) which are licensed under the terms of [MIT license](./src/renderer/LICENSE).
