@@ -117,7 +117,7 @@ async function encrypt(
   return resp.body;
 }
 
-function generate(options: {
+function generateCertificate(options: {
   slot: { id: number; objectId: number };
   pin: string;
 }) {
@@ -137,6 +137,29 @@ function generate(options: {
           }
         });
         await client.writeCertificate(options.slot.objectId, certDer);
+        resolve();
+      },
+      (error) => reject(error)
+    )
+  );
+}
+
+function deleteCertificate(options: {
+  slot: { id: number; objectId: number };
+  pin: string;
+}) {
+  return new Promise<void>((resolve, reject) =>
+    withYubiKeyClient(
+      async (client) => {
+        await client.selectPiv();
+        await client.verifyPin(options.pin);
+        const key = await client.getProtectedMgmtKey();
+        await client.authenticateMgmKey(key);
+        await client.generateKey(options.slot.id);
+        await client.writeCertificate(
+          options.slot.objectId,
+          new Uint8Array([])
+        );
         resolve();
       },
       (error) => reject(error)
@@ -335,6 +358,7 @@ export {
   decrypt,
   monitorYubiKeys,
   getSlots,
-  generate,
+  generateCertificate,
+  deleteCertificate,
   type Slot
 };

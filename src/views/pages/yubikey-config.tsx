@@ -1,9 +1,14 @@
-import { AttributedText, type Window } from 'gui';
+import { AttributedText, MessageBox, type Window } from 'gui';
 import { createSignal } from 'solid-js';
 import yubiKeyImage from '#/assets/img/yubikey.png';
 import { TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
-import { generate, getSlots, type Slot } from '#/service/yubikey';
+import {
+  deleteCertificate,
+  generateCertificate,
+  getSlots,
+  type Slot
+} from '#/service/yubikey';
 import { showError } from '#/utils/message-box';
 import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
@@ -79,6 +84,38 @@ function YubiKeyConfigPage(props: { mainWindow: Window; window: Window }) {
                 'margin-bottom': 10
               }}
             >
+              <button
+                enabled={typeof selectedSlot()?.publicKey === 'string'}
+                onClick={async () => {
+                  const slot = selectedSlot()!;
+                  const msgBox = MessageBox.create();
+                  msgBox.setTitle(t('areYouSure'));
+                  msgBox.setType('warning');
+                  msgBox.setText(
+                    t('areYouSureDeleteCert').replace('{}', slot.name)
+                  );
+                  msgBox.addButton(t('cancel'), -1);
+                  msgBox.addButton(t('yesForSure'), 1);
+                  if (msgBox.runForWindow(props.window) === -1) return;
+                  const pin = await requestPin(
+                    navigator,
+                    slot.serial,
+                    null,
+                    `${t('delete')} ${slot.name}`
+                  );
+                  navigator.pop();
+                  if (pin)
+                    deleteCertificate({ slot, pin }).catch((err) =>
+                      showError(props.window, err)
+                    );
+                }}
+                style={{
+                  height: 30,
+                  width: 100,
+                  'margin-left': 10
+                }}
+                title={t('delete')}
+              />
               <Expand />
               <button
                 enabled={selectedSlot() !== null}
@@ -98,7 +135,7 @@ function YubiKeyConfigPage(props: { mainWindow: Window; window: Window }) {
                     });
                   });
                   try {
-                    await generate({ slot: selectedSlot()!, pin });
+                    await generateCertificate({ slot: selectedSlot()!, pin });
                   } catch (err) {
                     if (!signal.aborted) showError(props.window, err);
                   } finally {

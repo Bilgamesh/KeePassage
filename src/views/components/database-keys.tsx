@@ -1,10 +1,15 @@
+import type { Window } from 'gui';
 import type { Accessor, Setter } from 'solid-js';
 import { t } from '#/data/i18n';
+import { render } from '#/renderer';
 import type { YubiKey } from '#/schemas/yubikey-schema';
-import { open } from '#/utils/url';
 import { KeysTable } from '#/views/components/keys-table';
+import { YubiKeyConfigPage } from '#/views/pages/yubikey-config';
+import { getYubiKeyConfigWindow } from '#/views/windows/yubikey-config';
 
 function DatabaseKeys(props: {
+  window: Window;
+  mainWindow: Window;
   yubiKeys: Accessor<YubiKey[]>;
   setYubiKeys: Setter<YubiKey[]>;
 }) {
@@ -27,10 +32,18 @@ function DatabaseKeys(props: {
           color="#0000FF"
           cursor="hand"
           onMouseDown={() => {
-            open('https://github.com/str4d/age-plugin-yubikey#configuration');
+            const win = getYubiKeyConfigWindow();
+            render(
+              () => (
+                <YubiKeyConfigPage mainWindow={props.mainWindow} window={win} />
+              ),
+              win
+            );
+            props.window.close();
+            win.activate();
           }}
           style={{ 'margin-left': 10, 'margin-right': 10 }}
-          text="https://github.com/str4d/age-plugin-yubikey#configuration"
+          text={t('configureYubikey')}
         />
         <container style={{ flex: 1 }} />
       </container>

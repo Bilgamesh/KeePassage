@@ -2,6 +2,7 @@ import { SimpleTableModel, type TableColumnOptions } from 'gui';
 import { type Accessor, createEffect, type Setter } from 'solid-js';
 import { t } from '#/data/i18n';
 import type { YubiKey } from '#/schemas/yubikey-schema';
+import { RETIRED_SLOTS } from '#/service/lib/yubikey/yubikey-client';
 
 function KeysTable(props: {
   yubiKeys: Accessor<YubiKey[]>;
@@ -18,7 +19,7 @@ function KeysTable(props: {
       keys.push(`${yubiKey.publicKey}`);
       dbTable.addRow([
         `${yubiKey.serial}`,
-        `${yubiKey.slot}`,
+        `${RETIRED_SLOTS.find(({ number }) => number === yubiKey.slot)?.name}`,
         yubiKey.publicKey,
         yubiKey.paired
       ]);

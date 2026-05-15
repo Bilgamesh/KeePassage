@@ -69,7 +69,12 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                 setDbName={setDbName}
                 setDescription={setDescription}
               />
-              <DatabaseKeys setYubiKeys={setYubiKeys} yubiKeys={yubiKeys} />
+              <DatabaseKeys
+                mainWindow={props.mainWindow}
+                setYubiKeys={setYubiKeys}
+                window={props.window}
+                yubiKeys={yubiKeys}
+              />
             </Router>
           </group>
           <container
