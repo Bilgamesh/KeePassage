@@ -81,6 +81,10 @@ function Toolbar(props: { window: Window }) {
     }
   });
 
+  navigator.subscribe(() =>
+    navigator.isCurrentPage((p) => p.DB_INDEX) ? searchBar.focus() : null
+  );
+
   return (
     <>
       <container
