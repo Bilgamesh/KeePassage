@@ -13,9 +13,7 @@ abstract class View {
   parent: View | null = null;
   name: string = 'view';
 
-  protected createElement(): GuiView {
-    throw new Error(`Cannot create node "${this.name}" directly.`);
-  }
+  protected abstract createElement(): GuiView;
 
   addChild(child: View, _anchor: View | null | undefined): void {
     throw new Error(
