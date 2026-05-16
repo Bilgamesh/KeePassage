@@ -7,7 +7,7 @@ import {
 } from 'gui';
 import type { Style } from '#/renderer/types';
 
-class View {
+abstract class View {
   node: GuiView = Container.create();
   protected children: View[] = [];
   parent: View | null = null;
