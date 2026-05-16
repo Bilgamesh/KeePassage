@@ -12,7 +12,8 @@ import { AppIcon } from '#/views/components/app-icon';
 import { MainMenuBar } from '#/views/components/main-menu-bar';
 import { TrayMenu } from '#/views/components/tray-menu';
 
-type ToggleableWindow = Window & { toggleVisibility: (show: boolean) => void };
+type Toggleable = { toggleVisibility: (show: boolean) => void };
+type ToggleableWindow = Window & Toggleable;
 
 let tray: Tray | null = null;
 let win: ToggleableWindow;

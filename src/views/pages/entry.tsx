@@ -16,6 +16,10 @@ import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
 import { getGeneratedPassword } from '#/views/pages/pw-generator';
 
+type BlankEntry = Omit<Entry, 'encryptedPayloads'>;
+type WithPassword = { password: string };
+type Form = BlankEntry & WithPassword;
+
 let controller: AbortController;
 const [passwordVisible, setPasswordVisible] = createSignal(false);
 const [title, setTitle] = createSignal('');
@@ -40,9 +44,7 @@ function getRawEntry() {
   };
 }
 
-function restoreRawEntry(
-  form: Omit<Entry, 'encryptedPayloads'> & { password: string }
-) {
+function restoreRawEntry(form: Form) {
   setTitle(form.title);
   setUsername(form.username);
   setPassword(form.password);

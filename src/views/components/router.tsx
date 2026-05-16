@@ -10,30 +10,29 @@ import {
 } from 'solid-js';
 import type { View as ViewWrapper } from '#/renderer/elements/view';
 
-type cleanup = (() => void) | null;
-type historyItem = {
+type Cleanup = (() => void) | null;
+type HistoryItem = {
   index: number;
   id: UUID;
-  cleanup: cleanup;
+  cleanup: Cleanup;
 };
-type pageSelector<T extends Record<string, number>> = (
+type IndexRecord = Record<string, number>;
+type PageSelector<T extends IndexRecord> = (
   pages: T
-) => number | Omit<historyItem, 'id'>;
-type pageChecker<T extends Record<string, number>> = (
-  pages: T
-) => number | number[];
+) => number | Omit<HistoryItem, 'id'>;
+type PageChecker<T extends IndexRecord> = (pages: T) => number | number[];
 
-class Navigator<T extends Record<string, number>> {
+class Navigator<T extends IndexRecord> {
   public id: string;
-  private history: Accessor<historyItem[]>;
-  private setHistory: Setter<historyItem[]>;
+  private history: Accessor<HistoryItem[]>;
+  private setHistory: Setter<HistoryItem[]>;
   public pageIndex: Accessor<number>;
   private setPageIndex: Setter<number>;
   private indexes: T;
 
   constructor(indexes: T) {
     const [pageIndex, setPageIndex] = createSignal(0);
-    const [history, setHistory] = createSignal<historyItem[]>([
+    const [history, setHistory] = createSignal<HistoryItem[]>([
       {
         index: pageIndex(),
         id: randomUUID(),
@@ -48,10 +47,10 @@ class Navigator<T extends Record<string, number>> {
     this.indexes = indexes;
   }
 
-  push(pageSelector: pageSelector<T>) {
-    const input = pageSelector(this.indexes);
+  push(PageSelector: PageSelector<T>) {
+    const input = PageSelector(this.indexes);
     const { index, cleanup } =
-      typeof input === 'number' ? { index: input } : (input as historyItem);
+      typeof input === 'number' ? { index: input } : input;
     this.setHistory((history) => [
       ...history,
       { index, id: randomUUID(), cleanup: cleanup ?? null }
@@ -59,7 +58,7 @@ class Navigator<T extends Record<string, number>> {
     this.setPageIndex(index);
   }
 
-  replace(options: { from?: pageChecker<T>; to: pageSelector<T> }): void {
+  replace(options: { from?: PageChecker<T>; to: PageSelector<T> }): void {
     const input = options.to(this.indexes);
     const from = options.from ? options.from(this.indexes) : null;
 
@@ -74,7 +73,7 @@ class Navigator<T extends Record<string, number>> {
     if (from !== null) return;
 
     const { index, cleanup } =
-      typeof input === 'number' ? { index: input } : (input as historyItem);
+      typeof input === 'number' ? { index: input } : input;
 
     for (const item of this.history().reverse())
       if (item.cleanup) item.cleanup();
@@ -96,14 +95,14 @@ class Navigator<T extends Record<string, number>> {
     createEffect(on(this.pageIndex, (value) => callback(value)));
   }
 
-  isCurrentPage(pageChecker: pageChecker<T>) {
-    const index = pageChecker(this.indexes);
+  isCurrentPage(PageChecker: PageChecker<T>) {
+    const index = PageChecker(this.indexes);
     if (typeof index === 'number') return this.pageIndex() === index;
     return index.includes(this.pageIndex());
   }
 }
 
-function Router<T extends Record<string, number>>(props: {
+function Router<T extends IndexRecord>(props: {
   children: View[];
   navigator: Navigator<T>;
 }): View[] {

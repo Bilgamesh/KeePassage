@@ -95,6 +95,8 @@ const RETIRED_SLOTS = [
   { index: 19, number: 20, objectId: 0x005fc120, id: 0x95, name: 'R20' }
 ] as const;
 
+type RetiredSlot = (typeof RETIRED_SLOTS)[number];
+
 const DEFAULT_MANAGEMENT_KEY = new Uint8Array([
   0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05,
   0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08
@@ -523,4 +525,4 @@ function withYubiKeyClient(
     .start();
 }
 
-export { RETIRED_SLOTS, withYubiKeyClient, YubiKeyClient };
+export { RETIRED_SLOTS, type RetiredSlot, withYubiKeyClient, YubiKeyClient };

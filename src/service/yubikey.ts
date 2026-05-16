@@ -12,16 +12,18 @@ import type {
 } from '#/schemas/yubikey-schema';
 import {
   RETIRED_SLOTS,
+  type RetiredSlot,
   withYubiKeyClient
 } from '#/service/lib/yubikey/yubikey-client';
 import { YubiKeyIdentity } from '#/service/lib/yubikey/yubikey-identity';
 import { YubiKeyRecipient } from '#/service/lib/yubikey/yubikey-recipient';
 import { createListeners } from '#/utils/listen';
 
-type Slot = (typeof RETIRED_SLOTS)[number] & {
+type Discovered = {
   publicKey: string | null;
   serial: number;
 };
+type Slot = RetiredSlot & Discovered;
 
 async function detectYubiKey(options?: {
   timeoutMs?: number | undefined;
