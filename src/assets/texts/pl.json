@@ -28,6 +28,7 @@
   "cancel": "Anuluj",
   "passwordGenerator": "Generator haseł",
   "previewPassword": "Pokaż hasło",
+  "previewSecret": "Pokaż sekret",
   "generateNew": "Wygeneruj nowe hasło",
   "copyToClipboard": "Skopiuj hasło do schowka",
   "length": "Długość",
@@ -115,5 +116,7 @@
   "copy": "Kopiuj",
   "cut": "Wytnij",
   "paste": "Wklej",
-  "select_all": "Zaznacz wszystko"
+  "select_all": "Zaznacz wszystko",
+  "addNewSecret": "Dodaj nowy sekret",
+  "name": "Nazwa"
 }

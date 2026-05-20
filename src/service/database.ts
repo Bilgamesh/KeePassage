@@ -142,7 +142,7 @@ async function saveNewDatabase(options: {
   }
 }
 
-async function getPassword(options: { entry: Entry; window: Window }) {
+async function getDecryptedPayload(options: { entry: Entry; window: Window }) {
   const { entry, window } = options;
   const path = selectedDbPath();
   const dbFile = await loadDatabase(path);
@@ -167,14 +167,14 @@ async function getPassword(options: { entry: Entry; window: Window }) {
   }
   try {
     const signal = requestTouch(navigator);
-    const { password } = await decrypt(
+    const payload = await decrypt(
       entry.encryptedPayloads[key.index]!,
       pin,
       key.publicKey,
       key.slot,
       { signal }
     );
-    return password;
+    return payload;
   } catch (err) {
     console.error(`Failed to decrypt password: ${err}`);
     if (!(err instanceof DOMException) || err.name !== 'AbortError') {
@@ -210,15 +210,15 @@ async function editEntry(window: Window) {
     });
     return;
   }
-  const password = await getPassword({ entry, window });
-  if (password === null) {
+  const payload = await getDecryptedPayload({ entry, window });
+  if (payload === null) {
     navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
     return;
   }
-  const newEntry = await requestEntry(password, entry);
+  const newEntry = await requestEntry(payload, entry);
   navigator.replace({
     from: (pages) => pages.ENTRY,
     to: (pages) => pages.DB_INDEX
@@ -274,13 +274,13 @@ function copyUsername() {
 async function copyPassword(window: Window) {
   const entry = selectedEntry();
   if (entry) {
-    const password = await getPassword({ entry, window });
+    const payload = await getDecryptedPayload({ entry, window });
     navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
-    if (password) {
-      Clipboard.get().setText(password);
+    if (payload) {
+      Clipboard.get().setText(payload.password);
       triggerClipboardCleanup();
     }
   }
@@ -289,13 +289,13 @@ async function copyPassword(window: Window) {
 async function showQrCode(window: Window) {
   const entry = selectedEntry();
   if (entry) {
-    const password = await getPassword({ entry, window });
+    const payload = await getDecryptedPayload({ entry, window });
     navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
-    if (password) {
-      const code = await qrCodeToString(password);
+    if (payload) {
+      const code = await qrCodeToString(payload.password);
       const window = QrCodeWindow({ title: `${entry.title} - Password` });
       render(() => QRCode({ code, window }), window);
       window.fitSize();
@@ -365,7 +365,7 @@ export {
   copyUsername,
   deleteEntry,
   editEntry,
-  getPassword,
+  getDecryptedPayload,
   openDatabase,
   refreshDbLock,
   saveNewDatabase,

@@ -28,6 +28,7 @@
   "cancel": "Cancel",
   "passwordGenerator": "Password generator",
   "previewPassword": "Preview password",
+  "previewSecret": "Preview secret",
   "generateNew": "Generate new password",
   "copyToClipboard": "Copy password to clipboard",
   "length": "Length",
@@ -115,5 +116,7 @@
   "copy": "Copy",
   "cut": "Cut",
   "paste": "Paste",
-  "select_all": "Select all"
+  "select_all": "Select all",
+  "addNewSecret": "Add new secret",
+  "name": "Name"
 }

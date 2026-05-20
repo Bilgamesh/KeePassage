@@ -6,6 +6,8 @@ import { initConfigFile } from '#/service/config';
 import { SingleInstance } from '#/utils/single-instance';
 import { MainWindow } from '#/views/windows/main';
 
+type YodeProcess = typeof process & { versions: { yode?: string } };
+
 async function main() {
   app.setName(APP_NAME);
   app.setID(APP_ID);
@@ -18,7 +20,7 @@ async function main() {
 
   window.activate();
 
-  if (!(process as { versions: { yode?: string } }).versions.yode) {
+  if (!(process as YodeProcess).versions.yode) {
     MessageLoop.run();
     process.exit(0);
   }

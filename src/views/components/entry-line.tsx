@@ -1,37 +1,62 @@
-import type { View } from 'gui';
-import type { Accessor } from 'solid-js';
+import type { Entry, KeyEvent, View } from 'gui';
+import { type Accessor, Show } from 'solid-js';
 import { SMALL_ENTRY_STYLE } from '#/data/constants';
 
 function EntryLine(props: {
-  title: string;
+  title: Accessor<string>;
   titleWidth?: number;
   text?: Accessor<string>;
   type?: 'password' | 'normal';
   onTextChange?: (text: string) => void;
   children?: View[];
+  editableTitle?: boolean;
+  onTitleChange?: (text: string) => void;
+  onTitleSubmit?: () => void;
+  onTitleClick?: () => void;
 }) {
-  if (!props.type) {
-    props.type = 'normal';
-  }
+  if (!props.type) props.type = 'normal';
+
+  const silenceKeyDown = (entry: Entry, ev: KeyEvent) => {
+    if (ev.key === 'Enter') return true;
+    if (ev.key === 'Backspace' && entry.getText() === '') return true;
+    return false;
+  };
+
   return (
     <container style={{ flexDirection: 'row', 'margin-top': 10 }}>
-      <label
-        align="end"
-        style={{
-          width: props.titleWidth || (process.platform === 'linux' ? 90 : 70)
-        }}
-        text={props.title}
-      />
+      <Show when={props.editableTitle}>
+        <entry
+          onKeyDown={(self, ev) => {
+            if (ev.key === 'Enter' && props.onTitleSubmit)
+              props.onTitleSubmit();
+            return silenceKeyDown(self, ev);
+          }}
+          onTextChange={(entry) => {
+            if (props.onTitleChange) props.onTitleChange(entry.getText());
+          }}
+          style={{
+            width: props.titleWidth || (process.platform === 'linux' ? 90 : 70)
+          }}
+          text={props.title()}
+        />
+      </Show>
+      <Show when={!props.editableTitle}>
+        <label
+          align="end"
+          cursor={props.onTitleClick ? 'hand' : 'default'}
+          onMouseUp={() => {
+            if (props.onTitleClick) props.onTitleClick();
+          }}
+          style={{
+            width: props.titleWidth || (process.platform === 'linux' ? 90 : 70)
+          }}
+          text={
+            props.title().endsWith(':') ? props.title() : `${props.title()}:`
+          }
+        />
+      </Show>
       <entry
-        onKeyDown={(self, ev) => {
-          if (ev.key === 'Enter') {
-            return true;
-          }
-          if (ev.key === 'Backspace' && self.getText() === '') {
-            return true;
-          }
-          return false;
-        }}
+        onKeyDown={silenceKeyDown}
         onTextChange={(entry) => {
           if (props.onTextChange) {
             props.onTextChange(entry.getText());
@@ -47,15 +72,7 @@ function EntryLine(props: {
         visible={props.type === 'normal'}
       />
       <password
-        onKeyDown={(self, ev) => {
-          if (ev.key === 'Enter') {
-            return true;
-          }
-          if (ev.key === 'Backspace' && self.getText() === '') {
-            return true;
-          }
-          return false;
-        }}
+        onKeyDown={silenceKeyDown}
         onTextChange={(entry) => {
           if (props.onTextChange) {
             props.onTextChange(entry.getText());

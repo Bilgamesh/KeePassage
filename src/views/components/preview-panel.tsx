@@ -9,7 +9,11 @@ import { TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
 import { appSettings, selectedEntry } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
-import { copyPassword, getPassword, showQrCode } from '#/service/database';
+import {
+  copyPassword,
+  getDecryptedPayload,
+  showQrCode
+} from '#/service/database';
 import { IconButton } from '#/views/components/icon-button';
 import { PreviewLine } from '#/views/components/preview-line';
 
@@ -21,12 +25,12 @@ function PreviewPanel(props: {
   const [password, setPassword] = createSignal<string | null>(null);
 
   async function showPassword() {
-    const pw = await getPassword(props);
+    const payload = await getDecryptedPayload(props);
     navigator.replace({
       from: (pages) => [pages.TOUCH, pages.PINTENTRY],
       to: (pages) => pages.DB_INDEX
     });
-    setPassword(pw);
+    setPassword(payload?.password ?? null);
   }
 
   createEffect(() => {

@@ -1,9 +1,15 @@
 import { z } from 'zod';
 import type { YubiKey } from '#/schemas/yubikey-schema';
 
-const Payload = z.object({
-  password: z.string()
+const CustomSecret = z.object({
+  name: z.string(),
+  value: z.string()
 });
+const Payload = z.object({
+  password: z.string(),
+  customSecrets: z.array(CustomSecret).optional()
+});
+
 type Payload = z.infer<typeof Payload>;
 
 type Entry = {
@@ -14,6 +20,11 @@ type Entry = {
   tags: string;
   notes: string;
   modified: number;
+};
+
+type CustomSecret = {
+  name: string;
+  value: string;
 };
 
 type DbIndex = {
@@ -37,4 +48,4 @@ const DbFile = z.object({
 });
 type DbFile = z.infer<typeof DbFile>;
 
-export { DbFile, Payload, type DbIndex, type Entry };
+export { DbFile, Payload, type DbIndex, type Entry, type CustomSecret };
