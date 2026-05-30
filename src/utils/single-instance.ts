@@ -32,37 +32,26 @@ class SingleInstance extends EventEmitter {
         try {
           unlinkSync(this.socketPath);
         } catch (err) {
-          if ((err as { code?: string }).code !== 'ENOENT') {
-            throw err;
-          }
+          if ((err as { code?: string }).code !== 'ENOENT') throw err;
         }
-        this.server = createServer((connection) => {
-          connection.on('data', () => {
-            this.emit('connection-attempt');
-          });
-        });
+        this.server = createServer((connection) =>
+          connection.on('data', () => this.emit('connection-attempt'))
+        );
         resolve(true);
         this.server.listen(this.socketPath);
-        this.server.on('error', (err) => {
-          reject(err);
-        });
+        this.server.on('error', (err) => reject(err));
       });
     });
   }
 
   unlock() {
     return new Promise((resolve, reject) => {
-      if (this.server) {
+      if (this.server)
         this.server.close((err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(true);
-          }
+          if (err) reject(err);
+          else resolve(true);
         });
-      } else {
-        resolve(true);
-      }
+      else resolve(true);
     });
   }
 }

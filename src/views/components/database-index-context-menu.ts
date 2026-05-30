@@ -13,7 +13,7 @@ import {
 } from '#/service/database';
 
 function DatabaseIndexContextMenu(props: { window: Window }) {
-  if (!selectedEntry()) {
+  if (!selectedEntry())
     return Menu.create([
       {
         label: t('newEntry...'),
@@ -22,7 +22,7 @@ function DatabaseIndexContextMenu(props: { window: Window }) {
         }
       }
     ] as MenuItemOptions[]);
-  } else {
+  else
     return Menu.create([
       {
         label: t('copyUsername'),
@@ -68,7 +68,6 @@ function DatabaseIndexContextMenu(props: { window: Window }) {
         }
       }
     ] as MenuItemOptions[]);
-  }
 }
 
 export { DatabaseIndexContextMenu };

@@ -33,9 +33,7 @@ function NumericEntry(props: {
     on(
       value,
       (value) => {
-        if (props.onValueChange) {
-          props.onValueChange(value);
-        }
+        if (props.onValueChange) props.onValueChange(value);
       },
       { defer: true }
     )
@@ -71,12 +69,8 @@ function NumericEntry(props: {
     <>
       <entry
         onKeyDown={(_entry, ev) => {
-          if (ev.key === 'ArrowUp') {
-            increment();
-          }
-          if (ev.key === 'ArrowDown') {
-            decrement();
-          }
+          if (ev.key === 'ArrowUp') increment();
+          if (ev.key === 'ArrowDown') decrement();
           return !ALLOWED_KEYS.includes(ev.key);
         }}
         onTextChange={(entry) => {
@@ -86,19 +80,17 @@ function NumericEntry(props: {
             entry.setText('');
             return;
           }
-          if (Number.isNaN(Number(text))) {
+          if (Number.isNaN(Number(text)))
             entry.setText(
               `${Math.max(Math.min(value(), props.maxValue || Infinity), props.minValue || -Infinity)}`
             );
-          } else {
+          else {
             const newValue = Math.max(
               Math.min(Number(text), props.maxValue || Infinity),
               props.minValue || -Infinity
             );
             setValue(newValue);
-            if (entry.getText() !== `${newValue}`) {
-              entry.setText(`${value()}`);
-            }
+            if (entry.getText() !== `${newValue}`) entry.setText(`${value()}`);
           }
         }}
         ref={({ node }) => {

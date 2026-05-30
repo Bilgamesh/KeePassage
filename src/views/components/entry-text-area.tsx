@@ -21,25 +21,19 @@ function EntryTextArea(props: {
       />
       <textedit
         onKeyDown={(self, ev) => {
-          if (ev.key === 'Backspace' && self.getText() === '') {
-            return true;
-          }
+          if (ev.key === 'Backspace' && self.getText() === '') return true;
           return false;
         }}
         onMouseDown={(textEdit, ev) => {
-          if (ev.button === 2 && textEdit.hasFocus()) {
+          if (ev.button === 2 && textEdit.hasFocus())
             TextContextMenu({
               editable: true,
               textEdit
             }).popup();
-          } else {
-            textEdit.focus();
-          }
+          else textEdit.focus();
         }}
         onTextChange={(textedit) => {
-          if (props.onTextChange) {
-            props.onTextChange(textedit.getText());
-          }
+          if (props.onTextChange) props.onTextChange(textedit.getText());
         }}
         style={{ flex: 1, 'margin-left': 10 }}
         text={props.text ? props.text() : ''}

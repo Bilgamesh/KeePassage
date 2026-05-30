@@ -13,11 +13,8 @@ function TrayMenu(props: { win: ToggleableWindow }) {
     {
       label: t('toggleWindow'),
       onClick: () => {
-        if (props.win.isMinimized()) {
-          props.win.toggleVisibility(true);
-        } else {
-          props.win.toggleVisibility(false);
-        }
+        if (props.win.isMinimized()) props.win.toggleVisibility(true);
+        else props.win.toggleVisibility(false);
       }
     },
     {

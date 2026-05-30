@@ -64,9 +64,8 @@ async function requestEntry(password?: string, existingEntry?: Entry) {
         controller.abort('Page cleanup');
     }
   }));
-  if (existingEntry && typeof password === 'string') {
+  if (existingEntry && typeof password === 'string')
     restoreRawEntry({ ...existingEntry, password });
-  }
   try {
     const entry = await entryListeners.waitForValue({
       signal: controller.signal
@@ -91,9 +90,7 @@ function EntryPage() {
 
   async function onEntrySubmit() {
     const encryptedPayloads: string[] = [];
-    if (!unlockedDbIndex()) {
-      throw new Error('No unlocked DB Index');
-    }
+    if (!unlockedDbIndex()) throw new Error('No unlocked DB Index');
     for (const key of unlockedDbIndex()?.keys ?? []) {
       const encryptedPayload = await encrypt(
         { password: password() },

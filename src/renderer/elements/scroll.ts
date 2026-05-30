@@ -25,16 +25,14 @@ class Scroll extends View {
   }
 
   override addChild(child: View, _anchor: View | null | undefined): void {
-    if (child.parent !== null) {
+    if (child.parent !== null)
       throw new Error(
         `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`
       );
-    }
-    if (this.children.length > 0) {
+    if (this.children.length > 0)
       throw new Error(
         `Cannot add child node "${child.name}" under parent node "${this.name}". Parent node ${this.name} cannot have more than 1 child node.`
       );
-    }
     this.node.setContentView(child.node);
     this.children[0] = child;
     child.parent = this;

@@ -13,9 +13,7 @@ function IconButton(props: {
   onClick?: (self: Button) => void;
   visible?: boolean;
 }) {
-  if (props.enabled === undefined) {
-    props.enabled = true;
-  }
+  if (props.enabled === undefined) props.enabled = true;
 
   const image = () => {
     const image = Image.createFromPath(props.src).resize(
@@ -25,15 +23,9 @@ function IconButton(props: {
       },
       4
     );
-    if (!props.enabled) {
-      return image.tint(DISABLED_COLOR);
-    }
-    if (process.platform === 'win32') {
-      return image;
-    }
-    if (isDark()) {
-      return image.tint(DARK_MODE_FONT_COLOR);
-    }
+    if (!props.enabled) return image.tint(DISABLED_COLOR);
+    if (process.platform === 'win32') return image;
+    if (isDark()) return image.tint(DARK_MODE_FONT_COLOR);
     return image;
   };
 

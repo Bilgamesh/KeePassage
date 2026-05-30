@@ -21,7 +21,7 @@ function requestTouch<T extends NavigationIndex>(navigator: Navigator<T>) {
   // We assume that if there was no error within the initial 50ms, PIN must be correct and we prompt the user to tap the key.
   setTimeout(50).then(() => {
     const stillOnSamePage = navigator.isCurrentPage(() => previousPageId);
-    if (!newAbortController.signal.aborted && stillOnSamePage) {
+    if (!newAbortController.signal.aborted && stillOnSamePage)
       navigator.push((pages) => ({
         index: pages.TOUCH,
         cleanup: () => {
@@ -29,7 +29,6 @@ function requestTouch<T extends NavigationIndex>(navigator: Navigator<T>) {
             newAbortController.abort('Page cleanup');
         }
       }));
-    }
   });
   controller = newAbortController;
   return controller.signal;

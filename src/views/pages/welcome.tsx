@@ -31,9 +31,7 @@ function WelcomePage(props: { window: Window }) {
 
   createEffect(() => {
     const table = SimpleTableModel.create(1);
-    for (const db of recent()) {
-      table.addRow([db]);
-    }
+    for (const db of recent()) table.addRow([db]);
     setDbTable(table);
   });
 

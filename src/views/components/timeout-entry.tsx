@@ -38,9 +38,7 @@ function TimeoutEntry(props: {
     on(
       seconds,
       (value) => {
-        if (props.onValueChange) {
-          props.onValueChange(value);
-        }
+        if (props.onValueChange) props.onValueChange(value);
       },
       { defer: true }
     )
@@ -68,9 +66,7 @@ function TimeoutEntry(props: {
         <checkbox
           checked={props.checked || false}
           onClick={(checkbox) => {
-            if (props.onClick) {
-              props.onClick(checkbox.isChecked());
-            }
+            if (props.onClick) props.onClick(checkbox.isChecked());
           }}
           title={props.title}
         />
@@ -78,12 +74,8 @@ function TimeoutEntry(props: {
       <entry
         enabled={props.checked || false}
         onKeyDown={(_entry, ev) => {
-          if (ev.key === 'ArrowUp') {
-            increment();
-          }
-          if (ev.key === 'ArrowDown') {
-            decrement();
-          }
+          if (ev.key === 'ArrowUp') increment();
+          if (ev.key === 'ArrowDown') decrement();
           return !ALLOWED_KEYS.includes(ev.key);
         }}
         onTextChange={(entry) => {
@@ -91,9 +83,7 @@ function TimeoutEntry(props: {
           if (/^\d* sec$/g.test(text)) {
             const number = Number(text.replace('sec', '').trim());
             setSeconds(number);
-          } else {
-            entry.setText(`${seconds()} sec`);
-          }
+          } else entry.setText(`${seconds()} sec`);
         }}
         ref={({ node }) => {
           entry = node;

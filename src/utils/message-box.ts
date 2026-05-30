@@ -8,18 +8,15 @@ function showError(
   const msgBox = MessageBox.create();
   msgBox.setType('error');
   msgBox.setTitle('Error');
-  if (error instanceof Error) {
+
+  if (error instanceof Error)
     msgBox.setText(`${error.message}\n${error.cause}`);
-  } else if (typeof error === 'string') {
-    msgBox.setText(error);
-  } else if (typeof (error as { error: string })?.error === 'string') {
+  else if (typeof error === 'string') msgBox.setText(error);
+  else if (typeof (error as { error: string })?.error === 'string')
     msgBox.setText((error as { error: string }).error);
-  } else {
-    msgBox.setText('Unknown error');
-  }
-  if (options?.title) {
-    msgBox.setTitle(options.title);
-  }
+  else msgBox.setText('Unknown error');
+
+  if (options?.title) msgBox.setTitle(options.title);
   msgBox.runForWindow(window);
 }
 

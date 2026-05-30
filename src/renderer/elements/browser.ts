@@ -25,13 +25,11 @@ class Browser extends View {
 
   private updateZoom() {
     // macOS supports disabling zoom out of the box via `node.setMagnifiable(boolean)`. For other OSes, run custom JS to disable zoom
-    if (process.platform !== 'darwin') {
+    if (process.platform !== 'darwin')
       this.node.onChangeLoading.connect(() => {
-        if (!this.magnifiable) {
+        if (!this.magnifiable)
           this.node.executeJavaScript(this.disableZoomScript, () => {});
-        }
       });
-    }
   }
 
   override setProperty<T>(name: string, value: T): void {
@@ -40,9 +38,8 @@ class Browser extends View {
         this.node.loadURL(String(value));
         break;
       case 'html':
-        if (typeof value === 'string') {
-          this.node.loadHTML(value, 'about:blank');
-        } else {
+        if (typeof value === 'string') this.node.loadHTML(value, 'about:blank');
+        else {
           const { html, baseUrl } = value as { html: string; baseUrl?: string };
           this.node.loadHTML(html, baseUrl || 'about:blank');
         }
@@ -60,9 +57,7 @@ class Browser extends View {
         break;
       case 'magnifiable':
         this.magnifiable = !!value;
-        if (process.platform === 'darwin') {
-          this.node.setMagnifiable(!!value);
-        }
+        if (process.platform === 'darwin') this.node.setMagnifiable(!!value);
         break;
       case 'onClose':
         this.node.onClose.connect(value);

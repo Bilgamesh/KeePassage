@@ -62,7 +62,7 @@ async function getMatchingKey(dbFile: DbFile, timeoutMs?: number) {
     });
     for (let i = 0; i < dbFile.s.length; i++) {
       const { publicKey: requiredKey } = dbFile.s[i]!;
-      if (requiredKey === publicKey) {
+      if (requiredKey === publicKey)
         return {
           encryptedIndexKey: dbFile.k[i]!,
           serial,
@@ -70,7 +70,6 @@ async function getMatchingKey(dbFile: DbFile, timeoutMs?: number) {
           publicKey,
           index: i
         };
-      }
     }
     return null;
   } catch (err) {

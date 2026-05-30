@@ -54,9 +54,7 @@ function getSystemLocale() {
 
 const t = translator(() => {
   const dict = currentDictionary();
-  if (!dict) {
-    throw new Error('Attempted to translate with `null` dictionary');
-  }
+  if (!dict) throw new Error('Attempted to translate with `null` dictionary');
   return dict.content;
 });
 

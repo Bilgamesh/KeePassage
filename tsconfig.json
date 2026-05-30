@@ -4,7 +4,7 @@
     "@tsconfig/node22/tsconfig.json"
   ],
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDirs": ["./src", "./scripts"],
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "noEmit": true,
@@ -18,5 +18,5 @@
       "#/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "scripts/**/*"]
 }

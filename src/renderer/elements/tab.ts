@@ -17,15 +17,12 @@ class Tab extends View {
   }
 
   override addChild(child: View, _anchor: View | null | undefined): void {
-    if (child.parent !== null) {
+    if (child.parent !== null)
       throw new Error(
         `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`
       );
-    }
     if (this.titles) {
-      if (this.queue.length > 0) {
-        this.addFromQueue();
-      }
+      if (this.queue.length > 0) this.addFromQueue();
       this.children.push(child);
       this.node.addPage(this.titles[this.children.length] || '', child.node);
     } else {
@@ -44,11 +41,10 @@ class Tab extends View {
 
   override removeChild(child: View): void {
     const index = this.children.indexOf(child);
-    if (index === -1) {
+    if (index === -1)
       throw new Error(
         `Cannot remove child node "${child.name}" from parent "${this.name}". Child not found.`
       );
-    }
     this.node.removePage(child.node);
     this.children.splice(index, 1);
     child.parent = null;

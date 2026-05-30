@@ -14,9 +14,7 @@ import { TextContextMenu } from '#/views/components/text-context-menu';
 let timeout: NodeJS.Timeout | null = null;
 
 function preventPwCopy() {
-  if (timeout) {
-    clearTimeout(timeout);
-  }
+  if (timeout) clearTimeout(timeout);
   setCopyingEnabled(false);
   timeout = setTimeout(() => setCopyingEnabled(true), 100);
 }
@@ -68,18 +66,14 @@ function PreviewLine(props: {
             }
           }}
           onMouseDown={(textEdit, ev) => {
-            if (ev.button === 2 && textEdit.hasFocus()) {
+            if (ev.button === 2 && textEdit.hasFocus())
               TextContextMenu({
                 editable: false,
                 textEdit
               }).popup();
-            } else {
-              textEdit.focus();
-            }
+            else textEdit.focus();
           }}
-          onTextChange={(textedit) => {
-            textedit.setText(props.value);
-          }}
+          onTextChange={(textedit) => textedit.setText(props.value)}
         />
       </Show>
       <Show when={process.platform === 'linux' && props.type !== 'url'}>

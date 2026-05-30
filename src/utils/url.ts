@@ -29,9 +29,7 @@ function open(url: string): Promise<void> {
         if (errorText.length > 0) {
           console.error(errorText);
           resolve();
-        } else {
-          resolve();
-        }
+        } else resolve();
       });
     } catch (err) {
       console.error(err);

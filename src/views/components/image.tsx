@@ -12,9 +12,7 @@ function Image(props: {
     const image = props.src
       ? GuiImage.createFromPath(props.src).resize(props.size, props.scale || 1)
       : GuiImage.createEmpty().resize(props.size, props.scale || 1);
-    if (props.tint) {
-      return image.tint(props.tint);
-    }
+    if (props.tint) return image.tint(props.tint);
     return image;
   };
   return <gifplayer image={image()} style={props.style || {}} />;

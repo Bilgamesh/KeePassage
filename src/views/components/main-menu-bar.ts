@@ -79,9 +79,7 @@ const rules = () => [
 
 function updateStatus(item: MenuItem) {
   const rule = rules().find((rule) => rule.labels.includes(item.getLabel()));
-  if (rule) {
-    item.setEnabled(rule.enabled);
-  }
+  if (rule) item.setEnabled(rule.enabled);
 }
 
 function updateStatuses(menu: Menu | MenuBar) {
@@ -89,9 +87,7 @@ function updateStatuses(menu: Menu | MenuBar) {
     const item = menu.itemAt(i);
     updateStatus(item);
     const submenu = item.getSubmenu();
-    if (submenu) {
-      updateStatuses(submenu);
-    }
+    if (submenu) updateStatuses(submenu);
   }
 }
 
@@ -210,9 +206,8 @@ function MainMenuBar(props: { window: Window }) {
           label: t('newEntry'),
           accelerator: 'CmdOrCtrl+N',
           onClick: async () => {
-            if (navigator.isCurrentPage((pages) => pages.DB_INDEX)) {
+            if (navigator.isCurrentPage((pages) => pages.DB_INDEX))
               addNewEntry();
-            }
           }
         },
         {

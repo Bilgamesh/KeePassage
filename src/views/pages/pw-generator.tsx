@@ -69,23 +69,15 @@ function openPasswordGenerator() {
 
 function generate() {
   let charset = '';
-  if (passwordPolicy().lowerCase) {
-    charset += 'abcdefghijklmnopqrstuvwxyz';
-  }
-  if (passwordPolicy().numbers) {
-    charset += '0123456789';
-  }
-  if (passwordPolicy().symbols) {
-    charset += '!@#$%^&*()_+[]{}|;:,.<>?~';
-  }
-  if (passwordPolicy().upperCase || charset === '') {
+  if (passwordPolicy().lowerCase) charset += 'abcdefghijklmnopqrstuvwxyz';
+  if (passwordPolicy().numbers) charset += '0123456789';
+  if (passwordPolicy().symbols) charset += '!@#$%^&*()_+[]{}|;:,.<>?~';
+  if (passwordPolicy().upperCase || charset === '')
     charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  }
   let password = '';
   const array = getRandomValues(new Uint32Array(passwordPolicy().length));
-  for (let i = 0; i < passwordPolicy().length; i++) {
+  for (let i = 0; i < passwordPolicy().length; i++)
     password += charset[array[i]! % charset.length];
-  }
   setPassword(password);
 }
 
@@ -149,9 +141,7 @@ function PwGeneratorPage() {
             <IconButton
               imageSize={{ height: 15, width: 15 }}
               onClick={() => {
-                if (password()) {
-                  Clipboard.get().setText(password());
-                }
+                if (password()) Clipboard.get().setText(password());
               }}
               size={{
                 ...(ENTRY_BUTTON_STYLE as { height: number; width: number })

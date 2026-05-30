@@ -73,11 +73,8 @@ function PreviewPanel(props: {
             <IconButton
               imageSize={{ height: 13, width: 13 }}
               onClick={() => {
-                if (password() === null) {
-                  showPassword();
-                } else {
-                  setPassword(null);
-                }
+                if (password() === null) showPassword();
+                else setPassword(null);
               }}
               size={{ height: 20, width: 20 }}
               src={password() === null ? eyeIcon : eyeOffIcon}

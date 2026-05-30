@@ -3,7 +3,7 @@ import { t } from '#/data/i18n';
 import type { MenuItemOptions } from '#/renderer/types';
 
 function TextContextMenu(props: { editable?: boolean; textEdit: TextEdit }) {
-  if (props.editable) {
+  if (props.editable)
     return Menu.create([
       {
         label: t('copy'),
@@ -35,7 +35,7 @@ function TextContextMenu(props: { editable?: boolean; textEdit: TextEdit }) {
         }
       }
     ] as MenuItemOptions[]);
-  } else {
+  else
     return Menu.create([
       {
         label: t('copy'),
@@ -52,7 +52,6 @@ function TextContextMenu(props: { editable?: boolean; textEdit: TextEdit }) {
         }
       }
     ] as MenuItemOptions[]);
-  }
 }
 
 export { TextContextMenu };

@@ -21,9 +21,7 @@ class Picker extends View {
         break;
       case 'items':
         this.node.clear();
-        for (const item of value as string[]) {
-          this.node.addItem(item);
-        }
+        for (const item of value as string[]) this.node.addItem(item);
         break;
       case 'onSelectionChange':
         this.node.onSelectionChange.connect(value);

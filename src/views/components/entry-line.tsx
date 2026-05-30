@@ -10,9 +10,7 @@ function EntryLine(props: {
   onTextChange?: (text: string) => void;
   children?: View[];
 }) {
-  if (!props.type) {
-    props.type = 'normal';
-  }
+  if (!props.type) props.type = 'normal';
   return (
     <container style={{ flexDirection: 'row', 'margin-top': 10 }}>
       <label
@@ -24,18 +22,12 @@ function EntryLine(props: {
       />
       <entry
         onKeyDown={(self, ev) => {
-          if (ev.key === 'Enter') {
-            return true;
-          }
-          if (ev.key === 'Backspace' && self.getText() === '') {
-            return true;
-          }
+          if (ev.key === 'Enter') return true;
+          if (ev.key === 'Backspace' && self.getText() === '') return true;
           return false;
         }}
         onTextChange={(entry) => {
-          if (props.onTextChange) {
-            props.onTextChange(entry.getText());
-          }
+          if (props.onTextChange) props.onTextChange(entry.getText());
         }}
         style={{
           flex: 1,
@@ -48,18 +40,12 @@ function EntryLine(props: {
       />
       <password
         onKeyDown={(self, ev) => {
-          if (ev.key === 'Enter') {
-            return true;
-          }
-          if (ev.key === 'Backspace' && self.getText() === '') {
-            return true;
-          }
+          if (ev.key === 'Enter') return true;
+          if (ev.key === 'Backspace' && self.getText() === '') return true;
           return false;
         }}
         onTextChange={(entry) => {
-          if (props.onTextChange) {
-            props.onTextChange(entry.getText());
-          }
+          if (props.onTextChange) props.onTextChange(entry.getText());
         }}
         style={{
           flex: 1,

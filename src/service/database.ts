@@ -37,16 +37,15 @@ async function openDatabase(window: Window, path: string) {
   setSelectedDbPath(path);
   const dbFile = await loadDatabase(path);
   const key = await getMatchingKey(dbFile, 1000);
-  if (!key) {
-    showError(
+  if (!key)
+    return showError(
       window,
       `Please connect the correct YubiKey with one of the following serial numbers:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
       {
         title: 'YubiKey Not Connected'
       }
     );
-    return;
-  }
+
   const pin = await requestPin(navigator, key.serial);
   if (!pin) {
     setSelectedDbPath(previousPath);
@@ -72,9 +71,8 @@ async function openDatabase(window: Window, path: string) {
     });
   } catch (err) {
     console.error(`Failed to open database: ${err}`);
-    if (!(err instanceof DOMException) || err.name !== 'AbortError') {
+    if (!(err instanceof DOMException) || err.name !== 'AbortError')
       showError(window, err);
-    }
     setSelectedDbPath(previousPath);
     navigator.replace({
       from: (pages) => [pages.TOUCH, pages.PINTENTRY],
@@ -83,11 +81,8 @@ async function openDatabase(window: Window, path: string) {
   }
   await updateSettings((settings) => {
     const index = settings.recent.indexOf(path);
-    if (index === -1) {
-      settings.recent.unshift(path);
-    } else {
-      settings.recent.unshift(settings.recent.splice(index, 1)[0]!);
-    }
+    if (index === -1) settings.recent.unshift(path);
+    else settings.recent.unshift(settings.recent.splice(index, 1)[0]!);
     return settings;
   });
 }
@@ -107,9 +102,7 @@ async function saveNewDatabase(options: {
     msgBox.setText(t('youHaveOnlySelected1'));
     msgBox.addButton(t('cancel'), -1);
     msgBox.addButton(t('continueWithoutBak'), 1);
-    if (msgBox.runForWindow(window) !== 1) {
-      return;
-    }
+    if (msgBox.runForWindow(window) !== 1) return;
   }
 
   const dialog = FileSaveDialog.create();
@@ -131,9 +124,7 @@ async function saveNewDatabase(options: {
     });
     await updateSettings((settings) => {
       const index = settings.recent.indexOf(path);
-      if (index !== -1) {
-        settings.recent.splice(index, 1);
-      }
+      if (index !== -1) settings.recent.splice(index, 1);
       settings.recent.unshift(path);
       return settings;
     });
@@ -177,9 +168,8 @@ async function getPassword(options: { entry: Entry; window: Window }) {
     return password;
   } catch (err) {
     console.error(`Failed to decrypt password: ${err}`);
-    if (!(err instanceof DOMException) || err.name !== 'AbortError') {
+    if (!(err instanceof DOMException) || err.name !== 'AbortError')
       showError(window, err);
-    }
     return null;
   }
 }
@@ -204,28 +194,22 @@ async function addNewEntry() {
 
 async function editEntry(window: Window) {
   const entry = selectedEntry();
-  if (!entry) {
-    showError(window, t('pleaseSelectEntryToEdit'), {
+  if (!entry)
+    return showError(window, t('pleaseSelectEntryToEdit'), {
       title: 'Entry Not Selected'
     });
-    return;
-  }
   const password = await getPassword({ entry, window });
-  if (password === null) {
-    navigator.replace({
+  if (password === null)
+    return navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
-    return;
-  }
   const newEntry = await requestEntry(password, entry);
   navigator.replace({
     from: (pages) => pages.ENTRY,
     to: (pages) => pages.DB_INDEX
   });
-  if (!newEntry) {
-    return;
-  }
+  if (!newEntry) return;
   const db = unlockedDbIndex()!;
   const index = db.secrets.indexOf(entry);
   db.secrets[index] = newEntry;
@@ -236,20 +220,16 @@ async function editEntry(window: Window) {
 
 async function deleteEntry(window: Window) {
   const entry = selectedEntry();
-  if (!entry) {
-    showError(window, t('pleaseSelectEntryToDelete'), {
+  if (!entry)
+    return showError(window, t('pleaseSelectEntryToDelete'), {
       title: 'Entry Not Selected'
     });
-    return;
-  }
   const db = unlockedDbIndex()!;
   const index = db.secrets.indexOf(entry);
-  if (index === -1) {
-    showError(window, t('cannotDeleteEntryDoesNotExist'), {
+  if (index === -1)
+    return showError(window, t('cannotDeleteEntryDoesNotExist'), {
       title: 'Entry Not Selected'
     });
-    return;
-  }
   const msgBox = MessageBox.create();
   msgBox.setTitle(t('deleteEntry'));
   msgBox.setText(`${t('areYouSureDeleteEntry')} ${entry.title}?`);
@@ -266,9 +246,7 @@ async function deleteEntry(window: Window) {
 
 function copyUsername() {
   const entry = selectedEntry();
-  if (entry) {
-    Clipboard.get().setText(entry?.username);
-  }
+  if (entry) Clipboard.get().setText(entry?.username);
 }
 
 async function copyPassword(window: Window) {
@@ -306,9 +284,7 @@ async function showQrCode(window: Window) {
 
 function copyUrl() {
   const entry = selectedEntry();
-  if (entry) {
-    Clipboard.get().setText(entry?.url);
-  }
+  if (entry) Clipboard.get().setText(entry?.url);
 }
 
 let clipboardTimeout: NodeJS.Timeout | null = null;
@@ -318,11 +294,8 @@ function refreshDbLock() {
   const isMinimised = MainWindow().isMinimized() || false;
   const isActive = MainWindow().isActive() || false;
 
-  if (!isActive && unlockedDbIndex() !== null) {
-    secondsSinceInactive++;
-  } else {
-    secondsSinceInactive = 0;
-  }
+  if (!isActive && unlockedDbIndex() !== null) secondsSinceInactive++;
+  else secondsSinceInactive = 0;
 
   if (isMinimised && appSettings().dbMinimiseLock) {
     setUnlockedDbIndex(null);
@@ -351,9 +324,7 @@ function triggerClipboardCleanup() {
   if (appSettings().clipboardTimout !== null && clipboardTimeout === null) {
     const pw = Clipboard.get().getText();
     clipboardTimeout = setTimeout(() => {
-      if (pw === Clipboard.get().getText()) {
-        Clipboard.get().clear();
-      }
+      if (pw === Clipboard.get().getText()) Clipboard.get().clear();
     }, appSettings().clipboardTimout! * 1000);
   }
 }

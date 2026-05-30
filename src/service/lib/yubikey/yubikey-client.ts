@@ -158,9 +158,8 @@ class YubiKeyClient {
       },
       [0xa0, 0x00, 0x00, 0x05, 0x27, 0x20, 0x01]
     );
-    if (sw !== SW_CODES.OK) {
+    if (sw !== SW_CODES.OK)
       throw new Error(`Select OTP failed: SW=${sw.toString(16)}`);
-    }
   }
 
   async getSerialNumber() {

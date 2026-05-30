@@ -15,11 +15,10 @@ class Vibrant extends Container {
   }
 
   protected override createElement() {
-    if (process.platform !== 'darwin') {
+    if (process.platform !== 'darwin')
       throw new Error(
         'Cannot create element "vibrant". This element is only supported on macOS.'
       );
-    }
     return GuiVibrant.create();
   }
 

@@ -51,9 +51,7 @@ class YubiKeyRecipient implements Recipient {
     this.publicKey = res.bytes;
 
     const point = validatePublicKey(this.publicKey);
-    if (!point) {
-      throw Error('invalid yubiKey recipient point');
-    }
+    if (!point) throw Error('invalid yubiKey recipient point');
 
     this.point = point;
 
@@ -61,16 +59,14 @@ class YubiKeyRecipient implements Recipient {
   }
 
   async wrapFileKey(fileKey: Uint8Array): Promise<Stanza[]> {
-    if (fileKey.length !== FILE_KEY_BYTES) {
+    if (fileKey.length !== FILE_KEY_BYTES)
       throw new Error(`invalid file key length: ${fileKey.length}`);
-    }
 
     const ephemeralPrivate = p256.utils.randomSecretKey();
     const ephemeralPublic = p256.getPublicKey(ephemeralPrivate, true);
 
-    if (!validatePublicKey(ephemeralPublic)) {
+    if (!validatePublicKey(ephemeralPublic))
       throw new Error('invalid ephemeral key');
-    }
 
     const ephemeralScalar = p256.Point.Fn.fromBytes(ephemeralPrivate);
     const sharedPoint = this.point.multiply(ephemeralScalar);
@@ -96,9 +92,7 @@ class YubiKeyRecipient implements Recipient {
       base64nopad.encode(ephemeralPublic)
     ];
 
-    if (this.serial) {
-      stanzaArgs.splice(2, 0, this.serial);
-    }
+    if (this.serial) stanzaArgs.splice(2, 0, this.serial);
 
     const nonce = new Uint8Array(NONCE_LENGTH);
     const encryptedKey = chacha20poly1305(key, nonce).encrypt(fileKey);

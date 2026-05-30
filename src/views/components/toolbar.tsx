@@ -248,12 +248,8 @@ function Toolbar(props: { window: Window }) {
         <entry
           enabled={navigator.isCurrentPage((pages) => pages.DB_INDEX)}
           onKeyDown={(self, ev) => {
-            if (ev.key === 'Enter') {
-              return true;
-            }
-            if (ev.key === 'Backspace' && self.getText() === '') {
-              return true;
-            }
+            if (ev.key === 'Enter') return true;
+            if (ev.key === 'Backspace' && self.getText() === '') return true;
             return false;
           }}
           onTextChange={(self) => {

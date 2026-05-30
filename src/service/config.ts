@@ -10,9 +10,7 @@ const path = join(getRootDirname(), 'settings.json');
 let isInit = false;
 
 async function initConfigFile() {
-  if (isInit) {
-    return;
-  }
+  if (isInit) return;
   const exists = isFile(path, { silent: true });
   if (!exists) {
     const settings = { ...DEFAULT_SETTINGS, language: getSystemLocale() };

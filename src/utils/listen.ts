@@ -7,17 +7,13 @@ function createListeners<T>() {
   }
   function removeListener(listen: (value: T) => void) {
     const index = listeners.indexOf(listen);
-    if (index !== -1) {
-      listeners.splice(index, 1);
-    }
+    if (index !== -1) listeners.splice(index, 1);
   }
   function hasListener(listen: (value: T) => void) {
     return listeners.includes(listen);
   }
   function notifyListeners(value: T) {
-    for (const listen of listeners) {
-      listen(value);
-    }
+    for (const listen of listeners) listen(value);
   }
   function waitForValue(options?: {
     timeoutMs?: number | undefined;
@@ -54,12 +50,11 @@ function createListeners<T>() {
 
       options?.signal?.addEventListener('abort', onAbort);
 
-      if (options?.timeoutMs) {
+      if (options?.timeoutMs)
         setTimeout(() => {
           cleanup();
           reject(new Error('Timeout'));
         }, options.timeoutMs);
-      }
     });
   }
 
@@ -80,9 +75,7 @@ function createLineReader(onLine: (line: string) => void) {
       const idx = buffer.indexOf('\n');
       const line = buffer.slice(0, idx);
       buffer = buffer.slice(idx + 1);
-      if (line.trim()) {
-        onLine(line);
-      }
+      if (line.trim()) onLine(line);
     }
   };
 }

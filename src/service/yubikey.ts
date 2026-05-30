@@ -208,10 +208,10 @@ function detectYubiKeys(
         await client.selectYubicoOtp();
         const serial = await client.getSerialNumber();
         await client.selectPiv();
-        for (const { number, objectId } of RETIRED_SLOTS) {
+        for (const { number, objectId } of RETIRED_SLOTS)
           try {
             const publicKey = await client.getPublicKey(objectId);
-            if (publicKey) {
+            if (publicKey)
               onSuccess({
                 id: requestId,
                 status: 'DETECT_YUBIKEYS_SUCCESS',
@@ -219,7 +219,6 @@ function detectYubiKeys(
                 slot: number,
                 publicKey
               });
-            }
           } catch (err) {
             onError({
               id: requestId,
@@ -227,7 +226,6 @@ function detectYubiKeys(
               error: `${err}`
             });
           }
-        }
       } catch (err) {
         onError({
           id: requestId,

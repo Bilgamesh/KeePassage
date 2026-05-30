@@ -64,27 +64,17 @@ function detectPcscPkg() {
 
 function detectAbi() {
   if (process.platform === 'win32') {
-    if (process.versions.bun) {
-      return 'bun';
-    }
-    if (process.versions.electron) {
-      return 'electron';
-    }
+    if (process.versions['bun']) return 'bun';
+    if (process.versions['electron']) return 'electron';
     return 'node';
   }
 
-  if (process.platform !== 'linux') {
-    return null;
-  }
+  if (process.platform !== 'linux') return null;
 
   try {
     const ldd = fs.readFileSync('/usr/bin/ldd', 'utf8');
-    if (ldd.includes('GLIBC')) {
-      return 'glibc';
-    }
-    if (ldd.includes('musl')) {
-      return 'musl';
-    }
+    if (ldd.includes('GLIBC')) return 'glibc';
+    if (ldd.includes('musl')) return 'musl';
   } catch {}
 
   if (

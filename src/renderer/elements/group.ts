@@ -19,21 +19,18 @@ class Group extends View {
   }
 
   override addChild(child: View, _anchor: View | null | undefined): void {
-    if (child.parent !== null) {
+    if (child.parent !== null)
       throw new Error(
         `Cannot add child node "${child.name}" under parent node "${this.name}". Node "${child.name}" already has another parent node ${child.parent.name}.`
       );
-    }
-    if (this.children.length > 0) {
+    if (this.children.length > 0)
       throw new Error(
         `Cannot add child node "${child.name}" under parent node "${this.name}". Parent node "${this.name}" cannot have more than 1 child node.`
       );
-    }
-    if (!(child.node instanceof Container)) {
+    if (!(child.node instanceof Container))
       throw new Error(
         `Cannot add child node "${child.name}" under parent node "${this.name}". Parent node "${this.name}" only acceps child with node type container.`
       );
-    }
     this.children[0] = child;
     this.node.setContentView(child.node);
     child.parent = this;

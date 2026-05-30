@@ -13,9 +13,7 @@ function KeysTable(props: {
 
   createEffect(() => {
     for (const yubiKey of props.yubiKeys()) {
-      if (keys.includes(`${yubiKey.publicKey}`)) {
-        continue;
-      }
+      if (keys.includes(`${yubiKey.publicKey}`)) continue;
       keys.push(`${yubiKey.publicKey}`);
       dbTable.addRow([
         `${yubiKey.serial}`,

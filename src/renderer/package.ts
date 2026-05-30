@@ -8,18 +8,14 @@ let execFileName: string | null = null;
 let rootDirName: string | null = null;
 
 function init() {
-  if (isInit) {
-    return;
-  }
+  if (isInit) return;
   dirname = __dirname;
   isPacked = isFile(dirname.split(sep).slice(0, -1).join(sep));
   const dirs = dirname.split(sep);
   if (isPacked) {
     rootDirName = dirs.slice(0, -2).join(sep);
     execFileName = dirs.slice(0, -1).pop()!;
-  } else {
-    rootDirName = dirs.slice(0, -1).join(sep);
-  }
+  } else rootDirName = dirs.slice(0, -1).join(sep);
   isInit = true;
   return;
 }
@@ -28,9 +24,7 @@ function isFile(path: string, options?: { silent?: boolean }) {
   try {
     return lstatSync(path).isFile();
   } catch (error) {
-    if (options?.silent) {
-      return false;
-    }
+    if (options?.silent) return false;
     console.error(`Failed to check if \`${path}\` is file: ${error}`);
     return false;
   }
@@ -38,21 +32,19 @@ function isFile(path: string, options?: { silent?: boolean }) {
 
 function getRootDirname() {
   init();
-  if (rootDirName === null) {
+  if (rootDirName === null)
     throw new Error(
       'Cannot access rootDirName. FolderUtil must be initialized first.'
     );
-  }
   return rootDirName;
 }
 
 function getExecFileName() {
   init();
-  if (dirname === null) {
+  if (dirname === null)
     throw new Error(
       'Cannot resolve execFileName. FolderUtil must be initialized first.'
     );
-  }
   return execFileName;
 }
 

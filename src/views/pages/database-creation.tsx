@@ -98,9 +98,9 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                 selectedKeys().length > 0
               }
               onClick={() => {
-                if (!navigator.isCurrentPage((p) => p.DB_KEYS_PAGE)) {
+                if (!navigator.isCurrentPage((p) => p.DB_KEYS_PAGE))
                   navigator.push((p) => p.DB_KEYS_PAGE);
-                } else {
+                else
                   saveNewDatabase({
                     dbName,
                     description,
@@ -108,7 +108,6 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                     window: props.window,
                     mainWindow: props.mainWindow
                   });
-                }
               }}
               style={{
                 height: 30,

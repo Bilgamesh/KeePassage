@@ -25,23 +25,21 @@ class Table extends View {
         this.node.setModel(value as TableModel);
         break;
       case 'columns':
-        for (const newColumn of value as string[]) {
+        for (const newColumn of value as string[])
           if (!this.columns.includes(newColumn)) {
             this.columns.push(newColumn);
             this.node.addColumn(newColumn);
           }
-        }
         break;
       case 'columnsWithOptions':
         for (const { label, options } of value as {
           label: string;
           options: TableColumnOptions;
-        }[]) {
+        }[])
           if (!this.columns.includes(label)) {
             this.columns.push(label);
             this.node.addColumnWithOptions(label, options);
           }
-        }
         break;
       case 'columnsVisible':
         this.node.setColumnsVisible(!!value);

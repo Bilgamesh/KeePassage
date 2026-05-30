@@ -54,9 +54,7 @@ function PinentryPage<T extends NavigationIndex>(props: {
   const [pin, setPin] = createSignal<string | null>(null);
 
   function validatePin(pin: string) {
-    if (pin.length > 8) {
-      return false;
-    }
+    if (pin.length > 8) return false;
     return /^\d+$/.test(pin);
   }
 
@@ -93,37 +91,26 @@ function PinentryPage<T extends NavigationIndex>(props: {
                 />
                 <password
                   onActivate={() => {
-                    if (pin() !== null) {
-                      pinListeners.notifyListeners(pin());
-                    }
+                    if (pin() !== null) pinListeners.notifyListeners(pin());
                   }}
                   onKeyDown={(_self, ev) => {
-                    // Silence error sound by returning true
+                    // Silence error sound by returning true on Enter
                     if (ev.key === 'Enter') {
-                      if (process.platform === 'linux') {
-                        // Auto submit doesn't work on Linux by default
-                        if (pin() !== null) {
-                          pinListeners.notifyListeners(pin());
-                        }
-                      }
+                      // Auto submit doesn't work on Linux by default
+                      if (process.platform === 'linux' && pin() !== null)
+                        pinListeners.notifyListeners(pin());
                       return true;
                     }
-                    if (ev.key === 'Backspace' && pin() === null) {
-                      return true;
-                    }
+                    // Silence error sound by returning true on empty delete
+                    if (ev.key === 'Backspace' && pin() === null) return true;
                     return false;
                   }}
                   onTextChange={(entry) => {
                     const text = entry.getText();
                     if (text) {
-                      if (validatePin(text)) {
-                        setPin(text);
-                      } else {
-                        entry.setText(`${pin() || ''}`);
-                      }
-                    } else {
-                      setPin(null);
-                    }
+                      if (validatePin(text)) setPin(text);
+                      else entry.setText(`${pin() || ''}`);
+                    } else setPin(null);
                   }}
                   ref={(element) => {
                     entryNodes[props.navigator.id] = element.node;

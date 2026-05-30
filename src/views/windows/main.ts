@@ -24,15 +24,12 @@ function MainWindow() {
   const contentView = Container.create();
   contentView.setStyle({ flex: 1 });
   win.setContentView(contentView);
-  if (process.platform === 'win32') {
+  if (process.platform === 'win32')
     win.setBackgroundColor(WINDOWS_APP_BACKGROUND_COLOR);
-  }
 
   createEffect(() => {
     const menuBar = MainMenuBar({ window: win });
-    if (appSettings().showMenuBar) {
-      win.setMenuBar(menuBar);
-    }
+    if (appSettings().showMenuBar) win.setMenuBar(menuBar);
     win.setMenuBarVisible(appSettings().showMenuBar);
   });
 

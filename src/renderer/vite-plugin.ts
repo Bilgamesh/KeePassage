@@ -11,7 +11,7 @@ const yuePlugin: (config: {
   transform(_: unknown, id: string) {
     config.assetsFolder = config.assetsFolder || join(config.src, 'assets');
     config.assetsFolder = resolve(config.assetsFolder);
-    if (resolve(id).startsWith(config.assetsFolder)) {
+    if (resolve(id).startsWith(config.assetsFolder))
       return {
         code: `
           import { checkIfPacked, getResourcePath } from '#/renderer/package';
@@ -21,7 +21,6 @@ const yuePlugin: (config: {
         `,
         map: { mappings: '' }
       };
-    }
     return null;
   },
   config() {
