@@ -78,8 +78,8 @@ function detectPcscPkg() {
 
 function detectAbi() {
   if (process.platform === 'win32') {
-    if (process.versions['bun']) return 'bun';
-    if (process.versions['electron']) return 'electron';
+    if (process.versions.bun) return 'bun';
+    if (process.versions.electron) return 'electron';
     return 'node';
   }
 
