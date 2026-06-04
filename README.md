@@ -41,7 +41,7 @@ Like [passage](https://github.com/FiloSottile/passage) with [age-plugin-yubikey]
 
 This means that even after the database is unlocked and its metadata becomes available, passwords remain protected and must be decrypted individually on demand through the YubiKey.
 
-KeePassage uses age identities stored on a YubiKey through the PIV applet. ECDSA P-256 keys are stored in the PIV retired key management slots.
+KeePassage uses age identities stored on a YubiKey through the PIV applet. ECDSA P-256 keys are stored in the PIV retired slots.
 
 ## Security Benefits
 
