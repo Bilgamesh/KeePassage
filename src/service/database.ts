@@ -95,7 +95,10 @@ async function saveNewDatabase(options: {
   description: Accessor<string>;
 }) {
   const { dbName, description, mainWindow, selectedKeys, window } = options;
-  if (selectedKeys().length === 1) {
+
+  const uniqueSerials = () => [...new Set(selectedKeys().map((k) => k.serial))];
+
+  if (uniqueSerials().length === 1) {
     const msgBox = MessageBox.create();
     msgBox.setTitle(t('backupRequired'));
     msgBox.setType('warning');
