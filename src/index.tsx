@@ -18,7 +18,7 @@ async function main() {
 
   window.activate();
 
-  if (!(process as { versions: { yode?: string } }).versions.yode) {
+  if (!process.versions.yode) {
     MessageLoop.run();
     process.exit(0);
   }

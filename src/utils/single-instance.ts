@@ -3,6 +3,7 @@ import { unlinkSync } from 'node:fs';
 import { connect, createServer, type Server } from 'node:net';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import type { Err } from 'pcsc-mini';
 
 class SingleInstance extends EventEmitter {
   private socketPath: string;
@@ -32,7 +33,7 @@ class SingleInstance extends EventEmitter {
         try {
           unlinkSync(this.socketPath);
         } catch (err) {
-          if ((err as { code?: string }).code !== 'ENOENT') throw err;
+          if ((err as Err).code !== 'ENOENT') throw err;
         }
         this.server = createServer((connection) =>
           connection.on('data', () => this.emit('connection-attempt'))

@@ -1,5 +1,5 @@
 import { getRandomValues } from 'node:crypto';
-import { Clipboard } from 'gui';
+import { Clipboard, type SizeF } from 'gui';
 import { createSignal } from 'solid-js';
 import { navigator } from '#/app';
 import clipboardIcon from '#/assets/icons/clipboard.png';
@@ -120,7 +120,7 @@ function PwGeneratorPage() {
                 setVisible((v) => !v);
               }}
               size={{
-                ...(ENTRY_BUTTON_STYLE as { height: number; width: number })
+                ...(ENTRY_BUTTON_STYLE as SizeF)
               }}
               src={visible() ? eyeOffIcon : eyeIcon}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
@@ -132,7 +132,7 @@ function PwGeneratorPage() {
                 generate();
               }}
               size={{
-                ...(ENTRY_BUTTON_STYLE as { height: number; width: number })
+                ...(ENTRY_BUTTON_STYLE as SizeF)
               }}
               src={refreshIcon}
               style={{ 'margin-top': 0, 'margin-left': 2 }}
@@ -144,7 +144,7 @@ function PwGeneratorPage() {
                 if (password()) Clipboard.get().setText(password());
               }}
               size={{
-                ...(ENTRY_BUTTON_STYLE as { height: number; width: number })
+                ...(ENTRY_BUTTON_STYLE as SizeF)
               }}
               src={clipboardIcon}
               style={{ 'margin-top': 0, 'margin-left': 2 }}

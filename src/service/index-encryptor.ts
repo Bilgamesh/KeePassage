@@ -2,6 +2,12 @@ import { randomBytes } from 'node:crypto';
 import sodium from 'libsodium-wrappers';
 import type { DbIndex } from '#/schemas/database-schema';
 
+type EncryptedData = {
+  nonce: string;
+  ad: string;
+  data: string;
+};
+
 function generateIndexKeyString() {
   const bytes = randomBytes(32);
   return bytes.toString('base64');
@@ -56,11 +62,7 @@ async function decryptIndex(
   const masterKeyBuffer = await deriveMasterKey(indexKey);
   const data = JSON.parse(
     Buffer.from(encrypted, 'base64').toString('utf-8')
-  ) as {
-    nonce: string;
-    ad: string;
-    data: string;
-  };
+  ) as EncryptedData;
   const ciphertext = Buffer.from(data.data, 'base64');
   const nonce = Buffer.from(data.nonce, 'base64');
   const ad = Buffer.from(data.ad, 'base64');

@@ -4,6 +4,7 @@ declare module 'node:process' {
       interface ProcessVersions {
         bun?: string;
         electron?: string;
+        yode?: string;
       }
     }
   }

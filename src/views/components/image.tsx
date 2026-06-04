@@ -1,9 +1,9 @@
-import { Image as GuiImage } from 'gui';
+import { Image as GuiImage, type SizeF } from 'gui';
 import type { Style } from '#/renderer/types';
 
 function Image(props: {
   src: string | null;
-  size: { height: number; width: number };
+  size: SizeF;
   scale?: number;
   style?: Style;
   tint?: string;
