@@ -65,16 +65,18 @@ function YubiKeyConfigPage(props: { window: Window }) {
               style={{ 'margin-left': 10 }}
             />
             <group style={{ flex: 3 }} title={t('generateIdentity')}>
-              <container style={{ flex: 1, margin: 5 }}>
-                <label
-                  align="start"
-                  style={{ 'margin-bottom': 5 }}
-                  text={t('pleaseSelectSlot')}
-                />
-                <YubiKeyConfigTable
-                  onSelection={setSelectedSlot}
-                  slots={slots}
-                />
+              <container style={{ flex: 1 }}>
+                <container style={{ flex: 1, margin: 10 }}>
+                  <label
+                    align="start"
+                    style={{ 'margin-bottom': 5 }}
+                    text={t('pleaseSelectSlot')}
+                  />
+                  <YubiKeyConfigTable
+                    onSelection={setSelectedSlot}
+                    slots={slots}
+                  />
+                </container>
               </container>
             </group>
             <container
