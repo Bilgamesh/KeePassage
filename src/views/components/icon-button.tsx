@@ -1,4 +1,4 @@
-import { type Button, Image } from 'gui';
+import { type Button, Image, type SizeF } from 'gui';
 import { DARK_MODE_FONT_COLOR, DISABLED_COLOR } from '#/data/constants';
 import { isDark } from '#/data/shared-state';
 import type { Style } from '#/renderer/types';
@@ -7,8 +7,8 @@ function IconButton(props: {
   src: string;
   tooltip?: string;
   enabled?: boolean;
-  size?: { width: number; height: number };
-  imageSize?: { width: number; height: number };
+  size?: SizeF;
+  imageSize?: SizeF;
   style?: Style;
   onClick?: (self: Button) => void;
   visible?: boolean;
