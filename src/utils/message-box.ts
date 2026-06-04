@@ -14,15 +14,15 @@ function showError(
   msgBox.setTitle('Error');
 
   if (error instanceof SwError)
-    msgBox.setText(t(`yubikey_statuses.${error.info.label}`));
+    msgBox.setText(t(`yubikey_status_words.${error.statusWord}`));
   else if (error instanceof Error && error.cause instanceof SwError)
-    msgBox.setText(t(`yubikey_statuses.${error.cause.info.label}`));
+    msgBox.setText(t(`yubikey_status_words.${error.cause.statusWord}`));
   else if (error instanceof Error)
     msgBox.setText(`${error.message}\n${error.cause}`);
   else if (typeof error === 'string') msgBox.setText(error);
   else if (typeof (error as WrappedError)?.error === 'string')
     msgBox.setText((error as WrappedError).error);
-  else msgBox.setText(t('yubikey_statuses.UNKNOWN'));
+  else msgBox.setText(t('yubikey_status_words.UNKNOWN'));
 
   if (options?.title) msgBox.setTitle(options.title);
   msgBox.runForWindow(window);

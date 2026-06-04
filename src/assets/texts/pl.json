@@ -116,8 +116,8 @@
   "cut": "Wytnij",
   "paste": "Wklej",
   "select_all": "Zaznacz wszystko",
-  "yubikey_statuses": {
-    "SUCCESS": "Polecenie zakończone pomyślnie.",
+  "yubikey_status_words": {
+    "OK": "Polecenie zakończone pomyślnie.",
     "BYTES_REMAINING": "Dostępne są dodatkowe dane do pobrania.",
     "NO_INPUT_DATA": "Brak danych wejściowych z urządzenia.",
     "VERIFY_FAILED_0": "Weryfikacja nie powiodła się. Brak pozostałych prób.",

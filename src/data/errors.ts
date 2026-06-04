@@ -1,4 +1,7 @@
-import { decodeSw, type SwInfo } from '#/utils/sw-decoder';
+import {
+  findStatusWord,
+  type StatusWord
+} from '#/service/lib/yubikey/yubikey-client';
 
 export class NextSiblingError extends Error {
   constructor(nodeName: string, parentName?: string) {
@@ -233,32 +236,20 @@ export class AgeDecryptionError extends Error {
 
 export class SwError extends Error {
   sw: number;
-  info: SwInfo;
+  statusWord: StatusWord;
 
   constructor(message: string, sw: number) {
     super(message);
 
     this.name = 'SwError';
     this.sw = sw;
-    this.info = decodeSw(sw);
+    this.statusWord = findStatusWord(sw);
 
     Object.setPrototypeOf(this, new.target.prototype);
   }
 
   hex() {
     return `0x${this.sw.toString(16).padStart(4, '0')}`;
-  }
-
-  isSuccess() {
-    return this.info.category === 'success';
-  }
-
-  isSecurity() {
-    return this.info.category === 'security';
-  }
-
-  isWarning() {
-    return this.info.category === 'warning';
   }
 }
 
@@ -434,6 +425,13 @@ export class GetObjectFailedError extends SwError {
   constructor(objectId: number, sw: number) {
     super(`Failed to get object ${objectId}: sw=${sw.toString(16)}`, sw);
     this.name = 'GetObjectFailedError';
+  }
+}
+
+export class ObjectNotFoundError extends SwError {
+  constructor(objectId: number, sw: number) {
+    super(`Object ${objectId} not found`, sw);
+    this.name = 'ObjectNotFoundError';
   }
 }
 

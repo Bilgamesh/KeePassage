@@ -20,6 +20,7 @@ import {
   InvalidEpkLengthError,
   InvalidManagementKeyError,
   MissingObjectTagError,
+  ObjectNotFoundError,
   PublicKeyNotFoundError,
   PutCertificateFailedError,
   ResponseTooShortError,
@@ -83,10 +84,29 @@ const TOUCH_POLICY = {
   POLICY: { ALWAYS: 0x02 }
 } as const;
 
-const SW_CODES = {
+const STATUS_WORDS = {
   OK: 0x9000,
-  MORE_DATA: 0x61
+  BYTES_REMAINING: 0x61,
+  NO_INPUT_DATA: 0x6285,
+  VERIFY_FAILED_0: 0x63c0,
+  VERIFY_FAILED_1: 0x63c1,
+  VERIFY_FAILED_2: 0x63c2,
+  VERIFY_FAILED_3: 0x63c3,
+  WRONG_LENGTH: 0x6700,
+  SECURITY_CONDITION_NOT_SATISFIED: 0x6982,
+  AUTHENTICATION_BLOCKED: 0x6983,
+  DATA_INVALID: 0x6984,
+  CONDITIONS_NOT_SATISFIED: 0x6985,
+  COMMAND_NOT_ALLOWED: 0x6986,
+  INCORRECT_PARAMETERS: 0x6a80,
+  NOT_FOUND: 0x6a82,
+  NO_SPACE: 0x6a84,
+  INCORRECT_SLOT: 0x6b00,
+  NOT_SUPPORTED: 0x6d00,
+  COMMAND_ABORTED: 0x6f00
 } as const;
+
+type StatusWord = keyof typeof STATUS_WORDS | 'UNKNOWN';
 
 const TAG_DYN_AUTH = 0x7c;
 
@@ -121,13 +141,6 @@ const DEFAULT_MANAGEMENT_KEY = new Uint8Array([
   0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05,
   0x06, 0x07, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08
 ]);
-
-class ObjectNotFoundError extends Error {
-  constructor(objectId: number) {
-    super(`Object ${objectId} not found`);
-    this.name = 'ObjectNotFoundError';
-  }
-}
 
 class YubiKeyClient {
   private card: Card;
@@ -178,7 +191,7 @@ class YubiKeyClient {
       },
       [0xa0, 0x00, 0x00, 0x05, 0x27, 0x20, 0x01]
     );
-    if (sw !== SW_CODES.OK) throw new SelectOtpFailedError(sw);
+    if (sw !== STATUS_WORDS.OK) throw new SelectOtpFailedError(sw);
   }
 
   async getSerialNumber() {
@@ -188,7 +201,7 @@ class YubiKeyClient {
       P1: APDU_KEYS.P1.SERIAL,
       P2: APDU_KEYS.P2.FIRST
     });
-    if (sw !== SW_CODES.OK) throw new GetSerialNumberFailedError(sw);
+    if (sw !== STATUS_WORDS.OK) throw new GetSerialNumberFailedError(sw);
     const serial =
       (resp[0]! << 24) | (resp[1]! << 16) | (resp[2]! << 8) | resp[3]!;
     return serial >>> 0;
@@ -204,7 +217,7 @@ class YubiKeyClient {
       },
       [0xa0, 0x00, 0x00, 0x03, 0x08]
     );
-    if (sw !== SW_CODES.OK) throw new SelectPivFailedError(sw);
+    if (sw !== STATUS_WORDS.OK) throw new SelectPivFailedError(sw);
   }
 
   async verifyPin(pin: string) {
@@ -218,7 +231,7 @@ class YubiKeyClient {
       },
       Array.from(pinBytes)
     );
-    if (sw !== SW_CODES.OK) throw new VerifyPinFailedError(sw);
+    if (sw !== STATUS_WORDS.OK) throw new VerifyPinFailedError(sw);
   }
 
   async p256ecdh(epkBytes: Uint8Array, slot: number) {
@@ -259,7 +272,7 @@ class YubiKeyClient {
     while (true) {
       const sw1 = resp.at(-2)!;
       const sw2 = resp.at(-1)!;
-      if (sw1 !== SW_CODES.MORE_DATA) break;
+      if (sw1 !== STATUS_WORDS.BYTES_REMAINING) break;
 
       const le = sw2 === 0x00 ? 256 : sw2;
       const getResponse = new Uint8Array([
@@ -306,7 +319,7 @@ class YubiKeyClient {
 
     const { sw: sw1, resp: resp1 } = await this.transmit(firstApdu, firstData);
 
-    if (sw1 !== SW_CODES.OK) throw new GetChallengeFailedError(sw1);
+    if (sw1 !== STATUS_WORDS.OK) throw new GetChallengeFailedError(sw1);
 
     const resp1len = resp1.length;
     if (resp1len < 12) throw new ResponseTooShortError(resp1len);
@@ -345,7 +358,7 @@ class YubiKeyClient {
       secondData
     );
 
-    if (sw2 !== SW_CODES.OK) throw new AuthenticationFailedError(sw2);
+    if (sw2 !== STATUS_WORDS.OK) throw new AuthenticationFailedError(sw2);
 
     const cardResponse = decryptManagementChallenge3DES(
       key,
@@ -374,7 +387,7 @@ class YubiKeyClient {
 
     const { sw } = await this.transmit(header, inData);
 
-    if (sw !== SW_CODES.OK) throw new GenerateKeyFailedError(sw);
+    if (sw !== STATUS_WORDS.OK) throw new GenerateKeyFailedError(sw);
   }
 
   async sign(slot: number, digest: Uint8Array) {
@@ -391,7 +404,7 @@ class YubiKeyClient {
       },
       outer
     );
-    if (sw !== 0x9000) throw new SignFailedError(sw);
+    if (sw !== STATUS_WORDS.OK) throw new SignFailedError(sw);
     return extractSignature(resp);
   }
 
@@ -417,7 +430,7 @@ class YubiKeyClient {
       Array.from(payload)
     );
 
-    if (sw !== 0x9000) throw new PutCertificateFailedError(sw);
+    if (sw !== STATUS_WORDS.OK) throw new PutCertificateFailedError(sw);
   }
 
   async generateSelfSignedCertificate(options: {
@@ -442,7 +455,7 @@ class YubiKeyClient {
       P1: APDU_KEYS.P1.BY_FID,
       P2: slot
     });
-    if (sw !== SW_CODES.OK) throw new GetMetadataFailedError(sw);
+    if (sw !== STATUS_WORDS.OK) throw new GetMetadataFailedError(sw);
     const tlv = parseSimpleTlv(resp.slice(0, -2));
     const publicKey = tlv.get(0x04) ?? null;
     return { publicKey };
@@ -482,8 +495,9 @@ class YubiKeyClient {
       chunks.push(...resp.slice(0, -2));
     }
 
-    if (sw === 0x6a82) throw new ObjectNotFoundError(objectId);
-    if (sw !== 0x9000) throw new GetObjectFailedError(objectId, sw);
+    if (sw === STATUS_WORDS.NOT_FOUND)
+      throw new ObjectNotFoundError(objectId, sw);
+    if (sw !== STATUS_WORDS.OK) throw new GetObjectFailedError(objectId, sw);
     const tlv = parseSimpleTlv(new Uint8Array(chunks));
     const object = tlv.get(0x53);
     if (!object) throw new MissingObjectTagError(0x53);
@@ -530,4 +544,21 @@ function withYubiKeyClient(
     .start();
 }
 
-export { RETIRED_SLOTS, type RetiredSlot, withYubiKeyClient, YubiKeyClient };
+function findStatusWord(code: number): StatusWord {
+  for (const key in STATUS_WORDS) {
+    if (!Object.hasOwn(STATUS_WORDS, key)) continue;
+    const value = STATUS_WORDS[key as keyof typeof STATUS_WORDS];
+    if (value === code) return key as StatusWord;
+  }
+  return 'UNKNOWN';
+}
+
+export {
+  RETIRED_SLOTS,
+  STATUS_WORDS,
+  type RetiredSlot,
+  type StatusWord,
+  withYubiKeyClient,
+  YubiKeyClient,
+  findStatusWord
+};

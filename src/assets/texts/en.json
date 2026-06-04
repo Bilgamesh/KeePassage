@@ -116,8 +116,8 @@
   "cut": "Cut",
   "paste": "Paste",
   "select_all": "Select all",
-  "yubikey_statuses": {
-    "SUCCESS": "Command completed successfully.",
+  "yubikey_status_words": {
+    "OK": "Command completed successfully.",
     "BYTES_REMAINING": "More data is available and can be retrieved.",
     "NO_INPUT_DATA": "No input data was available from the device.",
     "VERIFY_FAILED_0": "Verification failed. No attempts remaining.",
