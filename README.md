@@ -3,9 +3,19 @@
         <img src="./src/assets/img/logo.ico" alt="KeePassage Logo" width="80" height="80">
     </a>
     <h1 align="center">KeePassage</h1>
+    <a href="https://github.com/Bilgamesh/KeePassage/releases">
+        <img src="./assets/get-it-on-github.png"
+        alt="Get it on GitHub"
+        width="256">
+    </a>
+    <p align="center">
+        A free and open-source password manager that combines the usability of KeePassXC with the security model of age and YubiKey-backed encryption.
+        <br />
+        <a href="https://github.com/Bilgamesh/KeePassage/issues">Report Bug</a>
+        ·
+        <a href="https://github.com/Bilgamesh/KeePassage/issues">Request Feature</a>
+    </p>
 </div>
-
-KeePassage is a free and open-source password manager that combines the usability of KeePassXC with the security model of age and YubiKey-backed encryption.
 
 ## Encryption Model
 
@@ -45,8 +55,8 @@ KeePassage uses age identities stored on a YubiKey through the PIV applet. ECDSA
 # Screenshots
 
 <div align="center">
-    <img src="./screenshots/screenshot_1.jpg" width=400>
-    <img src="./screenshots/screenshot_2.jpg" width=400>
+    <img src="./assets/screenshot_1.jpg" width=400>
+    <img src="./assets/screenshot_2.jpg" width=400>
 </div>
 
 # Development
