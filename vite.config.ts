@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 import yuePlugin from './src/renderer/vite-plugin.ts';
 
-export default defineConfig({
+export default defineConfig((env) => ({
   plugins: [
     solidPlugin({
       solid: {
@@ -12,6 +12,7 @@ export default defineConfig({
       }
     }),
     yuePlugin({
+      mode: env.mode === 'dev' ? 'dev' : 'release',
       src: resolve(__dirname, 'src'),
       assetsFolder: resolve(__dirname, 'src', 'assets'),
       input: 'src/index.tsx',
@@ -24,4 +25,4 @@ export default defineConfig({
     },
     sourcemap: true
   }
-});
+}));

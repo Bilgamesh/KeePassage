@@ -1,5 +1,5 @@
-import { readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { readFile, writeFile } from 'atomically';
 import { DEFAULT_SETTINGS } from '#/data/constants';
 import { getSystemLocale } from '#/data/i18n';
 import { setAppSettings } from '#/data/shared-state';

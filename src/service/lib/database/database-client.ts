@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'atomically';
 import { DATABASE_EXTENSION } from '#/data/constants';
 import { DbFile, type DbIndex } from '#/schemas/database-schema';
 import type { YubiKey } from '#/schemas/yubikey-schema';

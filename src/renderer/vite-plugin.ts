@@ -2,6 +2,7 @@ import { basename, join, resolve } from 'node:path';
 import type { Plugin } from 'vite';
 
 const yuePlugin: (config: {
+  mode: 'dev' | 'release';
   src: string;
   assetsFolder?: string;
   input: string;
@@ -28,14 +29,13 @@ const yuePlugin: (config: {
     return {
       resolve: {
         alias: {
+          'solid-js/universal': `node_modules/solid-js/universal/dist/${config.mode === 'dev' ? 'dev' : 'universal'}.js`,
+          'solid-js': `node_modules/solid-js/dist/${config.mode === 'dev' ? 'dev' : 'solid'}.js`,
           '#': config.src
         }
       },
       ssr: {
-        noExternal: true,
-        resolve: {
-          conditions: ['browser']
-        }
+        noExternal: true
       },
       build: {
         target: 'node22',

@@ -1,7 +1,8 @@
 import fs from 'node:fs';
-import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { cp, mkdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { join } from 'node:path';
+import { readFile, writeFile } from 'atomically';
 // @ts-expect-error
 import { packageApp } from 'yackage';
 
