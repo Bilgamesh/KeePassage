@@ -4,7 +4,20 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 // @ts-expect-error
 import { packageApp } from 'yackage';
-import { LinuxABIError, UnsupportedPlatformError } from '../src/data/errors';
+
+class LinuxABIError extends Error {
+  constructor() {
+    super('Unable to detect Linux ABI');
+    this.name = 'LinuxABIError';
+  }
+}
+
+class UnsupportedPlatformError extends Error {
+  constructor(platform: string) {
+    super(`Unsupported platform: ${platform}`);
+    this.name = 'UnsupportedPlatformError';
+  }
+}
 
 function logStep(message: string) {
   const time = new Date().toLocaleTimeString();

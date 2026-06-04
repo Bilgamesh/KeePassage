@@ -72,13 +72,6 @@ export class UnsupportedPlatformError extends Error {
   }
 }
 
-export class LinuxABIError extends Error {
-  constructor() {
-    super('Unable to detect Linux ABI');
-    this.name = 'LinuxABIError';
-  }
-}
-
 export class NullDictionaryError extends Error {
   constructor() {
     super('Attempted to translate with `null` dictionary');
