@@ -5,13 +5,42 @@
     <h1 align="center">KeePassage</h1>
 </div>
 
-KeePassage is a free and open-source password manager that uses [age](https://age-encryption.org) and a YubiKey as its cryptographic backend, with a user interface inspired by KeePassXC.
+KeePassage is a free and open-source password manager that combines the usability of KeePassXC with the security model of age and YubiKey-backed encryption.
 
-All entries are stored in an encrypted database file protected with XChaCha20-Poly1305 (AEAD). The database encryption key itself is encrypted using age (via [typage](https://github.com/FiloSottile/typage)).
+## Encryption Model
 
-Like [passage](https://github.com/FiloSottile/passage) with [age-plugin-yubikey](https://github.com/str4d/age-plugin-yubikey), KeePassage uses public-key encryption with hardware-backed decryption provided by a YubiKey. Age encryption works by encrypting data with a public key and decrypting it with the corresponding private key - in this case, stored on a YubiKey and requiring both a PIN and physical touch to authorize decryption.
+KeePassage uses a two-layer encryption design.
 
-After unlocking the database, all entry metadata (URLs, usernames, notes) becomes available, while the secret password for each entry remains individually encrypted with age.
+### Database Encryption
+
+All entries are stored inside a single encrypted database file protected with XChaCha20-Poly1305 (AEAD). This protects the database structure and metadata, including:
+
+- entry names
+- usernames
+- URLs
+- notes
+- tags
+
+The database encryption key (master key) is encrypted using age recipients generated through [typage](https://github.com/FiloSottile/typage), allowing it to be recovered only by an authorized age identity.
+
+### Per-Password Encryption
+
+Each password is additionally encrypted individually using age public-key encryption.
+
+Like [passage](https://github.com/FiloSottile/passage) with [age-plugin-yubikey](https://github.com/str4d/age-plugin-yubikey), KeePassage relies on hardware-backed decryption provided by a YubiKey. The corresponding private key never leaves the device and decryption requires both PIN verification and physical touch confirmation.
+
+This means that even after the database is unlocked and its metadata becomes available, passwords remain protected and must be decrypted individually on demand through the YubiKey.
+
+KeePassage uses age identities stored on a YubiKey through the PIV applet. ECDSA P-256 keys are stored in the PIV retired key management slots.
+
+## Security Benefits
+
+- No master password is required.
+- The age private key never leaves the YubiKey.
+- Every password decryption requires physical user presence.
+- Compromise of the database file alone does not reveal any secrets.
+- Database metadata is protected separately from password contents.
+- Passwords are compartmentalized: decrypting one password does not automatically expose all others.
 
 # Screenshots
 
