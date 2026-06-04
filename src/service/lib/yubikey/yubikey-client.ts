@@ -99,11 +99,17 @@ const STATUS_WORDS = {
   CONDITIONS_NOT_SATISFIED: 0x6985,
   COMMAND_NOT_ALLOWED: 0x6986,
   INCORRECT_PARAMETERS: 0x6a80,
-  NOT_FOUND: 0x6a82,
+  FILE_NOT_FOUND: 0x6a82,
+  RECORD_NOT_FOUND: 0x6a83,
   NO_SPACE: 0x6a84,
+  REFERENCE_DATA_NOT_FOUND: 0x6a88,
+  APPLET_SELECT_FAILED: 0x6999,
   INCORRECT_SLOT: 0x6b00,
   NOT_SUPPORTED: 0x6d00,
-  COMMAND_ABORTED: 0x6f00
+  COMMAND_ABORTED: 0x6f00,
+  MEMORY_FAILURE: 0x6581,
+  FUNCTION_NOT_SUPPORTED: 0x6a81,
+  CLASS_NOT_SUPPORTED: 0x6e00
 } as const;
 
 type StatusWord = keyof typeof STATUS_WORDS | 'UNKNOWN';
@@ -495,7 +501,7 @@ class YubiKeyClient {
       chunks.push(...resp.slice(0, -2));
     }
 
-    if (sw === STATUS_WORDS.NOT_FOUND)
+    if (sw === STATUS_WORDS.FILE_NOT_FOUND)
       throw new ObjectNotFoundError(objectId, sw);
     if (sw !== STATUS_WORDS.OK) throw new GetObjectFailedError(objectId, sw);
     const tlv = parseSimpleTlv(new Uint8Array(chunks));

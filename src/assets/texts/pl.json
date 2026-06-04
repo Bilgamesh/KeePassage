@@ -132,11 +132,17 @@
     "CONDITIONS_NOT_SATISFIED": "Warunki nie zostały spełnione.",
     "COMMAND_NOT_ALLOWED": "Ta komenda nie jest dozwolona.",
     "INCORRECT_PARAMETERS": "Nieprawidłowe parametry.",
-    "NOT_FOUND": "Nie znaleziono żądanego elementu.",
+    "FILE_NOT_FOUND": "Nie znaleziono pliku.",
+    "RECORD_NOT_FOUND": "Nie znaleziono rekordu.",
     "NO_SPACE": "Brak miejsca na urządzeniu.",
+    "REFERENCE_DATA_NOT_FOUND": "Nie znaleziono danych referencyjnych.",
+    "APPLET_SELECT_FAILED": "Nie udało się wybrać apletu.",
     "INCORRECT_SLOT": "Wybrany slot jest nieprawidłowy lub nieobsługiwany.",
     "NOT_SUPPORTED": "Ta komenda nie jest obsługiwana przez urządzenie.",
     "COMMAND_ABORTED": "Komenda została przerwana.",
+    "MEMORY_FAILURE": "Błąd pamięci urządzenia.",
+    "FUNCTION_NOT_SUPPORTED": "Funkcja nie jest obsługiwana.",
+    "CLASS_NOT_SUPPORTED": "Klasa polecenia nie jest obsługiwana.",
     "UNKNOWN": "Wystąpił nieznany błąd."
   }
 }

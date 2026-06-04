@@ -132,11 +132,17 @@
     "CONDITIONS_NOT_SATISFIED": "Required conditions are not satisfied.",
     "COMMAND_NOT_ALLOWED": "This command is not allowed.",
     "INCORRECT_PARAMETERS": "Incorrect parameters provided.",
-    "NOT_FOUND": "Requested item was not found.",
+    "FILE_NOT_FOUND": "Requested file was not found.",
+    "RECORD_NOT_FOUND": "Requested record was not found.",
     "NO_SPACE": "No space available on the device.",
+    "REFERENCE_DATA_NOT_FOUND": "Referenced data was not found.",
+    "APPLET_SELECT_FAILED": "Failed to select applet.",
     "INCORRECT_SLOT": "The selected slot is invalid or unsupported.",
     "NOT_SUPPORTED": "This command is not supported by the device.",
     "COMMAND_ABORTED": "The command was aborted.",
+    "MEMORY_FAILURE": "Device memory failure.",
+    "FUNCTION_NOT_SUPPORTED": "Function is not supported.",
+    "CLASS_NOT_SUPPORTED": "Instruction class is not supported.",
     "UNKNOWN": "An unknown error occurred."
   }
 }
