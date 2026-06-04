@@ -11,7 +11,7 @@ function showError(
 ) {
   const msgBox = MessageBox.create();
   msgBox.setType('error');
-  msgBox.setTitle('Error');
+  msgBox.setTitle(t('error'));
 
   if (error instanceof SwError)
     msgBox.setText(t(`yubikey_status_words.${error.statusWord}`));

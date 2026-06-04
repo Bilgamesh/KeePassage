@@ -116,6 +116,7 @@
   "cut": "Wytnij",
   "paste": "Wklej",
   "select_all": "Zaznacz wszystko",
+  "error": "Błąd",
   "yubikey_status_words": {
     "OK": "Polecenie zakończone pomyślnie.",
     "BYTES_REMAINING": "Dostępne są dodatkowe dane do pobrania.",

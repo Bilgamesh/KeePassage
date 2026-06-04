@@ -116,6 +116,7 @@
   "cut": "Cut",
   "paste": "Paste",
   "select_all": "Select all",
+  "error": "Error",
   "yubikey_status_words": {
     "OK": "Command completed successfully.",
     "BYTES_REMAINING": "More data is available and can be retrieved.",
