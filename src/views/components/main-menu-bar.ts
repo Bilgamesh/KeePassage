@@ -59,6 +59,10 @@ const rules = () => [
     enabled: navigator.isCurrentPage((pages) => pages.DB_INDEX)
   },
   {
+    labels: [t('tools')],
+    enabled: navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
+  },
+  {
     labels: [
       t('editEntry'),
       t('deleteEntry'),
