@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 // @ts-expect-error
 import { packageApp } from 'yackage';
-import { LinuxABIError, UnsupportedPlatformError } from '#/data/errors';
+import { LinuxABIError, UnsupportedPlatformError } from '../src/data/errors';
 
 function logStep(message: string) {
   const time = new Date().toLocaleTimeString();
