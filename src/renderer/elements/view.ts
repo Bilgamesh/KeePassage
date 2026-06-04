@@ -5,6 +5,11 @@ import {
   type Font,
   type View as GuiView
 } from 'gui';
+import {
+  NodeCannotHaveChildrenError,
+  NodeHasNoChildrenError,
+  UnsupportedPropertyError
+} from '#/data/errors';
 import type { Style } from '#/renderer/types';
 
 abstract class View {
@@ -16,15 +21,11 @@ abstract class View {
   protected abstract createElement(): GuiView;
 
   addChild(child: View, _anchor: View | null | undefined): void {
-    throw new Error(
-      `Cannot add child node "${child.name}" under parent node "${this.name}". Node type "${this.name}" cannot have children`
-    );
+    throw new NodeCannotHaveChildrenError(child.name, this.name);
   }
 
   removeChild(child: View): void {
-    throw new Error(
-      `Cannot remove child node "${child.name}" from parent "${this.name}". Node type "${this.name}" cannot have children`
-    );
+    throw new NodeHasNoChildrenError(child.name, this.name);
   }
 
   getChildren(): View[] {
@@ -100,9 +101,7 @@ abstract class View {
         this.node.onSizeChanged.connect(value);
         break;
       default:
-        throw new Error(
-          `Property "${name}" is not supported for element type "${this.name}"`
-        );
+        throw new UnsupportedPropertyError(name, this.name);
     }
   }
 }

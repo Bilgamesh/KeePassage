@@ -1,4 +1,5 @@
 import { Tab as GuiTab } from 'gui';
+import { ChildNodeNotFoundError, NodeParentConflictError } from '#/data/errors';
 import { View } from '#/renderer/elements/view';
 
 class Tab extends View {
@@ -18,8 +19,10 @@ class Tab extends View {
 
   override addChild(child: View, _anchor: View | null | undefined): void {
     if (child.parent !== null)
-      throw new Error(
-        `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`
+      throw new NodeParentConflictError(
+        child.name,
+        this.name,
+        child.parent.name
       );
     if (this.titles) {
       if (this.queue.length > 0) this.addFromQueue();
@@ -41,10 +44,8 @@ class Tab extends View {
 
   override removeChild(child: View): void {
     const index = this.children.indexOf(child);
-    if (index === -1)
-      throw new Error(
-        `Cannot remove child node "${child.name}" from parent "${this.name}". Child not found.`
-      );
+    if (index === -1) throw new ChildNodeNotFoundError(child.name, this.name);
+
     this.node.removePage(child.node);
     this.children.splice(index, 1);
     child.parent = null;

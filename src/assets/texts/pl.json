@@ -115,5 +115,27 @@
   "copy": "Kopiuj",
   "cut": "Wytnij",
   "paste": "Wklej",
-  "select_all": "Zaznacz wszystko"
+  "select_all": "Zaznacz wszystko",
+  "yubikey_statuses": {
+    "SUCCESS": "Polecenie zakończone pomyślnie.",
+    "BYTES_REMAINING": "Dostępne są dodatkowe dane do pobrania.",
+    "NO_INPUT_DATA": "Brak danych wejściowych z urządzenia.",
+    "VERIFY_FAILED_0": "Weryfikacja nie powiodła się. Brak pozostałych prób.",
+    "VERIFY_FAILED_1": "Weryfikacja nie powiodła się. Pozostała 1 próba.",
+    "VERIFY_FAILED_2": "Weryfikacja nie powiodła się. Pozostały 2 próby.",
+    "VERIFY_FAILED_3": "Weryfikacja nie powiodła się. Pozostały 3 próby.",
+    "WRONG_LENGTH": "Nieprawidłowa długość danych.",
+    "SECURITY_CONDITION_NOT_SATISFIED": "Nie spełniono warunków bezpieczeństwa.",
+    "AUTHENTICATION_BLOCKED": "Uwierzytelnianie zostało zablokowane.",
+    "DATA_INVALID": "Dane są nieprawidłowe.",
+    "CONDITIONS_NOT_SATISFIED": "Warunki nie zostały spełnione.",
+    "COMMAND_NOT_ALLOWED": "Ta komenda nie jest dozwolona.",
+    "INCORRECT_PARAMETERS": "Nieprawidłowe parametry.",
+    "NOT_FOUND": "Nie znaleziono żądanego elementu.",
+    "NO_SPACE": "Brak miejsca na urządzeniu.",
+    "INCORRECT_SLOT": "Wybrany slot jest nieprawidłowy lub nieobsługiwany.",
+    "NOT_SUPPORTED": "Ta komenda nie jest obsługiwana przez urządzenie.",
+    "COMMAND_ABORTED": "Komenda została przerwana.",
+    "UNKNOWN": "Wystąpił nieznany błąd."
+  }
 }

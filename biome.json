@@ -19,7 +19,8 @@
       "recommended": true,
       "a11y": "off",
       "complexity": {
-        "useLiteralKeys": "off"
+        "useLiteralKeys": "off",
+        "useSimpleNumberKeys": "off"
       },
       "style": {
         "noNonNullAssertion": "off"

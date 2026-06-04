@@ -6,6 +6,10 @@ import { hkdf } from '@noble/hashes/hkdf';
 import { sha256 } from '@noble/hashes/sha2';
 import { base64nopad, bech32 } from '@scure/base';
 import { type Recipient, Stanza } from 'age-encryption';
+import {
+  InvalidEphemeralKeyError,
+  InvalidFileKeyLengthError
+} from '#/data/errors';
 
 const TAG_BYTES = 4;
 const EPK_BYTES = 33;
@@ -60,13 +64,13 @@ class YubiKeyRecipient implements Recipient {
 
   async wrapFileKey(fileKey: Uint8Array): Promise<Stanza[]> {
     if (fileKey.length !== FILE_KEY_BYTES)
-      throw new Error(`invalid file key length: ${fileKey.length}`);
+      throw new InvalidFileKeyLengthError(fileKey.length);
 
     const ephemeralPrivate = p256.utils.randomSecretKey();
     const ephemeralPublic = p256.getPublicKey(ephemeralPrivate, true);
 
     if (!validatePublicKey(ephemeralPublic))
-      throw new Error('invalid ephemeral key');
+      throw new InvalidEphemeralKeyError();
 
     const ephemeralScalar = p256.Point.Fn.fromBytes(ephemeralPrivate);
     const sharedPoint = this.point.multiply(ephemeralScalar);

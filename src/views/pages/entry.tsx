@@ -4,6 +4,7 @@ import diceIcon from '#/assets/icons/dice-3.png';
 import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
 import { LARGE_BUTTON_STYLE, SMALL_ENTRY_STYLE } from '#/data/constants';
+import { NoUnlockedDatabaseError } from '#/data/errors';
 import { t } from '#/data/i18n';
 import { unlockedDbIndex } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
@@ -90,7 +91,7 @@ function EntryPage() {
 
   async function onEntrySubmit() {
     const encryptedPayloads: string[] = [];
-    if (!unlockedDbIndex()) throw new Error('No unlocked DB Index');
+    if (!unlockedDbIndex()) throw new NoUnlockedDatabaseError();
     for (const key of unlockedDbIndex()?.keys ?? []) {
       const encryptedPayload = await encrypt(
         { password: password() },

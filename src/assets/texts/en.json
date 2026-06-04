@@ -115,5 +115,27 @@
   "copy": "Copy",
   "cut": "Cut",
   "paste": "Paste",
-  "select_all": "Select all"
+  "select_all": "Select all",
+  "yubikey_statuses": {
+    "SUCCESS": "Command completed successfully.",
+    "BYTES_REMAINING": "More data is available and can be retrieved.",
+    "NO_INPUT_DATA": "No input data was available from the device.",
+    "VERIFY_FAILED_0": "Verification failed. No attempts remaining.",
+    "VERIFY_FAILED_1": "Verification failed. 1 attempt remaining.",
+    "VERIFY_FAILED_2": "Verification failed. 2 attempts remaining.",
+    "VERIFY_FAILED_3": "Verification failed. 3 attempts remaining.",
+    "WRONG_LENGTH": "The provided data length is incorrect.",
+    "SECURITY_CONDITION_NOT_SATISFIED": "Security condition not satisfied.",
+    "AUTHENTICATION_BLOCKED": "Authentication is blocked.",
+    "DATA_INVALID": "The provided data is invalid.",
+    "CONDITIONS_NOT_SATISFIED": "Required conditions are not satisfied.",
+    "COMMAND_NOT_ALLOWED": "This command is not allowed.",
+    "INCORRECT_PARAMETERS": "Incorrect parameters provided.",
+    "NOT_FOUND": "Requested item was not found.",
+    "NO_SPACE": "No space available on the device.",
+    "INCORRECT_SLOT": "The selected slot is invalid or unsupported.",
+    "NOT_SUPPORTED": "This command is not supported by the device.",
+    "COMMAND_ABORTED": "The command was aborted.",
+    "UNKNOWN": "An unknown error occurred."
+  }
 }

@@ -6,6 +6,10 @@ import {
   Certificate,
   PublicKeyInfo
 } from 'pkijs';
+import {
+  InvalidBlockLengthError,
+  InvalidResultLengthError
+} from '#/data/errors';
 
 const ALGORITHM_ID = '1.2.840.10045.4.3.2';
 
@@ -18,8 +22,7 @@ function decryptManagementChallenge3DES(
   encryptedBlock: Uint8Array
 ): Uint8Array {
   const blockLength = encryptedBlock.length;
-  if (blockLength !== 8)
-    throw new Error(`Invalid block length: (expected 8, got ${blockLength})`);
+  if (blockLength !== 8) throw new InvalidBlockLengthError(blockLength);
 
   const decipher = crypto.createDecipheriv('des-ede3-ecb', key, null);
   decipher.setAutoPadding(false);
@@ -32,8 +35,7 @@ function decryptManagementChallenge3DES(
 
   const result = Buffer.concat([decrypted, finalPart]);
   const resLen = result.length;
-  if (resLen !== 8)
-    throw new Error(`Invalid result length: (expected 8, got ${resLen})`);
+  if (resLen !== 8) throw new InvalidResultLengthError(8, resLen);
 
   return new Uint8Array(result);
 }

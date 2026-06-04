@@ -5,6 +5,10 @@ import {
   type ScrollPolicy,
   type SizeF
 } from 'gui';
+import {
+  NodeParentConflictError,
+  ParentNodeChildLimitExceededError
+} from '#/data/errors';
 import { View } from '#/renderer/elements/view';
 
 const EMPTY_CHILD = Container.create();
@@ -26,13 +30,13 @@ class Scroll extends View {
 
   override addChild(child: View, _anchor: View | null | undefined): void {
     if (child.parent !== null)
-      throw new Error(
-        `Cannot add child node "${child.name}" under parent node "${this.name}". node "${child.name}" already has another parent node ${child.parent.name}.`
+      throw new NodeParentConflictError(
+        child.name,
+        this.name,
+        child.parent.name
       );
     if (this.children.length > 0)
-      throw new Error(
-        `Cannot add child node "${child.name}" under parent node "${this.name}". Parent node ${this.name} cannot have more than 1 child node.`
-      );
+      throw new ParentNodeChildLimitExceededError(child.name, this.name);
     this.node.setContentView(child.node);
     this.children[0] = child;
     child.parent = this;

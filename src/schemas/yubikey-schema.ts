@@ -29,22 +29,22 @@ const YubiKeyResponse = z.discriminatedUnion('status', [
   z.object({
     id: z.string(),
     status: z.literal('DETECT_YUBIKEYS_ERROR'),
-    error: z.string()
+    error: z.any()
   }),
   z.object({
     id: z.string(),
     status: z.literal('AGE_ENCRYPT_ERROR'),
-    error: z.string()
+    error: z.any()
   }),
   z.object({
     id: z.string(),
     status: z.literal('AGE_DECRYPT_ERROR'),
-    error: z.string()
+    error: z.any()
   }),
   z.object({
     id: z.literal(''),
     status: z.literal('GENERAL_ERROR'),
-    error: z.string()
+    error: z.any()
   })
 ]);
 

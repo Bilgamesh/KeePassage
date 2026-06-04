@@ -1,3 +1,5 @@
+import { TimeoutError } from '#/data/errors';
+
 function createListeners<T>() {
   const listeners: ((value: T) => void)[] = [];
   function addListener(listen: (value: T) => void) {
@@ -53,7 +55,7 @@ function createListeners<T>() {
       if (options?.timeoutMs)
         setTimeout(() => {
           cleanup();
-          reject(new Error('Timeout'));
+          reject(new TimeoutError());
         }, options.timeoutMs);
     });
   }

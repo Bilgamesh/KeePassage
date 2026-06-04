@@ -40,9 +40,9 @@ async function openDatabase(window: Window, path: string) {
   if (!key)
     return showError(
       window,
-      `Please connect the correct YubiKey with one of the following serial numbers:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
+      `${t('pleaseConnectCorrectKey')}:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
       {
-        title: 'YubiKey Not Connected'
+        title: t('keyNotConnected')
       }
     );
 

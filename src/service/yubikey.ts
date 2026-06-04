@@ -1,5 +1,10 @@
 import { randomUUID } from 'node:crypto';
 import { Decrypter, Encrypter } from 'age-encryption';
+import {
+  AgeDecryptionError,
+  AgeEncryptionError,
+  YubiKeyDetectionError
+} from '#/data/errors';
 import { Payload } from '#/schemas/database-schema';
 import type {
   DecryptionError,
@@ -41,9 +46,7 @@ async function detectYubiKey(options?: {
   const resp = await listeners.waitForValue(options);
 
   if (resp.status === 'DETECT_YUBIKEYS_ERROR')
-    throw new Error('Failed to detect YubiKey', {
-      cause: resp.error
-    });
+    throw new YubiKeyDetectionError(resp.error);
 
   return {
     publicKey: resp.publicKey,
@@ -114,7 +117,7 @@ async function encrypt(
   const resp = await listeners.waitForValue(options);
 
   if (resp.status === 'AGE_ENCRYPT_ERROR')
-    throw new Error('Failed to age encrypt', { cause: resp.error });
+    throw new AgeEncryptionError(resp.error);
 
   return resp.body;
 }
@@ -219,18 +222,18 @@ function detectYubiKeys(
                 slot: number,
                 publicKey
               });
-          } catch (err) {
+          } catch (error) {
             onError({
               id: requestId,
               status: 'DETECT_YUBIKEYS_ERROR',
-              error: `${err}`
+              error
             });
           }
-      } catch (err) {
+      } catch (error) {
         onError({
           id: requestId,
           status: 'DETECT_YUBIKEYS_ERROR',
-          error: `${err}`
+          error
         });
       }
     },
@@ -238,7 +241,7 @@ function detectYubiKeys(
       onError({
         id: requestId,
         status: 'DETECT_YUBIKEYS_ERROR',
-        error: `${error}`
+        error
       })
   );
 }
@@ -264,11 +267,11 @@ async function ageEncrypt(
       status: 'AGE_ENCRYPT_SUCCESS',
       body: result
     });
-  } catch (err) {
+  } catch (error) {
     onError({
       id: requestId,
       status: 'AGE_ENCRYPT_ERROR',
-      error: `${err}`
+      error
     });
   }
 }
@@ -297,7 +300,7 @@ async function decrypt(
 
   const resp = await listeners.waitForValue(options);
   if (resp.status === 'AGE_DECRYPT_ERROR')
-    throw new Error('Failed to age decrypt', { cause: resp.error });
+    throw new AgeDecryptionError(resp.error);
 
   return Payload.parse(JSON.parse(resp.body));
 }
@@ -344,7 +347,7 @@ async function ageDecrypt(
       onError({
         id: requestId,
         status: 'AGE_DECRYPT_ERROR',
-        error: `${error}`
+        error
       })
   );
 }

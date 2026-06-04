@@ -1,5 +1,14 @@
 import type { Container, Window } from 'gui';
 import { createRenderer } from 'solid-js/universal';
+import {
+  FirstChildNotFoundError,
+  InsertNodeError,
+  NextSiblingError,
+  ParentNotFoundError,
+  RemoveNodeError,
+  SetPropertyError,
+  TextNodeError
+} from '#/data/errors';
 import { ElementFactory } from '#/renderer/element-factory';
 import type { View as ViewWrapper } from '#/renderer/elements/view';
 
@@ -11,9 +20,7 @@ const renderer = createRenderer({
   },
   createTextNode(text: string): ViewWrapper | null {
     if (text === '') return elementFactory.createElement('container');
-    throw new Error(
-      `Cannot add node "${text}". Text nodes are not supported. Try <label text="${text.replaceAll('"', '\\"')}" /> instead.`
-    );
+    throw new TextNodeError(text);
   },
   replaceText(_node: ViewWrapper | null, _text: string): void {},
   insertNode(
@@ -21,41 +28,33 @@ const renderer = createRenderer({
     node: ViewWrapper | null,
     anchor: ViewWrapper | null | undefined
   ): void {
-    if (node === null) throw new Error('Cannot insert node "null".');
-    if (parent === null)
-      throw new Error(`Cannot insert node "${node.name}" into parent "null".`);
+    if (node === null) throw new InsertNodeError('null');
+    if (parent === null) throw new InsertNodeError(node.name, 'null');
     parent.addChild(node, anchor);
   },
   removeNode(parent: ViewWrapper | null, node: ViewWrapper | null): void {
-    if (node === null) throw new Error('Cannot remove node "null".');
-    if (parent === null)
-      throw new Error(`Cannot remove node "${node.name}" from parent "null".`);
+    if (node === null) throw new RemoveNodeError('null');
+    if (parent === null) throw new RemoveNodeError(node.name, 'null');
     parent.removeChild(node);
   },
   setProperty<T>(node: ViewWrapper | null, name: string, value: T): void {
-    if (node === null)
-      throw new Error(`Cannot set property "${name}" of node "null".`);
+    if (node === null) throw new SetPropertyError(name, 'null');
     node.setProperty(name, value);
   },
   isTextNode(_node: ViewWrapper | null): boolean {
     return false;
   },
   getParentNode(node: ViewWrapper | null): ViewWrapper | null {
-    if (node === null) throw new Error('Cannot find parent of node "null".');
+    if (node === null) throw new ParentNotFoundError('null');
     return node.parent;
   },
   getFirstChild(node: ViewWrapper | null): ViewWrapper | null {
-    if (node === null)
-      throw new Error('Cannot get first child of node "null".');
+    if (node === null) throw new FirstChildNotFoundError('null');
     return node.getChildren()[0] || null;
   },
   getNextSibling(node: ViewWrapper | null): ViewWrapper | null {
-    if (node === null)
-      throw new Error('Cannot get next sibling of node "null".');
-    if (node.parent === null)
-      throw new Error(
-        `Cannot get next sibling of node "${node.name}" with parent "null".`
-      );
+    if (node === null) throw new NextSiblingError('null');
+    if (node.parent === null) throw new NextSiblingError(node.name, 'null');
     let isNextSibling = false;
     for (const child of node.parent.getChildren()) {
       if (isNextSibling) return child;

@@ -19,6 +19,7 @@ import {
   Vibrant,
   type View
 } from 'gui';
+import { TypeNotImplementedError } from '#/data/errors';
 import { Browser as BrowserWrapper } from '#/renderer/elements/browser';
 import { Button as ButtonWrapper } from '#/renderer/elements/button';
 import { Checkbox as CheckboxWrapper } from '#/renderer/elements/checkbox';
@@ -44,13 +45,14 @@ import type { View as ViewWrapper } from '#/renderer/elements/view';
 import { VSeparator as VSeparatorWrapper } from '#/renderer/elements/vseparator';
 
 type Create = () => ViewWrapper;
+type Constructor = {
+  elementName: string;
+  create: Create;
+  nodeType: typeof View;
+};
 
 class ElementFactory {
-  constructors: {
-    elementName: string;
-    create: Create;
-    nodeType: typeof View;
-  }[] = [];
+  constructors: Constructor[] = [];
 
   constructor() {
     this.addConstructor('label', () => new LabelWrapper(), Label);
@@ -88,10 +90,7 @@ class ElementFactory {
   createElement(type: string): ViewWrapper {
     for (const { elementName, create } of this.constructors)
       if (elementName === type) return create();
-
-    throw new Error(
-      `Cannot create element type ${type}. Type ${type} is not implemented.`
-    );
+    throw new TypeNotImplementedError(type);
   }
 
   wrapNode(node: View) {

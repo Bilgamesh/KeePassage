@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import { join } from 'node:path';
 // @ts-expect-error
 import { packageApp } from 'yackage';
+import { LinuxABIError, UnsupportedPlatformError } from '#/data/errors';
 
 function logStep(message: string) {
   const time = new Date().toLocaleTimeString();
@@ -58,7 +59,7 @@ function detectPcscPkg() {
     case 'win32-x64-node':
       return '@pcsc-mini/windows-x86_64-node';
     default:
-      throw new Error(`Unsupported platform: ${target}`);
+      throw new UnsupportedPlatformError(target);
   }
 }
 
@@ -87,7 +88,7 @@ function detectAbi() {
     return 'glibc';
   }
 
-  throw new Error('Unable to detect Linux ABI');
+  throw new LinuxABIError();
 }
 
 const require = createRequire(import.meta.url);

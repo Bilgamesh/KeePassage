@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { type Flatten, flatten, translator } from '@solid-primitives/i18n';
 import { Locale } from 'gui';
 import type * as en from '#/assets/texts/en.json';
+import { NullDictionaryError } from '#/data/errors';
 import { appSettings } from '#/data/shared-state';
 import {
   checkIfPacked,
@@ -54,7 +55,7 @@ function getSystemLocale() {
 
 const t = translator(() => {
   const dict = currentDictionary();
-  if (!dict) throw new Error('Attempted to translate with `null` dictionary');
+  if (!dict) throw new NullDictionaryError();
   return dict.content;
 });
 

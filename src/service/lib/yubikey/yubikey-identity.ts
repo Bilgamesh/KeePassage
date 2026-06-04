@@ -4,6 +4,12 @@ import { hkdf } from '@noble/hashes/hkdf';
 import { sha256 } from '@noble/hashes/sha2';
 import { base64nopad, bech32 } from '@scure/base';
 import type { Identity, Stanza } from 'age-encryption';
+import {
+  InvalidInnerTlvError,
+  InvalidOuterTlvError,
+  MissingStanzaError,
+  YubiKeySwError
+} from '#/data/errors';
 import type { YubiKeyClient } from '#/service/lib/yubikey/yubikey-client';
 
 const ENCRYPTED_FILE_KEY_BYTES = 32;
@@ -46,7 +52,7 @@ class YubiKeyIdentity implements Identity {
   async unwrapFileKey(stanzas: Stanza[]): Promise<Uint8Array | null> {
     if (stanzas.length === 0) return null;
     const stanza = stanzas[0];
-    if (stanza === undefined) throw new Error('Missing stanza');
+    if (stanza === undefined) throw new MissingStanzaError();
     const epkBytes = base64nopad.decode(stanza.args[2]!);
 
     await this.yubiKey.selectPiv();
@@ -60,18 +66,17 @@ class YubiKeyIdentity implements Identity {
 
     const sw = (resp[resp.length - 2]! << 8) | resp[resp.length - 1]!;
 
-    if (sw !== 0x9000)
-      throw new Error(`YubiKey returned SW=0x${sw.toString(16)}`);
+    if (sw !== 0x9000) throw new YubiKeySwError(sw);
 
     const apduData = resp.slice(0, resp.length - 2);
     const outer = this.parseTlv(apduData);
-    if (outer.tag !== 0x7c) throw new Error('Invalid outer TLV');
+    if (outer.tag !== 0x7c) throw new InvalidOuterTlvError();
 
     const inner = this.parseTlv(outer.value);
     const sharedSecret = inner.value;
 
     if (inner.tag !== 0x82 && inner.tag !== 0x85)
-      throw new Error('Invalid inner TLV');
+      throw new InvalidInnerTlvError();
 
     const ephemeralPublic = base64nopad.decode(stanza.args[2]!);
     const recipientPublic = bech32.decodeToBytes(this.publicKey).bytes;

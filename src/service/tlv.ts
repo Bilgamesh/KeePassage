@@ -1,3 +1,5 @@
+import { MissingTlvTagError, SignatureNotFoundError } from '#/data/errors';
+
 function encodeLength(len: number): number[] {
   if (len < 0x80) return [len];
   else if (len <= 0xff) return [0x81, len];
@@ -26,7 +28,7 @@ function extractEccPublicKey(fullData: number[]) {
 
 function extractSignature(resp: Uint8Array) {
   const i = resp.indexOf(0x82);
-  if (i === -1) throw new Error('Signature not found');
+  if (i === -1) throw new SignatureNotFoundError();
   const len = resp[i + 1]!;
   return resp.slice(i + 2, i + 2 + len);
 }
@@ -66,7 +68,7 @@ function getNestedTlv(data: Uint8Array, ...tags: number[]) {
   for (const tag of tags) {
     const parsed = parseSimpleTlv(current);
     const next = parsed.get(tag);
-    if (!next) throw new Error(`Missing TLV tag 0x${tag.toString(16)}`);
+    if (!next) throw new MissingTlvTagError(tag);
     current = next;
   }
   return current;

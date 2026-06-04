@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { UnsupportedPlatformError } from '#/data/errors';
 
 let command: string;
 
@@ -13,7 +14,7 @@ switch (process.platform) {
     command = 'xdg-open';
     break;
   default:
-    throw new Error(`Unsupported platform: ${process.platform}`);
+    throw new UnsupportedPlatformError(process.platform);
 }
 
 function open(url: string): Promise<void> {

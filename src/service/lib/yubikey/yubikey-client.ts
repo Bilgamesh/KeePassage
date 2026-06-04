@@ -9,6 +9,26 @@ import {
   ReaderStatus
 } from 'pcsc-mini';
 import {
+  AuthenticationFailedError,
+  GenerateKeyFailedError,
+  GetChallengeFailedError,
+  GetMetadataFailedError,
+  GetObjectFailedError,
+  GetSerialNumberFailedError,
+  InvalidChallengeLengthError,
+  InvalidDigestLengthError,
+  InvalidEpkLengthError,
+  InvalidManagementKeyError,
+  MissingObjectTagError,
+  PublicKeyNotFoundError,
+  PutCertificateFailedError,
+  ResponseTooShortError,
+  SelectOtpFailedError,
+  SelectPivFailedError,
+  SignFailedError,
+  VerifyPinFailedError
+} from '#/data/errors';
+import {
   encodeLength,
   extractEccPublicKey,
   extractSignature,
@@ -158,8 +178,7 @@ class YubiKeyClient {
       },
       [0xa0, 0x00, 0x00, 0x05, 0x27, 0x20, 0x01]
     );
-    if (sw !== SW_CODES.OK)
-      throw new Error(`Select OTP failed: SW=${sw.toString(16)}`);
+    if (sw !== SW_CODES.OK) throw new SelectOtpFailedError(sw);
   }
 
   async getSerialNumber() {
@@ -169,8 +188,7 @@ class YubiKeyClient {
       P1: APDU_KEYS.P1.SERIAL,
       P2: APDU_KEYS.P2.FIRST
     });
-    if (sw !== SW_CODES.OK)
-      throw new Error(`Get serial number failed: SW=${sw.toString(16)}`);
+    if (sw !== SW_CODES.OK) throw new GetSerialNumberFailedError(sw);
     const serial =
       (resp[0]! << 24) | (resp[1]! << 16) | (resp[2]! << 8) | resp[3]!;
     return serial >>> 0;
@@ -186,8 +204,7 @@ class YubiKeyClient {
       },
       [0xa0, 0x00, 0x00, 0x03, 0x08]
     );
-    if (sw !== SW_CODES.OK)
-      throw new Error(`Select PIV failed: SW=${sw.toString(16)}`);
+    if (sw !== SW_CODES.OK) throw new SelectPivFailedError(sw);
   }
 
   async verifyPin(pin: string) {
@@ -201,13 +218,11 @@ class YubiKeyClient {
       },
       Array.from(pinBytes)
     );
-    if (sw !== SW_CODES.OK)
-      throw new Error(`Verify PIN failed: SW=${sw.toString(16)}`);
+    if (sw !== SW_CODES.OK) throw new VerifyPinFailedError(sw);
   }
 
   async p256ecdh(epkBytes: Uint8Array, slot: number) {
-    if (epkBytes.length !== 65)
-      throw new Error('Invalid EPK length for P-256 (expected 65 bytes)');
+    if (epkBytes.length !== 65) throw new InvalidEpkLengthError();
 
     const tlv82 = [0x82, 0x00];
     const len85 = encodeLength(epkBytes.length);
@@ -291,11 +306,10 @@ class YubiKeyClient {
 
     const { sw: sw1, resp: resp1 } = await this.transmit(firstApdu, firstData);
 
-    if (sw1 !== SW_CODES.OK)
-      throw new Error(`Failed to get challenge: SW=${sw1.toString(16)}`);
+    if (sw1 !== SW_CODES.OK) throw new GetChallengeFailedError(sw1);
 
     const resp1len = resp1.length;
-    if (resp1len < 12) throw new Error(`Response too short: ${resp1len}`);
+    if (resp1len < 12) throw new ResponseTooShortError(resp1len);
 
     const cardChallengeDecrypted = decryptManagementChallenge3DES(
       key,
@@ -303,8 +317,7 @@ class YubiKeyClient {
     );
     const challengeLen = cardChallengeDecrypted.length;
 
-    if (challengeLen !== 8)
-      throw new Error(`Invalid challenge length: ${challengeLen}`);
+    if (challengeLen !== 8) throw new InvalidChallengeLengthError(challengeLen);
 
     const hostChallenge = new Uint8Array(8);
     crypto.getRandomValues(hostChallenge);
@@ -332,8 +345,7 @@ class YubiKeyClient {
       secondData
     );
 
-    if (sw2 !== SW_CODES.OK)
-      throw new Error(`Authentication failed: SW=${sw2.toString(16)}`);
+    if (sw2 !== SW_CODES.OK) throw new AuthenticationFailedError(sw2);
 
     const cardResponse = decryptManagementChallenge3DES(
       key,
@@ -342,7 +354,7 @@ class YubiKeyClient {
 
     for (let i = 0; i < cardResponse.length; i++)
       if (cardResponse[i] !== hostChallenge[i])
-        throw new Error('Invalid management key');
+        throw new InvalidManagementKeyError();
   }
 
   async generateKey(slot: number) {
@@ -362,13 +374,11 @@ class YubiKeyClient {
 
     const { sw } = await this.transmit(header, inData);
 
-    if (sw !== SW_CODES.OK)
-      throw new Error(`Failed to generate key: SW=${sw.toString(16)}`);
+    if (sw !== SW_CODES.OK) throw new GenerateKeyFailedError(sw);
   }
 
   async sign(slot: number, digest: Uint8Array) {
-    if (digest.length > 32)
-      throw new Error(`Invalid digest length: ${digest.length}`);
+    if (digest.length > 32) throw new InvalidDigestLengthError(digest.length);
     const lenBytes = encodeLength(digest.length);
     const inner = [0x82, 0x00, 0x81, ...lenBytes, ...digest];
     const outer = [0x7c, ...encodeLength(inner.length), ...inner];
@@ -381,7 +391,7 @@ class YubiKeyClient {
       },
       outer
     );
-    if (sw !== 0x9000) throw new Error(`SIGN failed: SW=${sw.toString(16)}`);
+    if (sw !== 0x9000) throw new SignFailedError(sw);
     return extractSignature(resp);
   }
 
@@ -407,7 +417,7 @@ class YubiKeyClient {
       Array.from(payload)
     );
 
-    if (sw !== 0x9000) throw new Error(`PUT CERT failed ${sw.toString(16)}`);
+    if (sw !== 0x9000) throw new PutCertificateFailedError(sw);
   }
 
   async generateSelfSignedCertificate(options: {
@@ -415,7 +425,7 @@ class YubiKeyClient {
     authenticate: () => Promise<void>;
   }) {
     const { publicKey } = await this.getMetadata(options.slot);
-    if (!publicKey) throw new Error('Failed to get public key');
+    if (!publicKey) throw new PublicKeyNotFoundError();
     return generateSelfSignedCertificate({
       publicKey,
       sign: async (digest) => {
@@ -432,8 +442,7 @@ class YubiKeyClient {
       P1: APDU_KEYS.P1.BY_FID,
       P2: slot
     });
-    if (sw !== SW_CODES.OK)
-      throw new Error(`GET METADATA failed: SW=${sw.toString(16)}`);
+    if (sw !== SW_CODES.OK) throw new GetMetadataFailedError(sw);
     const tlv = parseSimpleTlv(resp.slice(0, -2));
     const publicKey = tlv.get(0x04) ?? null;
     return { publicKey };
@@ -474,13 +483,10 @@ class YubiKeyClient {
     }
 
     if (sw === 0x6a82) throw new ObjectNotFoundError(objectId);
-    if (sw !== 0x9000)
-      throw new Error(
-        `Failed to get object ${objectId}: sw=${sw.toString(16)}`
-      );
+    if (sw !== 0x9000) throw new GetObjectFailedError(objectId, sw);
     const tlv = parseSimpleTlv(new Uint8Array(chunks));
     const object = tlv.get(0x53);
-    if (!object) throw new Error('Missing object data tag 0x53');
+    if (!object) throw new MissingObjectTagError(0x53);
     return object;
   }
 
@@ -497,7 +503,7 @@ class YubiKeyClient {
 
 function withYubiKeyClient(
   callback: (yubiKey: YubiKeyClient) => Promise<void> | void,
-  onError: (error: Err | string) => Promise<void> | void
+  onError: (error: Err | Error | string | unknown) => Promise<void> | void
 ) {
   let started = false;
   const client = new Client()
@@ -514,8 +520,8 @@ function withYubiKeyClient(
           await callback(yubiKey);
           await card.disconnect(CardDisposition.RESET);
           client.stop();
-        } catch (err) {
-          onError(`${err}`);
+        } catch (error) {
+          onError(error);
           card?.disconnect(CardDisposition.RESET);
         }
       });

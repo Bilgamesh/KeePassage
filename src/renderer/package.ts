@@ -1,5 +1,6 @@
 import { lstatSync } from 'node:fs';
 import { join, sep } from 'node:path';
+import { FolderUtilNotInitializedError } from '#/data/errors';
 
 let isInit = false;
 let dirname: string | null = null;
@@ -33,18 +34,13 @@ function isFile(path: string, options?: { silent?: boolean }) {
 function getRootDirname() {
   init();
   if (rootDirName === null)
-    throw new Error(
-      'Cannot access rootDirName. FolderUtil must be initialized first.'
-    );
+    throw new FolderUtilNotInitializedError('rootDirName');
   return rootDirName;
 }
 
 function getExecFileName() {
   init();
-  if (dirname === null)
-    throw new Error(
-      'Cannot resolve execFileName. FolderUtil must be initialized first.'
-    );
+  if (dirname === null) throw new FolderUtilNotInitializedError('execFileName');
   return execFileName;
 }
 
