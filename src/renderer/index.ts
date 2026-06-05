@@ -4,6 +4,7 @@ import {
   FirstChildNotFoundError,
   InsertNodeError,
   NextSiblingError,
+  OccupiedWindowError,
   ParentNotFoundError,
   RemoveNodeError,
   SetPropertyError,
@@ -74,7 +75,8 @@ function render(code: () => ViewWrapper, window: Window) {
       dispose();
       wrapper?.cleanup();
     });
-  }
+    return dispose;
+  } else throw new OccupiedWindowError();
 }
 
 export {

@@ -3,6 +3,15 @@ import {
   type StatusWord
 } from '#/service/lib/yubikey/yubikey-client';
 
+export class OccupiedWindowError extends Error {
+  constructor() {
+    super(
+      'Cannot render in an occupied window. Content view must not have children.'
+    );
+    this.name = 'OccupiedWindowError';
+  }
+}
+
 export class NextSiblingError extends Error {
   constructor(nodeName: string, parentName?: string) {
     super(
