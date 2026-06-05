@@ -1,14 +1,14 @@
 import { Menu, MessageLoop } from 'gui';
 import { navigator } from '#/app';
-import { t } from '#/data/i18n';
-import {
-  setSelectedDbPath,
-  setUnlockedDbIndex,
-  unlockedDbIndex
-} from '#/data/shared-state';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import type { ToggleableWindow } from '#/views/windows/main';
 
 function TrayMenu(props: { win: ToggleableWindow }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const { setSelectedDbPath, setUnlockedDbIndex, unlockedDbIndex } = state;
+
   const menu = Menu.create([
     {
       label: t('toggleWindow'),

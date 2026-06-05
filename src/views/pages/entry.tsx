@@ -1,12 +1,11 @@
-import { createSignal } from 'solid-js';
 import { navigator } from '#/app';
 import diceIcon from '#/assets/icons/dice-3.png';
 import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
 import { LARGE_BUTTON_STYLE, SMALL_ENTRY_STYLE } from '#/data/constants';
 import { NoUnlockedDatabaseError } from '#/data/errors';
-import { t } from '#/data/i18n';
-import { unlockedDbIndex } from '#/data/shared-state';
+import { getTranslator } from '#/data/i18n';
+import { type AppState, useAppContext } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
 import { encrypt } from '#/service/yubikey';
 import { createListeners } from '#/utils/listen';
@@ -22,18 +21,11 @@ type WithPassword = { password: string };
 type Form = BlankEntry & WithPassword;
 
 let controller: AbortController;
-const [passwordVisible, setPasswordVisible] = createSignal(false);
-const [title, setTitle] = createSignal('');
-const [username, setUsername] = createSignal('');
-const [password, setPassword] = createSignal('');
-const [url, setUrl] = createSignal('');
-const [tags, setTags] = createSignal('');
-const [notes, setNotes] = createSignal('');
-const [modified, setModified] = createSignal(Date.now());
 
 const entryListeners = createListeners<Entry>();
 
-function getRawEntry() {
+function getRawEntry(state: AppState) {
+  const { title, username, password, url, tags, notes, modified } = state;
   return {
     title: title(),
     username: username(),
@@ -45,19 +37,23 @@ function getRawEntry() {
   };
 }
 
-function restoreRawEntry(form: Form) {
-  setTitle(form.title);
-  setUsername(form.username);
-  setPassword(form.password);
-  setUrl(form.url);
-  setTags(form.tags);
-  setNotes(form.notes);
-  setModified(form.modified);
+function restoreRawEntry(form: Form, state: AppState) {
+  state.setTitle(form.title);
+  state.setUsername(form.username);
+  state.setPassword(form.password);
+  state.setUrl(form.url);
+  state.setTags(form.tags);
+  state.setNotes(form.notes);
+  state.setModified(form.modified);
 }
 
-async function requestEntry(password?: string, existingEntry?: Entry) {
+async function requestEntry(
+  state: AppState,
+  password?: string,
+  existingEntry?: Entry
+) {
   controller = new AbortController();
-  setPasswordVisible(false);
+  state.setPasswordVisible(false);
   navigator.push((pages) => ({
     index: pages.ENTRY,
     cleanup: () => {
@@ -66,7 +62,7 @@ async function requestEntry(password?: string, existingEntry?: Entry) {
     }
   }));
   if (existingEntry && typeof password === 'string')
-    restoreRawEntry({ ...existingEntry, password });
+    restoreRawEntry({ ...existingEntry, password }, state);
   try {
     const entry = await entryListeners.waitForValue({
       signal: controller.signal
@@ -79,6 +75,29 @@ async function requestEntry(password?: string, existingEntry?: Entry) {
 }
 
 function EntryPage() {
+  const state = useAppContext();
+  const {
+    unlockedDbIndex,
+    setTitle,
+    setUsername,
+    setPassword,
+    setUrl,
+    setTags,
+    setNotes,
+    setModified,
+    title,
+    username,
+    url,
+    tags,
+    notes,
+    modified,
+    password,
+    passwordVisible,
+    setPasswordVisible
+  } = state;
+
+  const t = getTranslator(state);
+
   navigator.subscribe(() => {
     setTitle('');
     setUsername('');
@@ -134,12 +153,15 @@ function EntryPage() {
         <IconButton
           imageSize={{ height: 13, width: 13 }}
           onClick={async (b) => {
-            const oldEntry = getRawEntry();
-            const pw = await getGeneratedPassword();
-            restoreRawEntry({
-              ...oldEntry,
-              password: pw || oldEntry.password
-            });
+            const oldEntry = getRawEntry(state);
+            const pw = await getGeneratedPassword(state);
+            restoreRawEntry(
+              {
+                ...oldEntry,
+                password: pw || oldEntry.password
+              },
+              state
+            );
             blur(b);
           }}
           size={{ height: SMALL_ENTRY_STYLE.height!, width: 20 }}

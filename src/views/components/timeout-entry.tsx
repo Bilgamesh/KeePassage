@@ -32,7 +32,6 @@ function TimeoutEntry(props: {
   ] as const;
   const [seconds, setSeconds] = createSignal(props.value || 0);
   let entry: Entry;
-  // const [checked, setChecked] = createSignal(props.checked ? props.checked() : false);
 
   createEffect(
     on(

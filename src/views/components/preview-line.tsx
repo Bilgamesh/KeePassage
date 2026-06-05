@@ -4,7 +4,7 @@ import {
   PREVIEW_LABEL_FONT,
   WINDOWS_APP_BACKGROUND_COLOR
 } from '#/data/constants';
-import { setCopyingEnabled } from '#/data/shared-state';
+import { useAppContext } from '#/data/shared-state';
 import type { Style } from '#/renderer/types';
 import { open } from '#/utils/url';
 import { LabelContextMenu } from '#/views/components/label-context-menu';
@@ -14,6 +14,7 @@ import { TextContextMenu } from '#/views/components/text-context-menu';
 let timeout: NodeJS.Timeout | null = null;
 
 function preventPwCopy() {
+  const { setCopyingEnabled } = useAppContext();
   if (timeout) clearTimeout(timeout);
   setCopyingEnabled(false);
   timeout = setTimeout(() => setCopyingEnabled(true), 100);
@@ -27,6 +28,8 @@ function PreviewLine(props: {
   last?: boolean;
   type?: 'text' | 'url';
 }) {
+  const state = useAppContext();
+  const { setCopyingEnabled } = state;
   return (
     <container style={{ flexDirection: 'row', ...(props.style || {}) }}>
       <label
@@ -69,7 +72,8 @@ function PreviewLine(props: {
             if (ev.button === 2 && textEdit.hasFocus())
               TextContextMenu({
                 editable: false,
-                textEdit
+                textEdit,
+                state
               }).popup();
             else textEdit.focus();
           }}
@@ -82,7 +86,8 @@ function PreviewLine(props: {
           onMouseDown={(label, ev) => {
             if (ev.button === 2)
               LabelContextMenu({
-                label
+                label,
+                state
               }).popup();
           }}
           style={{ flex: 1 }}
@@ -100,7 +105,8 @@ function PreviewLine(props: {
               onMouseDown={(label, ev) => {
                 if (ev.button === 2)
                   LabelContextMenu({
-                    label
+                    label,
+                    state
                   }).popup();
                 else if (props.value.trim()) open(props.value);
               }}

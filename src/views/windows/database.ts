@@ -5,14 +5,15 @@ import {
   SUBWINDOW_MIN_SIZE,
   WINDOWS_APP_BACKGROUND_COLOR
 } from '#/data/constants';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import type { AppState } from '#/data/shared-state';
 import { createWindow } from '#/utils/ui';
-
-const title = () => t('createNewKeePassageDb');
 
 let win: Window | null = null;
 
-function DatabaseWindow(create?: boolean) {
+function DatabaseWindow(state: AppState, create?: boolean) {
+  const t = getTranslator(state);
+  const title = () => t('createNewKeePassageDb');
   if (win || !create) return win;
   createRoot((dispose) => {
     win = createWindow(title());

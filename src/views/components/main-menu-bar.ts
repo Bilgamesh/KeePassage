@@ -8,16 +8,8 @@ import {
 } from 'gui';
 import { navigator } from '#/app';
 import { DATABASE_EXTENSION } from '#/data/constants';
-import { t } from '#/data/i18n';
-import {
-  appSettings,
-  copyingEnabled,
-  selectedDbPath,
-  selectedEntry,
-  setSelectedDbPath,
-  setUnlockedDbIndex,
-  unlockedDbIndex
-} from '#/data/shared-state';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import { render } from '#/renderer';
 import type { MenuItemOptions } from '#/renderer/types';
 import { updateSettings } from '#/service/config';
@@ -37,49 +29,64 @@ import { openPasswordGenerator } from '#/views/pages/pw-generator';
 import { openSettingsPage } from '#/views/pages/settings';
 import { DatabaseWindow } from '#/views/windows/database';
 
-const rules = () => [
-  {
-    labels: [t('recentDatabases')],
-    enabled:
-      appSettings().recent.length > 0 &&
-      navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
-  },
-  {
-    labels: [t('newDb...'), t('openDb...')],
-    enabled: navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
-  },
-  {
-    labels: [t('lockDb')],
-    enabled:
-      unlockedDbIndex() !== null &&
-      navigator.isCurrentPage((pages) => pages.DB_INDEX)
-  },
-  {
-    labels: [t('entries'), t('newEntry')],
-    enabled: navigator.isCurrentPage((pages) => pages.DB_INDEX)
-  },
-  {
-    labels: [t('tools')],
-    enabled: navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
-  },
-  {
-    labels: [
-      t('editEntry'),
-      t('deleteEntry'),
-      t('copyUsername'),
-      t('copyPassword'),
-      t('showQrCode'),
-      t('copyUrl')
-    ],
-    enabled:
-      navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
-      selectedEntry() !== null
-  },
-  {
-    labels: [t('passwordGenerator'), t('settings')],
-    enabled: navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
-  }
-];
+const rules = () => {
+  const state = useAppContext();
+  const { unlockedDbIndex, selectedEntry, appSettings } = state;
+  const t = getTranslator(state);
+
+  return [
+    {
+      labels: [t('recentDatabases')],
+      enabled:
+        appSettings().recent.length > 0 &&
+        navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
+    },
+    {
+      labels: [t('newDb...'), t('openDb...')],
+      enabled: navigator.isCurrentPage((pages) => [
+        pages.WELCOME,
+        pages.DB_INDEX
+      ])
+    },
+    {
+      labels: [t('lockDb')],
+      enabled:
+        unlockedDbIndex() !== null &&
+        navigator.isCurrentPage((pages) => pages.DB_INDEX)
+    },
+    {
+      labels: [t('entries'), t('newEntry')],
+      enabled: navigator.isCurrentPage((pages) => pages.DB_INDEX)
+    },
+    {
+      labels: [t('tools')],
+      enabled: navigator.isCurrentPage((pages) => [
+        pages.WELCOME,
+        pages.DB_INDEX
+      ])
+    },
+    {
+      labels: [
+        t('editEntry'),
+        t('deleteEntry'),
+        t('copyUsername'),
+        t('copyPassword'),
+        t('showQrCode'),
+        t('copyUrl')
+      ],
+      enabled:
+        navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+        selectedEntry() !== null
+    },
+    {
+      labels: [t('passwordGenerator'), t('settings')],
+      enabled: navigator.isCurrentPage((pages) => [
+        pages.WELCOME,
+        pages.DB_INDEX
+      ])
+    }
+  ];
+};
 
 function updateStatus(item: MenuItem) {
   const rule = rules().find((rule) => rule.labels.includes(item.getLabel()));
@@ -96,6 +103,17 @@ function updateStatuses(menu: Menu | MenuBar) {
 }
 
 function MainMenuBar(props: { window: Window }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const {
+    appSettings,
+    selectedDbPath,
+    setSelectedDbPath,
+    setUnlockedDbIndex,
+    unlockedDbIndex,
+    selectedEntry,
+    copyingEnabled
+  } = state;
   const menu = MenuBar.create([
     {
       label: t('db'),
@@ -110,7 +128,7 @@ function MainMenuBar(props: { window: Window }) {
                 pages.DB_INDEX
               ])
             ) {
-              const win = DatabaseWindow(true)!;
+              const win = DatabaseWindow(state, true)!;
               render(
                 () =>
                   DatabaseCreationPage({
@@ -142,7 +160,7 @@ function MainMenuBar(props: { window: Window }) {
               ]);
               if (dialog.runForWindow(props.window)) {
                 const path = dialog.getResult();
-                openDatabase(props.window, path);
+                openDatabase(props.window, path, state);
               }
             }
           }
@@ -160,7 +178,7 @@ function MainMenuBar(props: { window: Window }) {
                     pages.DB_INDEX
                   ])
                 ) {
-                  openDatabase(props.window, path);
+                  openDatabase(props.window, path, state);
                 }
               }
             })),
@@ -171,7 +189,7 @@ function MainMenuBar(props: { window: Window }) {
                 updateSettings((settings) => {
                   settings.recent.length = 0;
                   return settings;
-                });
+                }, state);
               }
             }
           ]
@@ -211,7 +229,7 @@ function MainMenuBar(props: { window: Window }) {
           accelerator: 'CmdOrCtrl+N',
           onClick: async () => {
             if (navigator.isCurrentPage((pages) => pages.DB_INDEX))
-              addNewEntry();
+              addNewEntry(state);
           }
         },
         {
@@ -222,7 +240,7 @@ function MainMenuBar(props: { window: Window }) {
               navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
               selectedEntry() !== null
             ) {
-              editEntry(props.window);
+              editEntry(props.window, state);
             }
           }
         },
@@ -234,7 +252,7 @@ function MainMenuBar(props: { window: Window }) {
               navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
               selectedEntry() !== null
             ) {
-              deleteEntry(props.window);
+              deleteEntry(props.window, state);
             }
           }
         },
@@ -247,7 +265,7 @@ function MainMenuBar(props: { window: Window }) {
               navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
               selectedEntry() !== null
             ) {
-              copyUsername();
+              copyUsername(state);
             }
           }
         },
@@ -265,7 +283,7 @@ function MainMenuBar(props: { window: Window }) {
               selectedEntry() !== null &&
               copyingEnabled()
             ) {
-              copyPassword(props.window);
+              copyPassword(props.window, state);
             }
           }
         },
@@ -276,7 +294,7 @@ function MainMenuBar(props: { window: Window }) {
               navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
               selectedEntry() !== null
             ) {
-              showQrCode(props.window);
+              showQrCode(props.window, state);
             }
           }
         },
@@ -288,7 +306,7 @@ function MainMenuBar(props: { window: Window }) {
               navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
               selectedEntry() !== null
             ) {
-              copyUrl();
+              copyUrl(state);
             }
           }
         }
@@ -306,7 +324,7 @@ function MainMenuBar(props: { window: Window }) {
                 pages.DB_INDEX
               ])
             ) {
-              openPasswordGenerator();
+              openPasswordGenerator(state);
             }
           }
         },
@@ -320,7 +338,7 @@ function MainMenuBar(props: { window: Window }) {
                 pages.DB_INDEX
               ])
             ) {
-              openSettingsPage();
+              openSettingsPage(state);
             }
           }
         }
@@ -345,7 +363,7 @@ function MainMenuBar(props: { window: Window }) {
             updateSettings((settings) => {
               settings.alwaysOnTop = !settings.alwaysOnTop;
               return settings;
-            });
+            }, state);
           }
         },
         {
@@ -356,7 +374,7 @@ function MainMenuBar(props: { window: Window }) {
             updateSettings((settings) => {
               settings.showPreview = !settings.showPreview;
               return settings;
-            });
+            }, state);
           }
         },
         {
@@ -367,7 +385,7 @@ function MainMenuBar(props: { window: Window }) {
             updateSettings((settings) => {
               settings.showMenuBar = !settings.showMenuBar;
               return settings;
-            });
+            }, state);
           }
         },
         {
@@ -378,7 +396,7 @@ function MainMenuBar(props: { window: Window }) {
             updateSettings((settings) => {
               settings.showToolbar = !settings.showToolbar;
               return settings;
-            });
+            }, state);
           }
         },
         {
@@ -390,7 +408,7 @@ function MainMenuBar(props: { window: Window }) {
             updateSettings((settings) => {
               settings.hideUserNames = !settings.hideUserNames;
               return settings;
-            });
+            }, state);
           }
         }
       ]

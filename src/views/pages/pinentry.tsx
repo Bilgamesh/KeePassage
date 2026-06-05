@@ -1,8 +1,8 @@
 import { AttributedText, type Entry } from 'gui';
 import { createSignal, onCleanup } from 'solid-js';
-import { APP_NAME, LARGE_BUTTON_STYLE, TITLE_FONT } from '#/data/constants';
-import { t } from '#/data/i18n';
-import { selectedDbPath } from '#/data/shared-state';
+import { LARGE_BUTTON_STYLE, TITLE_FONT } from '#/data/constants';
+import { getTranslator } from '#/data/i18n';
+import { type AppState, useAppContext } from '#/data/shared-state';
 import { createListeners } from '#/utils/listen';
 import { Expand } from '#/views/components/expand';
 import type { Navigator } from '#/views/components/router';
@@ -13,15 +13,15 @@ const pinListeners = createListeners<string | null>();
 const entryNodes: Record<string, Entry> = {};
 let controller: AbortController;
 
-const [serial, setSerial] = createSignal<number | null>(null);
-const [purpose, setPurpose] = createSignal(`${APP_NAME} Database`);
-
 async function requestPin<T extends NavigationIndex>(
   navigator: Navigator<T>,
   serial: number,
+  state: AppState,
   entryName?: string | null,
   purpose?: string
 ) {
+  const { setPurpose, setSerial } = state;
+  const t = getTranslator(state);
   if (!controller?.signal.aborted) controller?.abort(); // Abort potential parallel PIN request in other window
   if (entryName) setPurpose(`${t('unlockEntry')}: ${entryName}`);
   else if (purpose) setPurpose(purpose);
@@ -50,6 +50,9 @@ async function requestPin<T extends NavigationIndex>(
 function PinentryPage<T extends NavigationIndex>(props: {
   navigator: Navigator<T>;
 }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const { selectedDbPath, serial, purpose } = state;
   const [pin, setPin] = createSignal<string | null>(null);
 
   function validatePin(pin: string) {

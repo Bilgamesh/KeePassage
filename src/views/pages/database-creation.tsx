@@ -2,7 +2,8 @@ import { AttributedText, type Window } from 'gui';
 import { createSignal, onCleanup } from 'solid-js';
 import yubiKeyImage from '#/assets/img/yubikey.png';
 import { TITLE_FONT } from '#/data/constants';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import type { YubiKey } from '#/schemas/yubikey-schema';
 import { saveNewDatabase } from '#/service/database';
 import { monitorYubiKeys } from '#/service/yubikey';
@@ -13,6 +14,8 @@ import { Image } from '#/views/components/image';
 import { Navigator, Router } from '#/views/components/router';
 
 function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
   const titles = (index: number) => [t('generalDbInfo'), t('pairKeys')][index];
   const [dbName, setDbName] = createSignal(t('passwords'));
   const [description, setDescription] = createSignal('');
@@ -109,7 +112,8 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                     description,
                     selectedKeys,
                     window: props.window,
-                    mainWindow: props.mainWindow
+                    mainWindow: props.mainWindow,
+                    state
                   });
               }}
               style={{

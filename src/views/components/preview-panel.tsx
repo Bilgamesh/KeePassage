@@ -6,8 +6,8 @@ import eyeIcon from '#/assets/icons/eye.png';
 import eyeOffIcon from '#/assets/icons/eye-off.png';
 import qrcodeIcon from '#/assets/icons/qrcode.png';
 import { TITLE_FONT } from '#/data/constants';
-import { t } from '#/data/i18n';
-import { appSettings, selectedEntry } from '#/data/shared-state';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
 import { copyPassword, getPassword, showQrCode } from '#/service/database';
 import { IconButton } from '#/views/components/icon-button';
@@ -18,10 +18,13 @@ function PreviewPanel(props: {
   visible?: boolean;
   entry: Entry;
 }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const { appSettings, selectedEntry } = state;
   const [password, setPassword] = createSignal<string | null>(null);
 
   async function showPassword() {
-    const pw = await getPassword(props);
+    const pw = await getPassword({ ...props, state });
     navigator.replace({
       from: (pages) => [pages.TOUCH, pages.PINTENTRY],
       to: (pages) => pages.DB_INDEX
@@ -84,7 +87,7 @@ function PreviewPanel(props: {
             <IconButton
               imageSize={{ height: 13, width: 13 }}
               onClick={() => {
-                showQrCode(props.window);
+                showQrCode(props.window, state);
               }}
               size={{ height: 20, width: 20 }}
               src={qrcodeIcon}
@@ -94,7 +97,7 @@ function PreviewPanel(props: {
             <IconButton
               imageSize={{ height: 13, width: 13 }}
               onClick={() => {
-                copyPassword(props.window);
+                copyPassword(props.window, state);
               }}
               size={{ height: 20, width: 20 }}
               src={clipboardIcon}

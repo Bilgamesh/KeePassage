@@ -1,6 +1,7 @@
 import { SimpleTableModel, type TableColumnOptions } from 'gui';
 import { type Accessor, createEffect, type Setter } from 'solid-js';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import type { YubiKey } from '#/schemas/yubikey-schema';
 import { RETIRED_SLOTS } from '#/service/lib/yubikey/yubikey-client';
 
@@ -8,6 +9,8 @@ function KeysTable(props: {
   yubiKeys: Accessor<YubiKey[]>;
   setYubiKeys: Setter<YubiKey[]>;
 }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
   const dbTable = SimpleTableModel.create(4);
   const keys: string[] = [];
 

@@ -13,33 +13,22 @@ import {
   PASSWORD_FONT,
   SMALL_BUTTON_STYLE
 } from '#/data/constants';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import { type AppState, useAppContext } from '#/data/shared-state';
 import { createListeners } from '#/utils/listen';
 import { blur } from '#/utils/ui';
 import { Expand } from '#/views/components/expand';
 import { IconButton } from '#/views/components/icon-button';
 import { NumericEntry } from '#/views/components/numeric-entry';
 
-const DEFAULT_PASSWORD_POLICY = {
-  lowerCase: true,
-  upperCase: true,
-  numbers: true,
-  symbols: true,
-  length: 32
-};
-
-const [password, setPassword] = createSignal('');
-const [passwordPolicy, setPasswordPolicy] = createSignal(
-  DEFAULT_PASSWORD_POLICY
-);
 let controller: AbortController;
 const pwListeners = createListeners<string>();
-const [requestInProgress, setRequestInProgress] = createSignal(false);
 
-async function getGeneratedPassword() {
+async function getGeneratedPassword(state: AppState) {
+  const { setRequestInProgress } = state.pwGenerator;
   setRequestInProgress(true);
   controller = new AbortController();
-  openPasswordGenerator();
+  openPasswordGenerator(state);
   try {
     const password = await pwListeners.waitForValue({
       signal: controller.signal
@@ -53,7 +42,8 @@ async function getGeneratedPassword() {
   }
 }
 
-function openPasswordGenerator() {
+function openPasswordGenerator(state: AppState) {
+  const { setPassword } = state.pwGenerator;
   if (!navigator.isCurrentPage((page) => page.GENERATOR)) {
     setPassword('');
     navigator.push((pages) => ({
@@ -63,11 +53,12 @@ function openPasswordGenerator() {
           controller.abort('Page cleanup');
       }
     }));
-    generate();
+    generate(state);
   }
 }
 
-function generate() {
+function generate(state: AppState) {
+  const { passwordPolicy, setPassword } = state.pwGenerator;
   let charset = '';
   if (passwordPolicy().lowerCase) charset += 'abcdefghijklmnopqrstuvwxyz';
   if (passwordPolicy().numbers) charset += '0123456789';
@@ -82,7 +73,24 @@ function generate() {
 }
 
 function PwGeneratorPage() {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const {
+    passwordPolicy,
+    setPasswordPolicy,
+    password,
+    setPassword,
+    requestInProgress
+  } = state.pwGenerator;
   const [visible, setVisible] = createSignal(true);
+
+  const DEFAULT_PASSWORD_POLICY = {
+    lowerCase: true,
+    upperCase: true,
+    numbers: true,
+    symbols: true,
+    length: 32
+  };
 
   // Workaround for Linux bug triggering slider onValueChange on first render
   setTimeout(() => {
@@ -129,7 +137,7 @@ function PwGeneratorPage() {
             <IconButton
               imageSize={{ height: 15, width: 15 }}
               onClick={() => {
-                generate();
+                generate(state);
               }}
               size={{
                 ...(ENTRY_BUTTON_STYLE as SizeF)
@@ -162,7 +170,7 @@ function PwGeneratorPage() {
                     1
                   )
                 }));
-                generate();
+                generate(state);
               }}
               range={{ min: 1, max: 129 }}
               step={1}
@@ -175,7 +183,7 @@ function PwGeneratorPage() {
               minValue={1}
               onValueChange={(value) => {
                 setPasswordPolicy((v) => ({ ...v, length: value }));
-                generate();
+                generate(state);
               }}
               value={passwordPolicy().length}
             />
@@ -190,7 +198,7 @@ function PwGeneratorPage() {
                       ...v,
                       upperCase: !v.upperCase
                     }));
-                    generate();
+                    generate(state);
                   }}
                   style={{
                     ...SMALL_BUTTON_STYLE,
@@ -205,7 +213,7 @@ function PwGeneratorPage() {
                       ...v,
                       lowerCase: !v.lowerCase
                     }));
-                    generate();
+                    generate(state);
                   }}
                   style={{
                     ...SMALL_BUTTON_STYLE,
@@ -217,7 +225,7 @@ function PwGeneratorPage() {
                 <button
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, numbers: !v.numbers }));
-                    generate();
+                    generate(state);
                   }}
                   style={{
                     ...SMALL_BUTTON_STYLE,
@@ -229,7 +237,7 @@ function PwGeneratorPage() {
                 <button
                   onClick={() => {
                     setPasswordPolicy((v) => ({ ...v, symbols: !v.symbols }));
-                    generate();
+                    generate(state);
                   }}
                   style={{
                     ...SMALL_BUTTON_STYLE,

@@ -2,19 +2,24 @@ import { app, MessageLoop } from 'gui';
 import { App } from '#/app';
 import { APP_ID, APP_NAME } from '#/data/constants';
 import { render } from '#/renderer';
-import { initConfigFile } from '#/service/config';
 import { SingleInstance } from '#/utils/single-instance';
 import { MainWindow } from '#/views/windows/main';
+import { AppProvider } from './data/shared-state';
 
 async function main() {
   app.setName(APP_NAME);
   app.setID(APP_ID);
 
-  await initConfigFile();
-
   const window = MainWindow();
 
-  render(() => <App window={window} />, window);
+  render(
+    () => (
+      <AppProvider>
+        <App window={window} />
+      </AppProvider>
+    ),
+    window
+  );
 
   window.activate();
 

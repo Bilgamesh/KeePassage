@@ -11,7 +11,7 @@ function createWindow(name: string) {
   const win = Window.create({});
   win.setIcon(AppIcon());
   win.setTitle(name);
-  global.windowMap.set(name, win);
+  // global.windowMap.set(name, win);
   win.onClose.connect(() => deleteWindow(name));
   return win;
 }

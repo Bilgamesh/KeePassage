@@ -2,16 +2,9 @@ import { Clipboard, FileSaveDialog, MessageBox, type Window } from 'gui';
 import { toString as qrCodeToString } from 'qrcode';
 import type { Accessor } from 'solid-js';
 import { navigator } from '#/app';
-import { DATABASE_EXTENSION } from '#/data/constants';
-import { t } from '#/data/i18n';
-import {
-  appSettings,
-  selectedDbPath,
-  selectedEntry,
-  setSelectedDbPath,
-  setUnlockedDbIndex,
-  unlockedDbIndex
-} from '#/data/shared-state';
+import { DATABASE_EXTENSION, type DEFAULT_SETTINGS } from '#/data/constants';
+import { getTranslator } from '#/data/i18n';
+import type { AppState } from '#/data/shared-state';
 import { render } from '#/renderer';
 import type { Entry } from '#/schemas/database-schema';
 import type { YubiKey } from '#/schemas/yubikey-schema';
@@ -32,7 +25,9 @@ import { requestTouch } from '#/views/pages/touch';
 import { MainWindow } from '#/views/windows/main';
 import { QrCodeWindow } from '#/views/windows/qr-code';
 
-async function openDatabase(window: Window, path: string) {
+async function openDatabase(window: Window, path: string, state: AppState) {
+  const t = getTranslator(state);
+  const { selectedDbPath, setSelectedDbPath, setUnlockedDbIndex } = state;
   const previousPath = selectedDbPath();
   setSelectedDbPath(path);
   const dbFile = await loadDatabase(path);
@@ -41,12 +36,13 @@ async function openDatabase(window: Window, path: string) {
     return showError(
       window,
       `${t('pleaseConnectCorrectKey')}:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
+      state,
       {
         title: t('keyNotConnected')
       }
     );
 
-  const pin = await requestPin(navigator, key.serial);
+  const pin = await requestPin(navigator, key.serial, state);
   if (!pin) {
     setSelectedDbPath(previousPath);
     navigator.pop();
@@ -72,7 +68,7 @@ async function openDatabase(window: Window, path: string) {
   } catch (err) {
     console.error(`Failed to open database: ${err}`);
     if (!(err instanceof DOMException) || err.name !== 'AbortError')
-      showError(window, err);
+      showError(window, err, state);
     setSelectedDbPath(previousPath);
     navigator.replace({
       from: (pages) => [pages.TOUCH, pages.PINTENTRY],
@@ -84,7 +80,7 @@ async function openDatabase(window: Window, path: string) {
     if (index === -1) settings.recent.unshift(path);
     else settings.recent.unshift(settings.recent.splice(index, 1)[0]!);
     return settings;
-  });
+  }, state);
 }
 
 async function saveNewDatabase(options: {
@@ -93,8 +89,11 @@ async function saveNewDatabase(options: {
   selectedKeys: Accessor<YubiKey[]>;
   dbName: Accessor<string>;
   description: Accessor<string>;
+  state: AppState;
 }) {
-  const { dbName, description, mainWindow, selectedKeys, window } = options;
+  const { dbName, description, mainWindow, selectedKeys, window, state } =
+    options;
+  const t = getTranslator(state);
 
   const uniqueSerials = () => [...new Set(selectedKeys().map((k) => k.serial))];
 
@@ -130,13 +129,19 @@ async function saveNewDatabase(options: {
       if (index !== -1) settings.recent.splice(index, 1);
       settings.recent.unshift(path);
       return settings;
-    });
+    }, state);
     window.close();
     mainWindow.activate();
   }
 }
 
-async function getPassword(options: { entry: Entry; window: Window }) {
+async function getPassword(options: {
+  entry: Entry;
+  window: Window;
+  state: AppState;
+}) {
+  const t = getTranslator(options.state);
+  const { selectedDbPath } = options.state;
   const { entry, window } = options;
   const path = selectedDbPath();
   const dbFile = await loadDatabase(path);
@@ -145,13 +150,19 @@ async function getPassword(options: { entry: Entry; window: Window }) {
     showError(
       window,
       `${t('pleaseConnectCorrectKey')}:\n${dbFile.s.map((s) => s.serial).join(', ')}`,
+      options.state,
       {
         title: t('keyNotConnected')
       }
     );
     return null;
   }
-  const pin = await requestPin(navigator, key.serial, entry.title);
+  const pin = await requestPin(
+    navigator,
+    key.serial,
+    options.state,
+    entry.title
+  );
   if (!pin) {
     navigator.replace({
       from: (pages) => [pages.TOUCH, pages.PINTENTRY],
@@ -172,13 +183,14 @@ async function getPassword(options: { entry: Entry; window: Window }) {
   } catch (err) {
     console.error(`Failed to decrypt password: ${err}`);
     if (!(err instanceof DOMException) || err.name !== 'AbortError')
-      showError(window, err);
+      showError(window, err, options.state);
     return null;
   }
 }
 
-async function addNewEntry() {
-  const entry = await requestEntry();
+async function addNewEntry(state: AppState) {
+  const { selectedDbPath, setUnlockedDbIndex, unlockedDbIndex } = state;
+  const entry = await requestEntry(state);
   navigator.replace({
     from: (pages) => pages.ENTRY,
     to: (pages) => pages.DB_INDEX
@@ -195,19 +207,22 @@ async function addNewEntry() {
   }
 }
 
-async function editEntry(window: Window) {
+async function editEntry(window: Window, state: AppState) {
+  const t = getTranslator(state);
+  const { selectedEntry, unlockedDbIndex, setUnlockedDbIndex, selectedDbPath } =
+    state;
   const entry = selectedEntry();
   if (!entry)
-    return showError(window, t('pleaseSelectEntryToEdit'), {
+    return showError(window, t('pleaseSelectEntryToEdit'), state, {
       title: 'Entry Not Selected'
     });
-  const password = await getPassword({ entry, window });
+  const password = await getPassword({ entry, window, state });
   if (password === null)
     return navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
-  const newEntry = await requestEntry(password, entry);
+  const newEntry = await requestEntry(state, password, entry);
   navigator.replace({
     from: (pages) => pages.ENTRY,
     to: (pages) => pages.DB_INDEX
@@ -221,16 +236,19 @@ async function editEntry(window: Window) {
   saveDatabase({ db, path });
 }
 
-async function deleteEntry(window: Window) {
+async function deleteEntry(window: Window, state: AppState) {
+  const t = getTranslator(state);
+  const { selectedDbPath, selectedEntry, setUnlockedDbIndex, unlockedDbIndex } =
+    state;
   const entry = selectedEntry();
   if (!entry)
-    return showError(window, t('pleaseSelectEntryToDelete'), {
+    return showError(window, t('pleaseSelectEntryToDelete'), state, {
       title: 'Entry Not Selected'
     });
   const db = unlockedDbIndex()!;
   const index = db.secrets.indexOf(entry);
   if (index === -1)
-    return showError(window, t('cannotDeleteEntryDoesNotExist'), {
+    return showError(window, t('cannotDeleteEntryDoesNotExist'), state, {
       title: 'Entry Not Selected'
     });
   const msgBox = MessageBox.create();
@@ -247,30 +265,33 @@ async function deleteEntry(window: Window) {
   }
 }
 
-function copyUsername() {
+function copyUsername(state: AppState) {
+  const { selectedEntry } = state;
   const entry = selectedEntry();
   if (entry) Clipboard.get().setText(entry?.username);
 }
 
-async function copyPassword(window: Window) {
+async function copyPassword(window: Window, state: AppState) {
+  const { appSettings, selectedEntry } = state;
   const entry = selectedEntry();
   if (entry) {
-    const password = await getPassword({ entry, window });
+    const password = await getPassword({ entry, window, state });
     navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
     });
     if (password) {
       Clipboard.get().setText(password);
-      triggerClipboardCleanup();
+      triggerClipboardCleanup(appSettings);
     }
   }
 }
 
-async function showQrCode(window: Window) {
+async function showQrCode(window: Window, state: AppState) {
+  const { selectedEntry } = state;
   const entry = selectedEntry();
   if (entry) {
-    const password = await getPassword({ entry, window });
+    const password = await getPassword({ entry, window, state });
     navigator.replace({
       from: (pages) => [pages.PINTENTRY, pages.TOUCH],
       to: (pages) => pages.DB_INDEX
@@ -285,7 +306,8 @@ async function showQrCode(window: Window) {
   }
 }
 
-function copyUrl() {
+function copyUrl(state: AppState) {
+  const { selectedEntry } = state;
   const entry = selectedEntry();
   if (entry) Clipboard.get().setText(entry?.url);
 }
@@ -293,7 +315,13 @@ function copyUrl() {
 let clipboardTimeout: NodeJS.Timeout | null = null;
 let secondsSinceInactive = 0;
 
-function refreshDbLock() {
+function refreshDbLock(state: AppState) {
+  const {
+    unlockedDbIndex,
+    setSelectedDbPath,
+    setUnlockedDbIndex,
+    appSettings
+  } = state;
   const isMinimised = MainWindow().isMinimized() || false;
   const isActive = MainWindow().isActive() || false;
 
@@ -317,9 +345,9 @@ function refreshDbLock() {
   }
 }
 
-setInterval(refreshDbLock, 1000);
-
-function triggerClipboardCleanup() {
+function triggerClipboardCleanup(
+  appSettings: Accessor<typeof DEFAULT_SETTINGS>
+) {
   if (clipboardTimeout) {
     clearTimeout(clipboardTimeout);
     clipboardTimeout = null;

@@ -1,8 +1,14 @@
 import { Clipboard, Menu, type TextEdit } from 'gui';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import type { AppState } from '#/data/shared-state';
 import type { MenuItemOptions } from '#/renderer/types';
 
-function TextContextMenu(props: { editable?: boolean; textEdit: TextEdit }) {
+function TextContextMenu(props: {
+  editable?: boolean;
+  textEdit: TextEdit;
+  state: AppState;
+}) {
+  const t = getTranslator(props.state);
   if (props.editable)
     return Menu.create([
       {

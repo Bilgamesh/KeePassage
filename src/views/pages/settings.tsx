@@ -1,35 +1,45 @@
 import { AttributedText, MessageBox, type Picker, type Window } from 'gui';
-import { createEffect, createMemo, createSignal } from 'solid-js';
+import {
+  type Accessor,
+  createEffect,
+  createMemo,
+  createSignal
+} from 'solid-js';
 import { navigator } from '#/app';
 import {
   DEFAULT_SETTINGS,
   LARGE_BUTTON_STYLE,
   TITLE_FONT
 } from '#/data/constants';
-import { dictionaries, t } from '#/data/i18n';
-import { appSettings } from '#/data/shared-state';
+import { dictionaries, getTranslator } from '#/data/i18n';
+import { type AppState, useAppContext } from '#/data/shared-state';
 import { updateSettings } from '#/service/config';
 import { blur } from '#/utils/ui';
 import { Expand } from '#/views/components/expand';
 import { TimeoutEntry } from '#/views/components/timeout-entry';
 
 const [unsavedAppSettings, setUnsavedAppSettings] = createSignal({
-  ...appSettings()
+  ...DEFAULT_SETTINGS
 });
 
-function reset() {
+function reset(appSettings: Accessor<typeof DEFAULT_SETTINGS>) {
   setUnsavedAppSettings((s) => ({ ...s }));
   setUnsavedAppSettings({ ...appSettings() });
 }
 
-function openSettingsPage() {
+function openSettingsPage(state: AppState) {
+  const { appSettings } = state;
   if (!navigator.isCurrentPage((page) => page.SETTINGS)) {
-    reset();
+    reset(appSettings);
     navigator.push((pages) => pages.SETTINGS);
   }
 }
 
 function SettingsPage(props: { window: Window }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const { appSettings } = state;
+  setUnsavedAppSettings({ ...appSettings() });
   const languages = createMemo(() =>
     dictionaries.map((dict) => t(dict.languageCode as 'en'))
   );
@@ -232,7 +242,7 @@ function SettingsPage(props: { window: Window }) {
             msgBox.addButton(t('reset'), 1);
             if (msgBox.runForWindow(props.window) === 1) {
               navigator.pop();
-              updateSettings(() => DEFAULT_SETTINGS);
+              updateSettings(() => DEFAULT_SETTINGS, state);
             }
           }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
@@ -242,7 +252,7 @@ function SettingsPage(props: { window: Window }) {
         <button
           onClick={(b) => {
             navigator.pop();
-            updateSettings(() => unsavedAppSettings());
+            updateSettings(() => unsavedAppSettings(), state);
             blur(b);
           }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
@@ -251,7 +261,7 @@ function SettingsPage(props: { window: Window }) {
         <button
           onClick={(b) => {
             navigator.pop();
-            reset();
+            reset(appSettings);
             blur(b);
           }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}

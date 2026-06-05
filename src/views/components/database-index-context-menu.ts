@@ -1,6 +1,6 @@
 import { Menu, type Window } from 'gui';
-import { t } from '#/data/i18n';
-import { selectedEntry } from '#/data/shared-state';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import type { MenuItemOptions } from '#/renderer/types';
 import {
   addNewEntry,
@@ -13,12 +13,15 @@ import {
 } from '#/service/database';
 
 function DatabaseIndexContextMenu(props: { window: Window }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const { selectedEntry } = state;
   if (!selectedEntry())
     return Menu.create([
       {
         label: t('newEntry...'),
         onClick: (_self) => {
-          addNewEntry();
+          addNewEntry(state);
         }
       }
     ] as MenuItemOptions[]);
@@ -27,44 +30,44 @@ function DatabaseIndexContextMenu(props: { window: Window }) {
       {
         label: t('copyUsername'),
         onClick: () => {
-          copyUsername();
+          copyUsername(state);
         }
       },
       {
         label: t('copyPassword'),
         onClick: () => {
-          copyPassword(props.window);
+          copyPassword(props.window, state);
         }
       },
       {
         label: t('showQrCode'),
         onClick: () => {
-          showQrCode(props.window);
+          showQrCode(props.window, state);
         }
       },
       {
         label: t('copyUrl'),
         onClick: () => {
-          copyUrl();
+          copyUrl(state);
         }
       },
       { type: 'separator' },
       {
         label: t('editEntry'),
         onClick: () => {
-          editEntry(props.window);
+          editEntry(props.window, state);
         }
       },
       {
         label: t('deleteEntry'),
         onClick: () => {
-          deleteEntry(props.window);
+          deleteEntry(props.window, state);
         }
       },
       {
         label: t('newEntry'),
         onClick: () => {
-          addNewEntry();
+          addNewEntry(state);
         }
       }
     ] as MenuItemOptions[]);

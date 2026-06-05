@@ -1,6 +1,7 @@
 import { AttributedText } from 'gui';
 import type { Accessor, Setter } from 'solid-js';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 
 function DatabaseGeneralInfo(props: {
   dbName: Accessor<string>;
@@ -8,6 +9,9 @@ function DatabaseGeneralInfo(props: {
   description: Accessor<string>;
   setDescription: Setter<string>;
 }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+
   return (
     <container style={{ flex: 1, 'margin-top': 10 }}>
       <container style={{ flexDirection: 'row' }}>

@@ -1,6 +1,7 @@
 import type { Window } from 'gui';
 import type { Accessor, Setter } from 'solid-js';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import { render } from '#/renderer';
 import type { YubiKey } from '#/schemas/yubikey-schema';
 import { KeysTable } from '#/views/components/keys-table';
@@ -12,6 +13,9 @@ function DatabaseKeys(props: {
   yubiKeys: Accessor<YubiKey[]>;
   setYubiKeys: Setter<YubiKey[]>;
 }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+
   return (
     <container style={{ flex: 1 }}>
       <label
@@ -31,7 +35,7 @@ function DatabaseKeys(props: {
           color="#0000FF"
           cursor="hand"
           onMouseDown={() => {
-            const win = YubiKeyConfigWindow(true)!;
+            const win = YubiKeyConfigWindow(state, true)!;
             render(() => <YubiKeyConfigPage window={win} />, win);
             props.window.close();
             win.activate();

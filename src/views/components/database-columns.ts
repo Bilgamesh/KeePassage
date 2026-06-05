@@ -1,7 +1,11 @@
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import type { TableColumn } from '#/renderer/types';
 
 function DatabaseColumns() {
+  const state = useAppContext();
+  const t = getTranslator(state);
+
   const columns: TableColumn[] = [
     {
       label: t('title'),

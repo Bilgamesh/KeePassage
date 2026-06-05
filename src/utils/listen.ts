@@ -69,17 +69,4 @@ function createListeners<T>() {
   };
 }
 
-function createLineReader(onLine: (line: string) => void) {
-  let buffer = '';
-  return (chunk: string) => {
-    buffer += chunk;
-    while (buffer.indexOf('\n') !== -1) {
-      const idx = buffer.indexOf('\n');
-      const line = buffer.slice(0, idx);
-      buffer = buffer.slice(idx + 1);
-      if (line.trim()) onLine(line);
-    }
-  };
-}
-
-export { createLineReader, createListeners };
+export { createListeners };

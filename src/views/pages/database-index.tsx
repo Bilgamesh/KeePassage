@@ -2,13 +2,7 @@ import { setTimeout } from 'node:timers/promises';
 import { SimpleTableModel, type Window } from 'gui';
 import { For, Show } from 'solid-js';
 import { currentDictionary, dictionaries } from '#/data/i18n';
-import {
-  appSettings,
-  filter,
-  selectedEntry,
-  setSelectedEntry,
-  unlockedDbIndex
-} from '#/data/shared-state';
+import { useAppContext } from '#/data/shared-state';
 import type { Entry } from '#/schemas/database-schema';
 import { editEntry } from '#/service/database';
 import { DatabaseColumns } from '#/views/components/database-columns';
@@ -16,6 +10,14 @@ import { DatabaseIndexContextMenu } from '#/views/components/database-index-cont
 import { PreviewPanel } from '#/views/components/preview-panel';
 
 function DatabaseIndexPage(props: { window: Window }) {
+  const state = useAppContext();
+  const {
+    appSettings,
+    filter,
+    selectedEntry,
+    setSelectedEntry,
+    unlockedDbIndex
+  } = state;
   const sorter = (a: Entry, b: Entry) => a.title.localeCompare(b.title);
   const entries = () =>
     (unlockedDbIndex()?.secrets || []).filter(filter().run).sort(sorter);
@@ -42,7 +44,7 @@ function DatabaseIndexPage(props: { window: Window }) {
         {(dict) => (
           // There is a limitation in Yue - table columns cannot be deleted and their titles can't be modified.
           // Because of that, we have to re-create the table when language is changed, to translate the column titles.
-          <Show when={dict === currentDictionary()}>
+          <Show when={dict === currentDictionary(state)}>
             <table
               columnsWithOptions={DatabaseColumns()}
               hasBorder={true}
@@ -60,7 +62,7 @@ function DatabaseIndexPage(props: { window: Window }) {
                 }
               }}
               onRowActivate={() => {
-                editEntry(props.window);
+                editEntry(props.window, state);
               }}
               onSelectionChange={async (self) => {
                 await setTimeout(2);

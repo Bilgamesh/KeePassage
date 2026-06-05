@@ -1,14 +1,17 @@
 import { MessageBox, type Window } from 'gui';
 import { SwError } from '#/data/errors';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import type { AppState } from '#/data/shared-state';
 
 type WrappedError = { error: string };
 
 function showError(
   window: Window,
   error: unknown,
+  state: AppState,
   options?: { title?: string }
 ) {
+  const t = getTranslator(state);
   const msgBox = MessageBox.create();
   msgBox.setType('error');
   msgBox.setTitle(t('error'));

@@ -13,8 +13,8 @@ import {
   TITLE_FONT,
   VERSION
 } from '#/data/constants';
-import { t } from '#/data/i18n';
-import { appSettings } from '#/data/shared-state';
+import { getTranslator } from '#/data/i18n';
+import { AppProvider, useAppContext } from '#/data/shared-state';
 import { render } from '#/renderer';
 import { openDatabase } from '#/service/database';
 import { Expand } from '#/views/components/expand';
@@ -25,6 +25,9 @@ import { DatabaseWindow } from '#/views/windows/database';
 import { YubiKeyConfigWindow } from '#/views/windows/yubikey-config';
 
 function WelcomePage(props: { window: Window }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const { appSettings } = state;
   const [dbTable, setDbTable] = createSignal(SimpleTableModel.create(1));
 
   const recent = () => appSettings().recent;
@@ -58,10 +61,15 @@ function WelcomePage(props: { window: Window }) {
         <Expand />
         <button
           onClick={() => {
-            const win = DatabaseWindow(true)!;
+            const win = DatabaseWindow(state, true)!;
             render(
               () => (
-                <DatabaseCreationPage mainWindow={props.window} window={win} />
+                <AppProvider>
+                  <DatabaseCreationPage
+                    mainWindow={props.window}
+                    window={win}
+                  />
+                </AppProvider>
               ),
               win
             );
@@ -72,7 +80,7 @@ function WelcomePage(props: { window: Window }) {
         />
         <button
           onClick={async () => {
-            const win = DatabaseWindow();
+            const win = DatabaseWindow(state);
             if (win) return win.activate();
 
             const dialog = FileOpenDialog.create();
@@ -84,7 +92,7 @@ function WelcomePage(props: { window: Window }) {
             ]);
             if (dialog.runForWindow(props.window)) {
               const path = dialog.getResult();
-              openDatabase(props.window, path);
+              openDatabase(props.window, path, state);
             }
           }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
@@ -92,8 +100,15 @@ function WelcomePage(props: { window: Window }) {
         />
         <button
           onClick={() => {
-            const win = YubiKeyConfigWindow(true)!;
-            render(() => <YubiKeyConfigPage window={win} />, win);
+            const win = YubiKeyConfigWindow(state, true)!;
+            render(
+              () => (
+                <AppProvider>
+                  <YubiKeyConfigPage window={win} />
+                </AppProvider>
+              ),
+              win
+            );
             win.activate();
           }}
           style={{ ...LARGE_BUTTON_STYLE, 'margin-left': 10 }}
@@ -126,11 +141,11 @@ function WelcomePage(props: { window: Window }) {
             hasBorder={true}
             model={dbTable()}
             onRowActivate={async (_table, row) => {
-              const win = DatabaseWindow();
+              const win = DatabaseWindow(state);
               if (win) return win.activate();
 
               const path = recent()[row]!;
-              openDatabase(props.window, path);
+              openDatabase(props.window, path, state);
             }}
             style={{ flex: 4 }}
           />

@@ -3,8 +3,8 @@ import { AttributedText } from 'gui';
 import { onCleanup } from 'solid-js';
 import touchIcon from '#/assets/icons/touch.png';
 import { DARK_MODE_FONT_COLOR, TITLE_FONT } from '#/data/constants';
-import { t } from '#/data/i18n';
-import { isDark } from '#/data/shared-state';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import { Expand } from '#/views/components/expand';
 import { Image } from '#/views/components/image';
 import type { Navigator } from '#/views/components/router';
@@ -36,6 +36,9 @@ function requestTouch<T extends NavigationIndex>(navigator: Navigator<T>) {
 }
 
 function TouchPage() {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const { isDark } = state;
   onCleanup(() => {
     controller?.abort('Cancel');
   });

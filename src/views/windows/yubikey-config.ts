@@ -5,12 +5,13 @@ import {
   SUBWINDOW_MIN_SIZE,
   WINDOWS_APP_BACKGROUND_COLOR
 } from '#/data/constants';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import type { AppState } from '#/data/shared-state';
 import { createWindow, getWindow } from '#/utils/ui';
 
-const title = () => t('configureYubikey');
-
-function YubiKeyConfigWindow(create?: boolean) {
+function YubiKeyConfigWindow(state: AppState, create?: boolean) {
+  const t = getTranslator(state);
+  const title = () => t('configureYubikey');
   const existing = getWindow(title());
   if (existing || !create) return existing;
   let win: Window;

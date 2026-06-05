@@ -5,7 +5,7 @@ import { type Flatten, flatten, translator } from '@solid-primitives/i18n';
 import { Locale } from 'gui';
 import type * as en from '#/assets/texts/en.json';
 import { NullDictionaryError } from '#/data/errors';
-import { appSettings } from '#/data/shared-state';
+import type { AppState } from '#/data/shared-state';
 import {
   checkIfPacked,
   getResourcePath,
@@ -53,15 +53,20 @@ function getSystemLocale() {
   return sanitizeLocale(Locale.getCurrentIdentifier());
 }
 
-const t = translator(() => {
-  const dict = currentDictionary();
-  if (!dict) throw new NullDictionaryError();
-  return dict.content;
-});
+function getTranslator(state: AppState) {
+  const t = translator(() => {
+    const dict = currentDictionary(state);
+    if (!dict) throw new NullDictionaryError();
+    return dict.content;
+  });
+  return t;
+}
 
 const dictionaries = getDictionaries();
 
-const currentDictionary = () =>
-  dictionaries.find((d) => d.languageCode === appSettings().language);
+const currentDictionary = (state: AppState) => {
+  const { appSettings } = state;
+  return dictionaries.find((d) => d.languageCode === appSettings().language);
+};
 
-export { currentDictionary, dictionaries, getSystemLocale, t };
+export { currentDictionary, dictionaries, getSystemLocale, getTranslator };

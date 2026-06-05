@@ -1,12 +1,16 @@
 import { SimpleTableModel, type TableColumnOptions } from 'gui';
 import type { Accessor } from 'solid-js';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import type { Slot } from '#/service/yubikey';
 
 function YubiKeyConfigTable(props: {
   slots: Accessor<Slot[]>;
   onSelection?: (slot: Slot | null) => void;
 }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+
   const columns = [
     {
       label: t('serialNumber'),

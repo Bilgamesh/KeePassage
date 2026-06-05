@@ -2,7 +2,8 @@ import { AttributedText, MessageBox, type Window } from 'gui';
 import { createSignal, onCleanup } from 'solid-js';
 import yubiKeyImage from '#/assets/img/yubikey.png';
 import { TITLE_FONT } from '#/data/constants';
-import { t } from '#/data/i18n';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import {
   deleteCertificate,
   generateCertificate,
@@ -18,6 +19,8 @@ import { PinentryPage, requestPin } from '#/views/pages/pinentry';
 import { requestTouch, TouchPage } from '#/views/pages/touch';
 
 function YubiKeyConfigPage(props: { window: Window }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
   const [slots, setSlots] = createSignal<Slot[]>([]);
   const [selectedSlot, setSelectedSlot] = createSignal<Slot | null>(null);
 
@@ -104,13 +107,14 @@ function YubiKeyConfigPage(props: { window: Window }) {
                   const pin = await requestPin(
                     navigator,
                     slot.serial,
+                    state,
                     null,
                     `${t('delete')} ${slot.name}`
                   );
                   navigator.pop();
                   if (pin)
                     deleteCertificate({ slot, pin }).catch((err) =>
-                      showError(props.window, err)
+                      showError(props.window, err, state)
                     );
                 }}
                 style={{
@@ -127,6 +131,7 @@ function YubiKeyConfigPage(props: { window: Window }) {
                   const pin = await requestPin(
                     navigator,
                     selectedSlot()!.serial,
+                    state,
                     null,
                     t('generateIdentity')
                   );
@@ -141,7 +146,7 @@ function YubiKeyConfigPage(props: { window: Window }) {
                   try {
                     await generateCertificate({ slot: selectedSlot()!, pin });
                   } catch (err) {
-                    if (!signal.aborted) showError(props.window, err);
+                    if (!signal.aborted) showError(props.window, err, state);
                   } finally {
                     navigator.replace({
                       from: (p) => [p.PINTENTRY, p.TOUCH],

@@ -125,7 +125,7 @@ function Router<T extends IndexRecord>(props: {
   });
 
   onCleanup(() => {
-    for (const page of pages) page.cleanup();
+    // for (const page of pages) page.cleanup();
   });
 
   return (

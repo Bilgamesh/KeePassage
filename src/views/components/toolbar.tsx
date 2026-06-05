@@ -24,16 +24,8 @@ import {
   DATABASE_EXTENSION,
   SMALL_ENTRY_STYLE
 } from '#/data/constants';
-import { t } from '#/data/i18n';
-import {
-  appSettings,
-  isDark,
-  selectedEntry,
-  setFilter,
-  setSelectedDbPath,
-  setUnlockedDbIndex,
-  unlockedDbIndex
-} from '#/data/shared-state';
+import { getTranslator } from '#/data/i18n';
+import { useAppContext } from '#/data/shared-state';
 import {
   addNewEntry,
   copyPassword,
@@ -50,6 +42,18 @@ import { openPasswordGenerator } from '#/views/pages/pw-generator';
 import { openSettingsPage } from '#/views/pages/settings';
 
 function Toolbar(props: { window: Window }) {
+  const state = useAppContext();
+  const t = getTranslator(state);
+  const {
+    appSettings,
+    isDark,
+    selectedEntry,
+    setFilter,
+    setSelectedDbPath,
+    setUnlockedDbIndex,
+    unlockedDbIndex
+  } = state;
+
   function updateFilter(text: string) {
     text = text.toLowerCase();
     setFilter({
@@ -109,7 +113,7 @@ function Toolbar(props: { window: Window }) {
             ]);
             if (dialog.runForWindow(props.window)) {
               const path = dialog.getResult();
-              openDatabase(props.window, path);
+              openDatabase(props.window, path, state);
             }
           }}
           src={folderIcon}
@@ -134,7 +138,7 @@ function Toolbar(props: { window: Window }) {
         <IconButton
           enabled={navigator.isCurrentPage((pages) => pages.DB_INDEX)}
           onClick={() => {
-            addNewEntry();
+            addNewEntry(state);
           }}
           src={plusIcon}
           tooltip={t('newEntry...')}
@@ -145,7 +149,7 @@ function Toolbar(props: { window: Window }) {
             selectedEntry() !== null
           }
           onClick={() => {
-            editEntry(props.window);
+            editEntry(props.window, state);
           }}
           src={editIcon}
           tooltip={t('editEntry')}
@@ -156,7 +160,7 @@ function Toolbar(props: { window: Window }) {
             selectedEntry() !== null
           }
           onClick={() => {
-            deleteEntry(props.window);
+            deleteEntry(props.window, state);
           }}
           src={trashIcon}
           tooltip={t('deleteEntry')}
@@ -170,7 +174,7 @@ function Toolbar(props: { window: Window }) {
             selectedEntry() !== null
           }
           onClick={() => {
-            copyUsername();
+            copyUsername(state);
           }}
           src={userIcon}
           tooltip={t('copyUsername')}
@@ -181,7 +185,7 @@ function Toolbar(props: { window: Window }) {
             selectedEntry() !== null
           }
           onClick={() => {
-            copyPassword(props.window);
+            copyPassword(props.window, state);
           }}
           src={copyIcon}
           tooltip={t('copyPassword')}
@@ -192,7 +196,7 @@ function Toolbar(props: { window: Window }) {
             selectedEntry() !== null
           }
           onClick={() => {
-            showQrCode(props.window);
+            showQrCode(props.window, state);
           }}
           src={qrcodeIcon}
           tooltip={t('showQrCode')}
@@ -203,7 +207,7 @@ function Toolbar(props: { window: Window }) {
             selectedEntry() !== null
           }
           onClick={() => {
-            copyUrl();
+            copyUrl(state);
           }}
           src={linkIcon}
           tooltip={t('copyUrl')}
@@ -217,7 +221,7 @@ function Toolbar(props: { window: Window }) {
             pages.DB_INDEX
           ])}
           onClick={() => {
-            openPasswordGenerator();
+            openPasswordGenerator(state);
           }}
           src={diceIcon}
           tooltip={t('passwordGenerator')}
@@ -228,7 +232,7 @@ function Toolbar(props: { window: Window }) {
             pages.DB_INDEX
           ])}
           onClick={() => {
-            openSettingsPage();
+            openSettingsPage(state);
           }}
           src={settingsIcon}
           tooltip={t('settings')}

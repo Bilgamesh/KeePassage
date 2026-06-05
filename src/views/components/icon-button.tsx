@@ -1,6 +1,6 @@
 import { type Button, Image, type SizeF } from 'gui';
 import { DARK_MODE_FONT_COLOR, DISABLED_COLOR } from '#/data/constants';
-import { isDark } from '#/data/shared-state';
+import { useAppContext } from '#/data/shared-state';
 import type { Style } from '#/renderer/types';
 
 function IconButton(props: {
@@ -16,6 +16,7 @@ function IconButton(props: {
   if (props.enabled === undefined) props.enabled = true;
 
   const image = () => {
+    const { isDark } = useAppContext();
     const image = Image.createFromPath(props.src).resize(
       {
         height: props.imageSize?.height || 20,

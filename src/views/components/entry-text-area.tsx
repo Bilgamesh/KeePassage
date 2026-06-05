@@ -1,4 +1,5 @@
 import type { Accessor } from 'solid-js';
+import { useAppContext } from '#/data/shared-state';
 import type { Style } from '#/renderer/types';
 import { TextContextMenu } from '#/views/components/text-context-menu';
 
@@ -9,6 +10,8 @@ function EntryTextArea(props: {
   text?: Accessor<string>;
   onTextChange?: (text: string) => void;
 }) {
+  const state = useAppContext();
+
   return (
     <container style={props.style || {}}>
       <label
@@ -28,7 +31,8 @@ function EntryTextArea(props: {
           if (ev.button === 2 && textEdit.hasFocus())
             TextContextMenu({
               editable: true,
-              textEdit
+              textEdit,
+              state
             }).popup();
           else textEdit.focus();
         }}
