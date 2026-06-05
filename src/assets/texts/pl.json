@@ -117,6 +117,7 @@
   "paste": "Wklej",
   "select_all": "Zaznacz wszystko",
   "error": "Błąd",
+  "entryNotSelected": "Nie wybrano wpisu",
   "yubikey_status_words": {
     "OK": "Polecenie zakończone pomyślnie.",
     "BYTES_REMAINING": "Dostępne są dodatkowe dane do pobrania.",

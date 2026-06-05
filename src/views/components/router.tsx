@@ -125,7 +125,10 @@ function Router<T extends IndexRecord>(props: {
   });
 
   onCleanup(() => {
-    for (const page of pages) page.cleanup();
+    // Allow window to finish closing animation before removing widgets
+    setTimeout(() => {
+      for (const page of pages) page.cleanup();
+    }, 2000);
   });
 
   return (

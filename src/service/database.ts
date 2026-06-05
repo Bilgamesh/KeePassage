@@ -199,7 +199,7 @@ async function editEntry(window: Window) {
   const entry = selectedEntry();
   if (!entry)
     return showError(window, t('pleaseSelectEntryToEdit'), {
-      title: 'Entry Not Selected'
+      title: t('entryNotSelected')
     });
   const password = await getPassword({ entry, window });
   if (password === null)
@@ -225,13 +225,13 @@ async function deleteEntry(window: Window) {
   const entry = selectedEntry();
   if (!entry)
     return showError(window, t('pleaseSelectEntryToDelete'), {
-      title: 'Entry Not Selected'
+      title: t('entryNotSelected')
     });
   const db = unlockedDbIndex()!;
   const index = db.secrets.indexOf(entry);
   if (index === -1)
     return showError(window, t('cannotDeleteEntryDoesNotExist'), {
-      title: 'Entry Not Selected'
+      title: t('entryNotSelected')
     });
   const msgBox = MessageBox.create();
   msgBox.setTitle(t('deleteEntry'));
