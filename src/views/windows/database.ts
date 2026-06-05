@@ -1,8 +1,12 @@
 import { Container, type Window } from 'gui';
-import { createEffect, createRoot } from 'solid-js';
-import { MAX_SIZE, SUBWINDOW_MIN_SIZE } from '#/data/constants';
+import { createEffect, createRoot, onCleanup } from 'solid-js';
+import {
+  MAX_SIZE,
+  SUBWINDOW_MIN_SIZE,
+  WINDOWS_APP_BACKGROUND_COLOR
+} from '#/data/constants';
 import { t } from '#/data/i18n';
-import { createWindow, deleteWindow } from '#/utils/ui';
+import { createWindow } from '#/utils/ui';
 
 const title = () => t('createNewKeePassageDb');
 
@@ -17,14 +21,17 @@ function DatabaseWindow(create?: boolean) {
     win.setContentView(contentView);
     win.setContentSize(SUBWINDOW_MIN_SIZE);
     win.center();
-    if (process.platform === 'win32') win.setBackgroundColor('#f5f5f5');
+    if (process.platform === 'win32')
+      win.setBackgroundColor(WINDOWS_APP_BACKGROUND_COLOR);
 
     win.setContentSizeConstraints(SUBWINDOW_MIN_SIZE, MAX_SIZE);
 
     win.onClose.connect(() => {
-      deleteWindow(title());
-      win = null;
       dispose();
+    });
+
+    onCleanup(() => {
+      win = null;
     });
 
     createEffect(() => {

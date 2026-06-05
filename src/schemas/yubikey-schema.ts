@@ -75,12 +75,12 @@ type DecryptionError = Extract<
 >;
 
 export {
-  YubiKey,
-  YubiKeyResponse,
-  type DetectionSuccess,
-  type DetectionError,
-  type EncryptionSuccess,
-  type EncryptionError,
   type DecryptionError,
-  type DecryptionSuccess
+  type DecryptionSuccess,
+  type DetectionError,
+  type DetectionSuccess,
+  type EncryptionError,
+  type EncryptionSuccess,
+  YubiKey,
+  YubiKeyResponse
 };

@@ -22,13 +22,13 @@ class Table extends View {
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'model':
-        this.node.setModel(value as TableModel);
+        this.node?.setModel(value as TableModel);
         break;
       case 'columns':
         for (const newColumn of value as string[])
           if (!this.columns.includes(newColumn)) {
             this.columns.push(newColumn);
-            this.node.addColumn(newColumn);
+            this.node?.addColumn(newColumn);
           }
         break;
       case 'columnsWithOptions':
@@ -38,35 +38,35 @@ class Table extends View {
         }[])
           if (!this.columns.includes(label)) {
             this.columns.push(label);
-            this.node.addColumnWithOptions(label, options);
+            this.node?.addColumnWithOptions(label, options);
           }
         break;
       case 'columnsVisible':
-        this.node.setColumnsVisible(!!value);
+        this.node?.setColumnsVisible(!!value);
         break;
       case 'rowHeight':
-        this.node.setRowHeight(Number(value));
+        this.node?.setRowHeight(Number(value));
         break;
       case 'hasBorder':
-        this.node.setHasBorder(!!value);
+        this.node?.setHasBorder(!!value);
         break;
       case 'multipleSelections':
-        this.node.enableMultipleSelection(!!value);
+        this.node?.enableMultipleSelection(!!value);
         break;
       case 'selectedRow':
-        this.node.selectRow(Number(value));
+        this.node?.selectRow(Number(value));
         break;
       case 'selectedRows':
-        this.node.selectRows(value as number[]);
+        this.node?.selectRows(value as number[]);
         break;
       case 'onSelectionChange':
-        this.node.onSelectionChange.connect(value);
+        this.node?.onSelectionChange.connect(value);
         break;
       case 'onRowActivate':
-        this.node.onRowActivate.connect(value);
+        this.node?.onRowActivate.connect(value);
         break;
       case 'onToggleCheckbox':
-        this.node.onToggleCheckbox.connect(value);
+        this.node?.onToggleCheckbox.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);

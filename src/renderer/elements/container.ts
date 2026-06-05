@@ -21,9 +21,9 @@ class Container extends View {
   }
 
   private wireParentResize() {
-    this.node.onSizeChanged.connect(() => {
+    this.node?.onSizeChanged.connect(() => {
       if (this.parent?.node instanceof Scroll)
-        this.parent.node.setContentSize(this.node.getPreferredSize());
+        this.parent.node.setContentSize(this.node?.getPreferredSize());
     });
   }
 
@@ -36,21 +36,21 @@ class Container extends View {
       );
 
     if (!anchor) {
-      this.node.addChildView(child.node);
+      this.node?.addChildView(child.node!);
       this.children.push(child);
       child.parent = this;
     } else {
       const anchorIndex = this.children.indexOf(anchor);
       if (anchorIndex === -1)
         throw new AnchorNodeNotFoundError(child.name, this.name, anchor.name);
-      this.node.addChildViewAt(child.node, anchorIndex);
+      this.node?.addChildViewAt(child.node!, anchorIndex);
       this.children.splice(anchorIndex, 0, child);
       child.parent = this;
     }
   }
 
   override removeChild(child: View): void {
-    this.node.removeChildView(child.node);
+    this.node?.removeChildView(child.node!);
     const index = this.children.indexOf(child);
     if (index === -1) throw new ChildNodeNotFoundError(child.name, this.name);
     this.children.splice(index, 1);
@@ -60,7 +60,7 @@ class Container extends View {
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'onDraw':
-        this.node.onDraw.connect(value);
+        this.node?.onDraw.connect(value);
         break;
       default:
         super.setProperty(name, value);

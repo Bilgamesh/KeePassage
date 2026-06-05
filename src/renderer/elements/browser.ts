@@ -26,22 +26,23 @@ class Browser extends View {
   private updateZoom() {
     // macOS supports disabling zoom out of the box via `node.setMagnifiable(boolean)`. For other OSes, run custom JS to disable zoom
     if (process.platform !== 'darwin')
-      this.node.onChangeLoading.connect(() => {
+      this.node?.onChangeLoading.connect(() => {
         if (!this.magnifiable)
-          this.node.executeJavaScript(this.disableZoomScript, () => {});
+          this.node?.executeJavaScript(this.disableZoomScript, () => {});
       });
   }
 
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'url':
-        this.node.loadURL(String(value));
+        this.node?.loadURL(String(value));
         break;
       case 'html':
-        if (typeof value === 'string') this.node.loadHTML(value, 'about:blank');
+        if (typeof value === 'string')
+          this.node?.loadHTML(value, 'about:blank');
         else {
           const { html, baseUrl } = value as { html: string; baseUrl?: string };
-          this.node.loadHTML(html, baseUrl || 'about:blank');
+          this.node?.loadHTML(html, baseUrl || 'about:blank');
         }
         break;
       case 'javaScript': {
@@ -49,39 +50,39 @@ class Browser extends View {
           code: string;
           callback?: () => void;
         };
-        this.node.executeJavaScript(code, callback || (() => {}));
+        this.node?.executeJavaScript(code, callback || (() => {}));
         break;
       }
       case 'userAgent':
-        this.node.setUserAgent(String(value));
+        this.node?.setUserAgent(String(value));
         break;
       case 'magnifiable':
         this.magnifiable = !!value;
-        if (process.platform === 'darwin') this.node.setMagnifiable(!!value);
+        if (process.platform === 'darwin') this.node?.setMagnifiable(!!value);
         break;
       case 'onClose':
-        this.node.onClose.connect(value);
+        this.node?.onClose.connect(value);
         break;
       case 'onUpdateCommand':
-        this.node.onUpdateCommand.connect(value);
+        this.node?.onUpdateCommand.connect(value);
         break;
       case 'onChangeLoading':
-        this.node.onChangeLoading.connect(value);
+        this.node?.onChangeLoading.connect(value);
         break;
       case 'onUpdateTitle':
-        this.node.onUpdateTitle.connect(value);
+        this.node?.onUpdateTitle.connect(value);
         break;
       case 'onStartNavigation':
-        this.node.onStartNavigation.connect(value);
+        this.node?.onStartNavigation.connect(value);
         break;
       case 'onCommitNavigation':
-        this.node.onCommitNavigation.connect(value);
+        this.node?.onCommitNavigation.connect(value);
         break;
       case 'onFinishNavigation':
-        this.node.onFinishNavigation.connect(value);
+        this.node?.onFinishNavigation.connect(value);
         break;
       case 'onFailNavigation':
-        this.node.onFailNavigation.connect(value);
+        this.node?.onFailNavigation.connect(value);
         break;
       default:
         super.setProperty(name, value);

@@ -1,5 +1,5 @@
 import { Container, type Window } from 'gui';
-import { createWindow, deleteWindow } from '#/utils/ui';
+import { createWindow } from '#/utils/ui';
 
 type FitSizeable = { fitSize: () => void };
 type QrCodeWindow = Window & FitSizeable;
@@ -15,10 +15,6 @@ function QrCodeWindow(props: { title: string }) {
   win.setMaximizable(false);
 
   win.fitSize = () => win.setContentSize(contentView.getPreferredSize());
-
-  win.onClose.connect(() => {
-    deleteWindow(props.title);
-  });
 
   return win;
 }

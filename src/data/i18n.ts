@@ -64,4 +64,4 @@ const dictionaries = getDictionaries();
 const currentDictionary = () =>
   dictionaries.find((d) => d.languageCode === appSettings().language);
 
-export { dictionaries, currentDictionary, getSystemLocale, t };
+export { currentDictionary, dictionaries, getSystemLocale, t };

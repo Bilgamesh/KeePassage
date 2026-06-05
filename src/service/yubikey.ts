@@ -353,15 +353,15 @@ async function ageDecrypt(
 }
 
 export {
+  ageDecrypt,
+  ageEncrypt,
+  decrypt,
+  deleteCertificate,
   detectYubiKey,
   detectYubiKeys,
   encrypt,
-  ageEncrypt,
-  ageDecrypt,
-  decrypt,
-  monitorYubiKeys,
-  getSlots,
   generateCertificate,
-  deleteCertificate,
+  getSlots,
+  monitorYubiKeys,
   type Slot
 };

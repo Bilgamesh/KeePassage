@@ -560,11 +560,11 @@ function findStatusWord(code: number): StatusWord {
 }
 
 export {
+  findStatusWord,
   RETIRED_SLOTS,
-  STATUS_WORDS,
   type RetiredSlot,
+  STATUS_WORDS,
   type StatusWord,
   withYubiKeyClient,
-  YubiKeyClient,
-  findStatusWord
+  YubiKeyClient
 };

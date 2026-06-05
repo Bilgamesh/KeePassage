@@ -1,5 +1,5 @@
-import { AttributedText, type Entry, type Window } from 'gui';
-import { createSignal } from 'solid-js';
+import { AttributedText, type Entry } from 'gui';
+import { createSignal, onCleanup } from 'solid-js';
 import { APP_NAME, LARGE_BUTTON_STYLE, TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
 import { selectedDbPath } from '#/data/shared-state';
@@ -48,7 +48,6 @@ async function requestPin<T extends NavigationIndex>(
 }
 
 function PinentryPage<T extends NavigationIndex>(props: {
-  window: Window;
   navigator: Navigator<T>;
 }) {
   const [pin, setPin] = createSignal<string | null>(null);
@@ -62,7 +61,10 @@ function PinentryPage<T extends NavigationIndex>(props: {
     setPin(null);
   });
 
-  props.window.onClose.connect(() => controller?.abort('Cancel'));
+  onCleanup(() => {
+    controller?.abort('Cancel');
+    delete entryNodes[props.navigator.id];
+  });
 
   return (
     <container style={{ flex: 1, flexDirection: 'column' }}>

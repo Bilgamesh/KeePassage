@@ -17,13 +17,13 @@ class GifPlayer extends View {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'image':
-        this.node.setImage(value as Image);
+        this.node?.setImage(value as Image);
         break;
       case 'animating':
-        this.node.setAnimating(!!value);
+        this.node?.setAnimating(!!value);
         break;
       case 'scale':
-        this.node.setScale(value as ImageScale);
+        this.node?.setScale(value as ImageScale);
         break;
       default:
         super.setProperty<T>(name, value);

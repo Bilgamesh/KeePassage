@@ -17,14 +17,14 @@ class Picker extends View {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'selectedItemIndex':
-        this.node.selectItemAt(Number(value));
+        this.node?.selectItemAt(Number(value));
         break;
       case 'items':
-        this.node.clear();
-        for (const item of value as string[]) this.node.addItem(item);
+        this.node?.clear();
+        for (const item of value as string[]) this.node?.addItem(item);
         break;
       case 'onSelectionChange':
-        this.node.onSelectionChange.connect(value);
+        this.node?.onSelectionChange.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);

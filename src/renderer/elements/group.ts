@@ -35,20 +35,20 @@ class Group extends View {
     if (!(child.node instanceof Container))
       throw new InvalidChildNodeTypeError(child.name, this.name, 'Container');
     this.children[0] = child;
-    this.node.setContentView(child.node);
+    this.node?.setContentView(child.node);
     child.parent = this;
   }
 
   override removeChild(child: View): void {
     this.children.length = 0;
-    this.node.setContentView(EMPTY_CHILD);
+    this.node?.setContentView(EMPTY_CHILD);
     child.parent = null;
   }
 
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'title':
-        this.node.setTitle(String(value));
+        this.node?.setTitle(String(value));
         break;
       default:
         super.setProperty<T>(name, value);

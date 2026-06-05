@@ -11,7 +11,7 @@ class Checkbox extends Button {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'checked':
-        this.node.setChecked(!!value);
+        this.node?.setChecked(!!value);
         break;
       default:
         super.setProperty<T>(name, value);

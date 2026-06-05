@@ -17,10 +17,10 @@ class ComboBox extends Picker {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'text':
-        this.node.setText(String(value));
+        this.node?.setText(String(value));
         break;
       case 'onTextChange':
-        this.node.onTextChange.connect(value);
+        this.node?.onTextChange.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);

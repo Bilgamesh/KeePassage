@@ -17,21 +17,21 @@ class Slider extends View {
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'value':
-        this.node.setValue(Number(value));
+        this.node?.setValue(Number(value));
         break;
       case 'step':
-        this.node.setStep(Number(value));
+        this.node?.setStep(Number(value));
         break;
       case 'range': {
         const { min, max } = value as { min: number; max: number };
-        this.node.setRange(min, max);
+        this.node?.setRange(min, max);
         break;
       }
       case 'onValueChange':
-        this.node.onValueChange.connect(value);
+        this.node?.onValueChange.connect(value);
         break;
       case 'onSlidingComplete':
-        this.node.onSlidingComplete.connect(value);
+        this.node?.onSlidingComplete.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);

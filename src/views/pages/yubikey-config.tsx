@@ -1,5 +1,5 @@
 import { AttributedText, MessageBox, type Window } from 'gui';
-import { createSignal } from 'solid-js';
+import { createSignal, onCleanup } from 'solid-js';
 import yubiKeyImage from '#/assets/img/yubikey.png';
 import { TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
@@ -36,8 +36,10 @@ function YubiKeyConfigPage(props: { window: Window }) {
 
   refreshSlots();
   const interval = setInterval(refreshSlots, 3000);
-  const cleanup = () => clearInterval(interval);
-  props.window.onClose.connect(cleanup);
+
+  onCleanup(() => {
+    clearInterval(interval);
+  });
 
   const navigator = new Navigator({
     KEY_SELECTION: 0,
@@ -165,8 +167,8 @@ function YubiKeyConfigPage(props: { window: Window }) {
           </container>
         </container>
       </container>
-      <PinentryPage navigator={navigator} window={props.window} />
-      <TouchPage window={props.window} />
+      <PinentryPage navigator={navigator} />
+      <TouchPage />
     </Router>
   );
 }

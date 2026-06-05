@@ -41,4 +41,5 @@ function EntryTextArea(props: {
     </container>
   );
 }
+
 export { EntryTextArea };

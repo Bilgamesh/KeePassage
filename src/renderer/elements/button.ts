@@ -22,22 +22,22 @@ class Button extends View {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'title':
-        this.node.setTitle(String(value));
+        this.node?.setTitle(String(value));
         break;
       case 'controlSize':
-        this.node.setControlSize(value as ControlSize);
+        this.node?.setControlSize(value as ControlSize);
         break;
       case 'hasBorder':
-        this.node.setHasBorder(!!value);
+        this.node?.setHasBorder(!!value);
         break;
       case 'image':
-        this.node.setImage(value as Image);
+        this.node?.setImage(value as Image);
         break;
       case 'buttonStyle':
-        this.node.setButtonStyle(value as ButtonStyle);
+        this.node?.setButtonStyle(value as ButtonStyle);
         break;
       case 'onClick':
-        this.node.onClick.connect(value);
+        this.node?.onClick.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);

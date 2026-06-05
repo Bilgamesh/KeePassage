@@ -1,10 +1,4 @@
-import {
-  Container,
-  Cursor,
-  type CursorType,
-  type Font,
-  type View as GuiView
-} from 'gui';
+import { Cursor, type CursorType, type Font, type View as GuiView } from 'gui';
 import {
   NodeCannotHaveChildrenError,
   NodeHasNoChildrenError,
@@ -13,7 +7,7 @@ import {
 import type { Style } from '#/renderer/types';
 
 abstract class View {
-  node: GuiView = Container.create();
+  node: GuiView | null = null;
   protected children: View[] = [];
   parent: View | null = null;
   name: string = 'view';
@@ -35,74 +29,84 @@ abstract class View {
   setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'color':
-        this.node.setColor(String(value));
+        this.node?.setColor(String(value));
         break;
       case 'backgroundColor':
-        this.node.setBackgroundColor(String(value));
+        this.node?.setBackgroundColor(String(value));
         break;
       case 'enabled':
-        this.node.setEnabled(!!value);
+        this.node?.setEnabled(!!value);
         break;
       case 'cursor':
-        this.node.setCursor(Cursor.createWithType(value as CursorType));
+        this.node?.setCursor(Cursor.createWithType(value as CursorType));
         break;
       case 'focusable':
-        this.node.setFocusable(!!value);
+        this.node?.setFocusable(!!value);
         break;
       case 'font':
-        this.node.setFont(value as Font);
+        this.node?.setFont(value as Font);
         break;
       case 'mouseDownCanMoveWindow':
-        this.node.setMouseDownCanMoveWindow(!!value);
+        this.node?.setMouseDownCanMoveWindow(!!value);
         break;
       case 'style':
-        this.node.setStyle(value as Style);
+        this.node?.setStyle(value as Style);
         break;
       case 'tooltip':
-        this.node.setTooltip(String(value));
+        this.node?.setTooltip(String(value));
         break;
       case 'visible':
-        this.node.setVisible(!!value);
+        this.node?.setVisible(!!value);
         break;
       case 'onCaptureLost':
-        this.node.onCaptureLost.connect(value);
+        this.node?.onCaptureLost.connect(value);
         break;
       case 'onDragLeave':
-        this.node.onDragLeave.connect(value);
+        this.node?.onDragLeave.connect(value);
         break;
       case 'onFocusIn':
-        this.node.onFocusIn.connect(value);
+        this.node?.onFocusIn.connect(value);
         break;
       case 'onFocusOut':
-        this.node.onFocusOut.connect(value);
+        this.node?.onFocusOut.connect(value);
         break;
       case 'onKeyDown':
-        this.node.onKeyDown.connect(value);
+        this.node?.onKeyDown.connect(value);
         break;
       case 'onKeyUp':
-        this.node.onKeyUp.connect(value);
+        this.node?.onKeyUp.connect(value);
         break;
       case 'onMouseDown':
-        this.node.onMouseDown.connect(value);
+        this.node?.onMouseDown.connect(value);
         break;
       case 'onMouseEnter':
-        this.node.onMouseEnter.connect(value);
+        this.node?.onMouseEnter.connect(value);
         break;
       case 'onMouseLeave':
-        this.node.onMouseLeave.connect(value);
+        this.node?.onMouseLeave.connect(value);
         break;
       case 'onMouseMove':
-        this.node.onMouseMove.connect(value);
+        this.node?.onMouseMove.connect(value);
         break;
       case 'onMouseUp':
-        this.node.onMouseUp.connect(value);
+        this.node?.onMouseUp.connect(value);
         break;
       case 'onSizeChanged':
-        this.node.onSizeChanged.connect(value);
+        this.node?.onSizeChanged.connect(value);
         break;
       default:
         throw new UnsupportedPropertyError(name, this.name);
     }
+  }
+
+  cleanup() {
+    for (const child of this.getChildren()) {
+      this.removeChild(child);
+      child.cleanup();
+    }
+    this.parent?.cleanup();
+    this.children.length = 0;
+    this.node = null;
   }
 }
 

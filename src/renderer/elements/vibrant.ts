@@ -24,10 +24,10 @@ class Vibrant extends Container {
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'material':
-        this.node.setMaterial(value as VibrantMaterial);
+        this.node?.setMaterial(value as VibrantMaterial);
         break;
       case 'blendingMode':
-        this.node.setBlendingMode(value as VibrantBlendingMode);
+        this.node?.setBlendingMode(value as VibrantBlendingMode);
         break;
       default:
         super.setProperty(name, value);

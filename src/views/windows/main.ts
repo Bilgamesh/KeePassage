@@ -1,5 +1,5 @@
 import { Container, MessageLoop, Tray, type Window } from 'gui';
-import { createEffect, createRoot } from 'solid-js';
+import { createEffect, createRoot, onCleanup } from 'solid-js';
 import {
   APP_NAME,
   MAX_SIZE,
@@ -7,7 +7,7 @@ import {
   WINDOWS_APP_BACKGROUND_COLOR
 } from '#/data/constants';
 import { appSettings } from '#/data/shared-state';
-import { createWindow, deleteWindow } from '#/utils/ui';
+import { createWindow, getWindow } from '#/utils/ui';
 import { AppIcon } from '#/views/components/app-icon';
 import { MainMenuBar } from '#/views/components/main-menu-bar';
 import { TrayMenu } from '#/views/components/tray-menu';
@@ -16,10 +16,11 @@ type Toggleable = { toggleVisibility: (show: boolean) => void };
 type ToggleableWindow = Window & Toggleable;
 
 let tray: Tray | null = null;
-let win: ToggleableWindow;
 
 function MainWindow() {
-  if (win) return win;
+  const existing = getWindow<ToggleableWindow>(APP_NAME);
+  if (existing) return existing;
+  let win: ToggleableWindow;
   createRoot((dispose) => {
     win = createWindow(APP_NAME) as ToggleableWindow;
     const contentView = Container.create();
@@ -57,14 +58,12 @@ function MainWindow() {
 
     // Kill program when main window is closed
     win.onClose.connect(() => {
-      if (tray && appSettings().minimiseInsteadOfExit) {
-        // Don't close
-      } else {
-        deleteWindow(APP_NAME);
-        dispose();
-        MessageLoop.quit();
-        process.exit(0);
-      }
+      if (!tray || !appSettings().minimiseInsteadOfExit) dispose();
+    });
+
+    onCleanup(() => {
+      MessageLoop.quit();
+      process.exit(0);
     });
 
     win.shouldClose = () => {
@@ -93,7 +92,7 @@ function MainWindow() {
 
     win.center();
   });
-  return win;
+  return win!;
 }
 
 export { MainWindow, type ToggleableWindow };

@@ -37,13 +37,13 @@ class Scroll extends View {
       );
     if (this.children.length > 0)
       throw new ParentNodeChildLimitExceededError(child.name, this.name);
-    this.node.setContentView(child.node);
+    this.node?.setContentView(child.node!);
     this.children[0] = child;
     child.parent = this;
   }
 
   override removeChild(child: View): void {
-    this.node.setContentView(EMPTY_CHILD);
+    this.node?.setContentView(EMPTY_CHILD);
     this.children.length = 0;
     child.parent = null;
   }
@@ -51,25 +51,25 @@ class Scroll extends View {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'contentSize':
-        this.node.setContentSize(value as SizeF);
+        this.node?.setContentSize(value as SizeF);
         break;
       case 'scrollPosition': {
         const { horizon, vertical } = value as {
           horizon: number;
           vertical: number;
         };
-        this.node.setScrollPosition(horizon, vertical);
+        this.node?.setScrollPosition(horizon, vertical);
         break;
       }
       case 'overlayScrollbar':
-        this.node.setOverlayScrollbar(!!value);
+        this.node?.setOverlayScrollbar(!!value);
         break;
       case 'scrollbarPolicy': {
         const { hpolicy, vpolicy } = value as {
           hpolicy: ScrollPolicy;
           vpolicy: ScrollPolicy;
         };
-        this.node.setScrollbarPolicy(hpolicy, vpolicy);
+        this.node?.setScrollbarPolicy(hpolicy, vpolicy);
         break;
       }
       case 'scrollElasticity': {
@@ -77,11 +77,11 @@ class Scroll extends View {
           helasticity: ScrollElasticity;
           velasticity: ScrollElasticity;
         };
-        this.node.setScrollElasticity(helasticity, velasticity);
+        this.node?.setScrollElasticity(helasticity, velasticity);
         break;
       }
       case 'onScroll':
-        this.node.onScroll.connect(value);
+        this.node?.onScroll.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);

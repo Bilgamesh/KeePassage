@@ -6,6 +6,7 @@ import {
   createEffect,
   createSignal,
   on,
+  onCleanup,
   type Setter
 } from 'solid-js';
 import type { View as ViewWrapper } from '#/renderer/elements/view';
@@ -107,20 +108,24 @@ function Router<T extends IndexRecord>(props: {
   navigator: Navigator<T>;
 }): View[] {
   const pages: ViewWrapper[] = children(() => props.children).toArray();
-  let container: Container;
+  let container: Container | null;
 
   createEffect(() => {
     const previousPage =
-      container.childCount() > 0 ? container.childAt(0) : null;
+      container!.childCount() > 0 ? container!.childAt(0) : null;
     const nextPage = pages[props.navigator.pageIndex()]?.node || null;
     if (previousPage) {
       previousPage.setVisible(false);
-      container.removeChildView(previousPage);
+      container!.removeChildView(previousPage);
     }
     if (nextPage) {
-      container.addChildView(nextPage);
+      container!.addChildView(nextPage);
       nextPage.setVisible(true);
     }
+  });
+
+  onCleanup(() => {
+    for (const page of pages) page.cleanup();
   });
 
   return (
@@ -133,4 +138,4 @@ function Router<T extends IndexRecord>(props: {
   );
 }
 
-export { Router, Navigator };
+export { Navigator, Router };

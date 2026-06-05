@@ -37,4 +37,4 @@ const DbFile = z.object({
 });
 type DbFile = z.infer<typeof DbFile>;
 
-export { DbFile, Payload, type DbIndex, type Entry };
+export { DbFile, type DbIndex, type Entry, Payload };

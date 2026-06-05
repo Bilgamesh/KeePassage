@@ -78,7 +78,7 @@ export {
   encodeLength,
   extractEccPublicKey,
   extractSignature,
-  wrapCertificate,
+  getNestedTlv,
   parseSimpleTlv,
-  getNestedTlv
+  wrapCertificate
 };

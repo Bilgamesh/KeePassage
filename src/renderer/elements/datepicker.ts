@@ -18,14 +18,14 @@ class DatePicker extends View {
     switch (name) {
       case 'range': {
         const { minimum, maximum } = value as { minimum: Date; maximum: Date };
-        this.node.setRange(minimum, maximum);
+        this.node?.setRange(minimum, maximum);
         break;
       }
       case 'date':
-        this.node.setDate(value as Date);
+        this.node?.setDate(value as Date);
         break;
       case 'onDateChange':
-        this.node.onDateChange.connect(value);
+        this.node?.onDateChange.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);

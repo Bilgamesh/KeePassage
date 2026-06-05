@@ -21,11 +21,11 @@ class TextEdit extends View {
   override setProperty<T>(name: string, value: T): void {
     switch (name) {
       case 'text':
-        if (this.node.getText() !== value) this.node.setText(String(value));
+        if (this.node?.getText() !== value) this.node?.setText(String(value));
         break;
       case 'selectedRange': {
         const { start, end } = value as { start: number; end: number };
-        this.node.selectRange(start, end);
+        this.node?.selectRange(start, end);
         break;
       }
       case 'scrollbarPolicy': {
@@ -33,7 +33,7 @@ class TextEdit extends View {
           hpolicy: ScrollPolicy;
           vpolicy: ScrollPolicy;
         };
-        this.node.setScrollbarPolicy(hpolicy, vpolicy);
+        this.node?.setScrollbarPolicy(hpolicy, vpolicy);
         break;
       }
       case 'scrollElasticity': {
@@ -41,14 +41,16 @@ class TextEdit extends View {
           helasticity: ScrollElasticity;
           velasticity: ScrollElasticity;
         };
-        this.node.setScrollElasticity(helasticity, velasticity);
+        this.node?.setScrollElasticity(helasticity, velasticity);
         break;
       }
       case 'onTextChange':
-        this.node.onTextChange.connect(value);
+        this.node?.onTextChange.connect(value);
         break;
       case 'shouldInsertNewLine':
-        this.node.shouldInsertNewLine = value as (self: GuiTextEdit) => boolean;
+        this.node!.shouldInsertNewLine = value as (
+          self: GuiTextEdit
+        ) => boolean;
         break;
       default:
         super.setProperty<T>(name, value);

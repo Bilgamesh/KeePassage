@@ -20,9 +20,13 @@ function deleteWindow(name: string) {
   global.windowMap.delete(name);
 }
 
+function getWindow<T = Window>(name: string) {
+  return global.windowMap.get(name) as T | undefined;
+}
+
 function blur(view: View) {
   view.setEnabled(false);
   setImmediate(() => view.setEnabled(true));
 }
 
-export { blur, createWindow, deleteWindow };
+export { blur, createWindow, deleteWindow, getWindow };

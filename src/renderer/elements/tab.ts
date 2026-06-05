@@ -27,7 +27,7 @@ class Tab extends View {
     if (this.titles) {
       if (this.queue.length > 0) this.addFromQueue();
       this.children.push(child);
-      this.node.addPage(this.titles[this.children.length] || '', child.node);
+      this.node?.addPage(this.titles[this.children.length] || '', child.node!);
     } else {
       this.queue.push(child);
     }
@@ -37,7 +37,7 @@ class Tab extends View {
   private addFromQueue() {
     for (const [index, child] of this.queue.entries()) {
       this.children.push(child);
-      this.node.addPage(this.titles?.[index] || '', child.node);
+      this.node?.addPage(this.titles?.[index] || '', child.node!);
     }
     this.queue.length = 0;
   }
@@ -45,8 +45,7 @@ class Tab extends View {
   override removeChild(child: View): void {
     const index = this.children.indexOf(child);
     if (index === -1) throw new ChildNodeNotFoundError(child.name, this.name);
-
-    this.node.removePage(child.node);
+    this.node?.removePage(child.node!);
     this.children.splice(index, 1);
     child.parent = null;
   }
@@ -58,10 +57,10 @@ class Tab extends View {
         this.addFromQueue();
         break;
       case 'selectedPage':
-        this.node.selectPageAt(Number(value));
+        this.node?.selectPageAt(Number(value));
         break;
       case 'onSelectedPageChange':
-        this.node.onSelectedPageChange.connect(value);
+        this.node?.onSelectedPageChange.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);

@@ -12,13 +12,13 @@ import {
 import { ElementFactory } from '#/renderer/element-factory';
 import type { View as ViewWrapper } from '#/renderer/elements/view';
 
-const elementFactory = new ElementFactory();
-
 const renderer = createRenderer({
   createElement(type: string): ViewWrapper | null {
+    const elementFactory = new ElementFactory();
     return elementFactory.createElement(type);
   },
   createTextNode(text: string): ViewWrapper | null {
+    const elementFactory = new ElementFactory();
     if (text === '') return elementFactory.createElement('container');
     throw new TextNodeError(text);
   },
@@ -64,9 +64,17 @@ const renderer = createRenderer({
   }
 });
 
-function render(code: () => ViewWrapper, window: Window): void {
+function render(code: () => ViewWrapper, window: Window) {
   const node = window.getContentView() as Container;
-  if (!node.childCount()) renderer.render(code, elementFactory.wrapNode(node));
+  if (!node.childCount()) {
+    const elementFactory = new ElementFactory();
+    const wrapper = elementFactory.wrapNode(node);
+    const dispose = renderer.render(code, wrapper);
+    window.onClose.connect(() => {
+      dispose();
+      wrapper?.cleanup();
+    });
+  }
 }
 
 export {

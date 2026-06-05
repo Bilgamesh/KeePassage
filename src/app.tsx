@@ -29,8 +29,8 @@ function App(props: { window: Window }) {
       <Toolbar window={props.window} />
       <Router navigator={navigator}>
         <WelcomePage window={props.window} />
-        <PinentryPage navigator={navigator} window={props.window} />
-        <TouchPage window={props.window} />
+        <PinentryPage navigator={navigator} />
+        <TouchPage />
         <DatabaseIndexPage window={props.window} />
         <EntryPage />
         <SettingsPage window={props.window} />

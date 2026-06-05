@@ -60,4 +60,5 @@ function EntryLine(props: {
     </container>
   );
 }
+
 export { EntryLine };

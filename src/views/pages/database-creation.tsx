@@ -1,5 +1,5 @@
 import { AttributedText, type Window } from 'gui';
-import { createSignal } from 'solid-js';
+import { createSignal, onCleanup } from 'solid-js';
 import yubiKeyImage from '#/assets/img/yubikey.png';
 import { TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
@@ -22,13 +22,16 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
     yubiKeys().find((key) => key.publicKey === publicKey);
   const addKey = (key: YubiKey) => setYubiKeys((keys) => [...keys, key]);
 
-  const cleanup = monitorYubiKeys(
+  const cleanupMonitor = monitorYubiKeys(
     (key) => {
       if (!keyExists(key.publicKey)) addKey(key);
     },
     { immediate: true }
   );
-  props.window.onClose.connect(cleanup);
+
+  onCleanup(() => {
+    cleanupMonitor();
+  });
 
   const navigator = new Navigator({
     DB_GENERAL_PAGE: 0,

@@ -1,5 +1,6 @@
 import { setTimeout } from 'node:timers/promises';
-import { AttributedText, type Window } from 'gui';
+import { AttributedText } from 'gui';
+import { onCleanup } from 'solid-js';
 import touchIcon from '#/assets/icons/touch.png';
 import { DARK_MODE_FONT_COLOR, TITLE_FONT } from '#/data/constants';
 import { t } from '#/data/i18n';
@@ -34,8 +35,10 @@ function requestTouch<T extends NavigationIndex>(navigator: Navigator<T>) {
   return controller.signal;
 }
 
-function TouchPage(props: { window: Window }) {
-  props.window.onClose.connect(() => controller?.abort('Cancel'));
+function TouchPage() {
+  onCleanup(() => {
+    controller?.abort('Cancel');
+  });
 
   return (
     <container style={{ flex: 1 }}>
@@ -83,4 +86,5 @@ function TouchPage(props: { window: Window }) {
     </container>
   );
 }
+
 export { requestTouch, TouchPage };

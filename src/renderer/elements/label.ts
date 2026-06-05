@@ -17,16 +17,16 @@ class Label extends View {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'text':
-        this.node.setText(String(value));
+        this.node?.setText(String(value));
         break;
       case 'attributedText':
-        this.node.setAttributedText(value as AttributedText);
+        this.node?.setAttributedText(value as AttributedText);
         break;
       case 'align':
-        this.node.setAlign(value as TextAlign);
+        this.node?.setAlign(value as TextAlign);
         break;
       case 'vAlign':
-        this.node.setVAlign(value as TextAlign);
+        this.node?.setVAlign(value as TextAlign);
         break;
       default:
         super.setProperty<T>(name, value);

@@ -17,13 +17,13 @@ class Entry extends View {
   override setProperty<T>(name: string, value: T) {
     switch (name) {
       case 'text':
-        if (this.node.getText() !== value) this.node.setText(String(value));
+        if (this.node?.getText() !== value) this.node?.setText(String(value));
         break;
       case 'onTextChange':
-        this.node.onTextChange.connect(value);
+        this.node?.onTextChange.connect(value);
         break;
       case 'onActivate':
-        this.node.onActivate.connect(value);
+        this.node?.onActivate.connect(value);
         break;
       default:
         super.setProperty<T>(name, value);
