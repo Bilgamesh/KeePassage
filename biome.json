@@ -19,8 +19,7 @@
       "recommended": true,
       "a11y": "off",
       "complexity": {
-        "useSimpleNumberKeys": "off",
-        "noBannedTypes": "off"
+        "useSimpleNumberKeys": "off"
       },
       "style": {
         "noNonNullAssertion": "off"

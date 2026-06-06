@@ -6,34 +6,42 @@ import {
   createEffect,
   createSignal,
   on,
-  onCleanup,
-  type Setter
+  onCleanup
 } from 'solid-js';
 import type { View as ViewWrapper } from '#/renderer/elements/view';
 
 type Cleanup = (() => void) | null;
-type ReplacementItem<T extends IndexRecord> = {
+type ReplacementItem<T extends NavigationRecord> = {
   index: Key<T>;
   cleanup?: Cleanup;
 };
-type HistoryItem<T extends IndexRecord> = {
-  index: T[keyof T];
+type Index<T> = T[keyof T];
+type HistoryItem<T extends NavigationRecord> = {
+  index: Index<T>;
   id: UUID;
   cleanup?: Cleanup;
 };
-type IndexRecord = Record<string, number>;
-type Key<T extends IndexRecord> = keyof T;
+type NavigationRecord = Record<string, number>;
+type Key<T extends NavigationRecord> = keyof T;
+type Setter<in out T> = {
+  <U extends T>(
+    ...args: undefined extends T ? [] : [value: U | ((prev: T) => U)]
+  ): undefined extends T ? undefined : U;
+  <U extends T>(value: (prev: T) => U): U;
+  <U extends T>(value: U): U;
+  <U extends T>(value: U | ((prev: T) => U)): U;
+};
 
-class Navigator<T extends IndexRecord> {
+class Navigator<T extends NavigationRecord> {
   public id: string;
   private history: Accessor<HistoryItem<T>[]>;
   private setHistory: Setter<HistoryItem<T>[]>;
-  public pageIndex: Accessor<T[keyof T]>;
-  private setPageIndex: Setter<T[keyof T]>;
+  public pageIndex: Accessor<Index<T>>;
+  private setPageIndex: Setter<Index<T>>;
   private indexes: T;
 
   constructor(indexes: T) {
-    const [pageIndex, setPageIndex] = createSignal(0 as T[keyof T]);
+    const [pageIndex, setPageIndex] = createSignal(0 as Index<T>);
     const [history, setHistory] = createSignal<HistoryItem<T>[]>([
       {
         index: pageIndex(),
@@ -52,7 +60,7 @@ class Navigator<T extends IndexRecord> {
   push(key: Key<T> | ReplacementItem<T>) {
     const input =
       typeof key === 'string'
-        ? { index: this.indexes[key]! as T[keyof T] }
+        ? { index: this.indexes[key]! as Index<T> }
         : {
             index: this.indexes[(key as ReplacementItem<T>).index],
             cleanup: (key as ReplacementItem<T>).cleanup
@@ -63,7 +71,7 @@ class Navigator<T extends IndexRecord> {
       ...history,
       { index, id: randomUUID(), cleanup: cleanup ?? null }
     ]);
-    this.setPageIndex(index as Exclude<T[keyof T], Function>);
+    this.setPageIndex(index as Index<T>);
   }
 
   replace(options: {
@@ -72,7 +80,7 @@ class Navigator<T extends IndexRecord> {
   }): void {
     const input =
       typeof options.to === 'string'
-        ? { index: this.indexes[options.to]! as T[keyof T] }
+        ? { index: this.indexes[options.to]! as Index<T> }
         : {
             index: this.indexes[(options.to as ReplacementItem<T>).index],
             cleanup: (options.to as ReplacementItem<T>).cleanup
@@ -100,7 +108,7 @@ class Navigator<T extends IndexRecord> {
       if (item.cleanup) item.cleanup();
 
     this.setHistory([{ index, id: randomUUID(), cleanup: cleanup ?? null }]);
-    this.setPageIndex(index as Exclude<T[keyof T], Function>);
+    this.setPageIndex(index as Index<T>);
   }
 
   pop() {
@@ -109,14 +117,14 @@ class Navigator<T extends IndexRecord> {
     if (lastItem.cleanup) lastItem.cleanup();
     this.setHistory((history) => [...history.slice(0, -1)]);
     const { index } = this.history()[this.history().length - 1]!;
-    this.setPageIndex(index as Exclude<T[keyof T], Function>);
+    this.setPageIndex(index as Index<T>);
   }
 
   subscribe(callback: (page: number) => void) {
     createEffect(on(this.pageIndex, (value) => callback(value)));
   }
 
-  isCurrentPage(key: Key<T> | Key<T>[] | T[keyof T]) {
+  isCurrentPage(key: Key<T> | Key<T>[] | Index<T>) {
     const index = Array.isArray(key)
       ? key.map((k) => this.indexes[k])
       : typeof key === 'number'
@@ -127,7 +135,7 @@ class Navigator<T extends IndexRecord> {
   }
 }
 
-function Router<T extends IndexRecord>(props: {
+function Router<T extends NavigationRecord>(props: {
   children: View[];
   navigator: Navigator<T>;
 }): View[] {
