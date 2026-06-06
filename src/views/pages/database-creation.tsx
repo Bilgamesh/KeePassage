@@ -43,9 +43,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
       <container style={{ flex: 5, flexDirection: 'row', 'margin-top': 20 }}>
         <Image
           size={{ height: 200, width: 200 }}
-          src={
-            navigator.isCurrentPage((p) => p.DB_KEYS_PAGE) ? yubiKeyImage : null
-          }
+          src={navigator.isCurrentPage('DB_KEYS_PAGE') ? yubiKeyImage : null}
         />
         <container
           style={{
@@ -88,7 +86,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
           >
             <Expand />
             <button
-              enabled={!navigator.isCurrentPage((p) => p.DB_GENERAL_PAGE)}
+              enabled={!navigator.isCurrentPage('DB_GENERAL_PAGE')}
               onClick={() => {
                 navigator.pop();
               }}
@@ -97,12 +95,12 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
             />
             <button
               enabled={
-                navigator.isCurrentPage((p) => p.DB_GENERAL_PAGE) ||
+                navigator.isCurrentPage('DB_GENERAL_PAGE') ||
                 selectedKeys().length > 0
               }
               onClick={() => {
-                if (!navigator.isCurrentPage((p) => p.DB_KEYS_PAGE))
-                  navigator.push((p) => p.DB_KEYS_PAGE);
+                if (!navigator.isCurrentPage('DB_KEYS_PAGE'))
+                  navigator.push('DB_KEYS_PAGE');
                 else
                   saveNewDatabase({
                     dbName,
@@ -118,7 +116,7 @@ function DatabaseCreationPage(props: { window: Window; mainWindow: Window }) {
                 'margin-left': 10
               }}
               title={
-                !navigator.isCurrentPage((p) => p.DB_KEYS_PAGE)
+                !navigator.isCurrentPage('DB_KEYS_PAGE')
                   ? t('continue')
                   : t('save')
               }

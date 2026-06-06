@@ -23,9 +23,9 @@ function reset() {
 }
 
 function openSettingsPage() {
-  if (!navigator.isCurrentPage((page) => page.SETTINGS)) {
+  if (!navigator.isCurrentPage('SETTINGS')) {
     reset();
-    navigator.push((pages) => pages.SETTINGS);
+    navigator.push('SETTINGS');
   }
 }
 

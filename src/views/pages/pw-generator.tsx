@@ -54,15 +54,15 @@ async function getGeneratedPassword() {
 }
 
 function openPasswordGenerator() {
-  if (!navigator.isCurrentPage((page) => page.GENERATOR)) {
+  if (!navigator.isCurrentPage('GENERATOR')) {
     setPassword('');
-    navigator.push((pages) => ({
-      index: pages.GENERATOR,
+    navigator.push({
+      index: 'GENERATOR',
       cleanup: () => {
         if (controller && !controller.signal.aborted)
           controller.abort('Page cleanup');
       }
-    }));
+    });
     generate();
   }
 }

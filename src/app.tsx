@@ -12,7 +12,7 @@ import { WelcomePage } from '#/views/pages/welcome';
 
 const navigator = new Navigator({
   WELCOME: 0,
-  PINTENTRY: 1,
+  PINENTRY: 1,
   TOUCH: 2,
   DB_INDEX: 3,
   ENTRY: 4,

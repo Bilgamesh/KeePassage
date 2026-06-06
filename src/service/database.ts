@@ -66,8 +66,8 @@ async function openDatabase(window: Window, path: string) {
     );
     setUnlockedDbIndex({ ...index });
     navigator.replace({
-      from: (pages) => [pages.TOUCH, pages.PINTENTRY],
-      to: (pages) => pages.DB_INDEX
+      from: ['TOUCH', 'PINENTRY'],
+      to: 'DB_INDEX'
     });
   } catch (err) {
     console.error(`Failed to open database: ${err}`);
@@ -75,8 +75,8 @@ async function openDatabase(window: Window, path: string) {
       showError(window, err);
     setSelectedDbPath(previousPath);
     navigator.replace({
-      from: (pages) => [pages.TOUCH, pages.PINTENTRY],
-      to: (pages) => pages.WELCOME
+      from: ['TOUCH', 'PINENTRY'],
+      to: 'WELCOME'
     });
   }
   await updateSettings((settings) => {
@@ -154,8 +154,8 @@ async function getPassword(options: { entry: Entry; window: Window }) {
   const pin = await requestPin(navigator, key.serial, entry.title);
   if (!pin) {
     navigator.replace({
-      from: (pages) => [pages.TOUCH, pages.PINTENTRY],
-      to: (pages) => pages.DB_INDEX
+      from: ['TOUCH', 'PINENTRY'],
+      to: 'DB_INDEX'
     });
     return null;
   }
@@ -180,8 +180,8 @@ async function getPassword(options: { entry: Entry; window: Window }) {
 async function addNewEntry() {
   const entry = await requestEntry();
   navigator.replace({
-    from: (pages) => pages.ENTRY,
-    to: (pages) => pages.DB_INDEX
+    from: 'ENTRY',
+    to: 'DB_INDEX'
   });
   if (entry) {
     setUnlockedDbIndex((db) => {
@@ -204,13 +204,13 @@ async function editEntry(window: Window) {
   const password = await getPassword({ entry, window });
   if (password === null)
     return navigator.replace({
-      from: (pages) => [pages.PINTENTRY, pages.TOUCH],
-      to: (pages) => pages.DB_INDEX
+      from: ['PINENTRY', 'TOUCH'],
+      to: 'DB_INDEX'
     });
   const newEntry = await requestEntry(password, entry);
   navigator.replace({
-    from: (pages) => pages.ENTRY,
-    to: (pages) => pages.DB_INDEX
+    from: 'ENTRY',
+    to: 'DB_INDEX'
   });
   if (!newEntry) return;
   const db = unlockedDbIndex()!;
@@ -257,8 +257,8 @@ async function copyPassword(window: Window) {
   if (entry) {
     const password = await getPassword({ entry, window });
     navigator.replace({
-      from: (pages) => [pages.PINTENTRY, pages.TOUCH],
-      to: (pages) => pages.DB_INDEX
+      from: ['PINENTRY', 'TOUCH'],
+      to: 'DB_INDEX'
     });
     if (password) {
       Clipboard.get().setText(password);
@@ -272,8 +272,8 @@ async function showQrCode(window: Window) {
   if (entry) {
     const password = await getPassword({ entry, window });
     navigator.replace({
-      from: (pages) => [pages.PINTENTRY, pages.TOUCH],
-      to: (pages) => pages.DB_INDEX
+      from: ['PINENTRY', 'TOUCH'],
+      to: 'DB_INDEX'
     });
     if (password) {
       const code = await qrCodeToString(password);
@@ -303,7 +303,7 @@ function refreshDbLock() {
   if (isMinimised && appSettings().dbMinimiseLock) {
     setUnlockedDbIndex(null);
     setSelectedDbPath('');
-    navigator.replace({ to: (pages) => pages.WELCOME });
+    navigator.replace({ to: 'WELCOME' });
   }
 
   if (
@@ -313,7 +313,7 @@ function refreshDbLock() {
   ) {
     setUnlockedDbIndex(null);
     setSelectedDbPath('');
-    navigator.replace({ to: (pages) => pages.WELCOME });
+    navigator.replace({ to: 'WELCOME' });
   }
 }
 

@@ -12,28 +12,29 @@ import {
 import type { View as ViewWrapper } from '#/renderer/elements/view';
 
 type Cleanup = (() => void) | null;
-type HistoryItem = {
-  index: number;
+type ReplacementItem<T extends IndexRecord> = {
+  index: Key<T>;
+  cleanup?: Cleanup;
+};
+type HistoryItem<T extends IndexRecord> = {
+  index: T[keyof T];
   id: UUID;
-  cleanup: Cleanup;
+  cleanup?: Cleanup;
 };
 type IndexRecord = Record<string, number>;
-type PageSelector<T extends IndexRecord> = (
-  pages: T
-) => number | Omit<HistoryItem, 'id'>;
-type PageChecker<T extends IndexRecord> = (pages: T) => number | number[];
+type Key<T extends IndexRecord> = keyof T;
 
 class Navigator<T extends IndexRecord> {
   public id: string;
-  private history: Accessor<HistoryItem[]>;
-  private setHistory: Setter<HistoryItem[]>;
-  public pageIndex: Accessor<number>;
-  private setPageIndex: Setter<number>;
+  private history: Accessor<HistoryItem<T>[]>;
+  private setHistory: Setter<HistoryItem<T>[]>;
+  public pageIndex: Accessor<T[keyof T]>;
+  private setPageIndex: Setter<T[keyof T]>;
   private indexes: T;
 
   constructor(indexes: T) {
-    const [pageIndex, setPageIndex] = createSignal(0);
-    const [history, setHistory] = createSignal<HistoryItem[]>([
+    const [pageIndex, setPageIndex] = createSignal(0 as T[keyof T]);
+    const [history, setHistory] = createSignal<HistoryItem<T>[]>([
       {
         index: pageIndex(),
         id: randomUUID(),
@@ -48,20 +49,39 @@ class Navigator<T extends IndexRecord> {
     this.indexes = indexes;
   }
 
-  push(PageSelector: PageSelector<T>) {
-    const input = PageSelector(this.indexes);
+  push(key: Key<T> | ReplacementItem<T>) {
+    const input =
+      typeof key === 'string'
+        ? { index: this.indexes[key]! as T[keyof T] }
+        : {
+            index: this.indexes[(key as ReplacementItem<T>).index],
+            cleanup: (key as ReplacementItem<T>).cleanup
+          };
     const { index, cleanup } =
       typeof input === 'number' ? { index: input } : input;
     this.setHistory((history) => [
       ...history,
       { index, id: randomUUID(), cleanup: cleanup ?? null }
     ]);
-    this.setPageIndex(index);
+    this.setPageIndex(index as Exclude<T[keyof T], Function>);
   }
 
-  replace(options: { from?: PageChecker<T>; to: PageSelector<T> }): void {
-    const input = options.to(this.indexes);
-    const from = options.from ? options.from(this.indexes) : null;
+  replace(options: {
+    from?: Key<T> | Key<T>[];
+    to: Key<T> | ReplacementItem<T>;
+  }): void {
+    const input =
+      typeof options.to === 'string'
+        ? { index: this.indexes[options.to]! as T[keyof T] }
+        : {
+            index: this.indexes[(options.to as ReplacementItem<T>).index],
+            cleanup: (options.to as ReplacementItem<T>).cleanup
+          };
+    const from = options.from
+      ? Array.isArray(options.from)
+        ? options.from.map((k) => this.indexes[k])
+        : this.indexes[options.from]
+      : null;
 
     if (Array.isArray(from) && from.includes(this.pageIndex())) {
       this.replace({ to: options.to });
@@ -80,7 +100,7 @@ class Navigator<T extends IndexRecord> {
       if (item.cleanup) item.cleanup();
 
     this.setHistory([{ index, id: randomUUID(), cleanup: cleanup ?? null }]);
-    this.setPageIndex(index);
+    this.setPageIndex(index as Exclude<T[keyof T], Function>);
   }
 
   pop() {
@@ -89,17 +109,21 @@ class Navigator<T extends IndexRecord> {
     if (lastItem.cleanup) lastItem.cleanup();
     this.setHistory((history) => [...history.slice(0, -1)]);
     const { index } = this.history()[this.history().length - 1]!;
-    this.setPageIndex(index);
+    this.setPageIndex(index as Exclude<T[keyof T], Function>);
   }
 
   subscribe(callback: (page: number) => void) {
     createEffect(on(this.pageIndex, (value) => callback(value)));
   }
 
-  isCurrentPage(PageChecker: PageChecker<T>) {
-    const index = PageChecker(this.indexes);
-    if (typeof index === 'number') return this.pageIndex() === index;
-    return index.includes(this.pageIndex());
+  isCurrentPage(key: Key<T> | Key<T>[] | T[keyof T]) {
+    const index = Array.isArray(key)
+      ? key.map((k) => this.indexes[k])
+      : typeof key === 'number'
+        ? key
+        : this.indexes[key];
+    if (Array.isArray(index)) return index.includes(this.pageIndex());
+    else return this.pageIndex() === index;
   }
 }
 

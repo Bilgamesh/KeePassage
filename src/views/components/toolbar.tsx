@@ -73,7 +73,7 @@ function Toolbar(props: { window: Window }) {
         : Event.isControlPressed();
     if (
       appSettings().showToolbar &&
-      navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+      navigator.isCurrentPage('DB_INDEX') &&
       ctrlOrCmd &&
       ev.key === 'f'
     ) {
@@ -82,7 +82,7 @@ function Toolbar(props: { window: Window }) {
   });
 
   navigator.subscribe(() =>
-    navigator.isCurrentPage((p) => p.DB_INDEX) ? searchBar.focus() : null
+    navigator.isCurrentPage('DB_INDEX') ? searchBar.focus() : null
   );
 
   return (
@@ -95,10 +95,7 @@ function Toolbar(props: { window: Window }) {
           : {})}
       >
         <IconButton
-          enabled={navigator.isCurrentPage((pages) => [
-            pages.WELCOME,
-            pages.DB_INDEX
-          ])}
+          enabled={navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])}
           onClick={() => {
             const dialog = FileOpenDialog.create();
             dialog.setFilters([
@@ -117,13 +114,12 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           enabled={
-            unlockedDbIndex() !== null &&
-            navigator.isCurrentPage((pages) => pages.DB_INDEX)
+            unlockedDbIndex() !== null && navigator.isCurrentPage('DB_INDEX')
           }
           onClick={() => {
             setUnlockedDbIndex(null);
             setSelectedDbPath('');
-            navigator.replace({ to: (pages) => pages.WELCOME });
+            navigator.replace({ to: 'WELCOME' });
           }}
           src={lockIcon}
           tooltip={t('lockDb')}
@@ -132,7 +128,7 @@ function Toolbar(props: { window: Window }) {
           style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }}
         />
         <IconButton
-          enabled={navigator.isCurrentPage((pages) => pages.DB_INDEX)}
+          enabled={navigator.isCurrentPage('DB_INDEX')}
           onClick={() => {
             addNewEntry();
           }}
@@ -141,8 +137,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           enabled={
-            navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
-            selectedEntry() !== null
+            navigator.isCurrentPage('DB_INDEX') && selectedEntry() !== null
           }
           onClick={() => {
             editEntry(props.window);
@@ -152,8 +147,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           enabled={
-            navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
-            selectedEntry() !== null
+            navigator.isCurrentPage('DB_INDEX') && selectedEntry() !== null
           }
           onClick={() => {
             deleteEntry(props.window);
@@ -166,8 +160,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           enabled={
-            navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
-            selectedEntry() !== null
+            navigator.isCurrentPage('DB_INDEX') && selectedEntry() !== null
           }
           onClick={() => {
             copyUsername();
@@ -177,8 +170,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           enabled={
-            navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
-            selectedEntry() !== null
+            navigator.isCurrentPage('DB_INDEX') && selectedEntry() !== null
           }
           onClick={() => {
             copyPassword(props.window);
@@ -188,8 +180,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           enabled={
-            navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
-            selectedEntry() !== null
+            navigator.isCurrentPage('DB_INDEX') && selectedEntry() !== null
           }
           onClick={() => {
             showQrCode(props.window);
@@ -199,8 +190,7 @@ function Toolbar(props: { window: Window }) {
         />
         <IconButton
           enabled={
-            navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
-            selectedEntry() !== null
+            navigator.isCurrentPage('DB_INDEX') && selectedEntry() !== null
           }
           onClick={() => {
             copyUrl();
@@ -212,10 +202,7 @@ function Toolbar(props: { window: Window }) {
           style={{ 'margin-left': 10, 'margin-top': 5, 'margin-bottom': 5 }}
         />
         <IconButton
-          enabled={navigator.isCurrentPage((pages) => [
-            pages.WELCOME,
-            pages.DB_INDEX
-          ])}
+          enabled={navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])}
           onClick={() => {
             openPasswordGenerator();
           }}
@@ -223,10 +210,7 @@ function Toolbar(props: { window: Window }) {
           tooltip={t('passwordGenerator')}
         />
         <IconButton
-          enabled={navigator.isCurrentPage((pages) => [
-            pages.WELCOME,
-            pages.DB_INDEX
-          ])}
+          enabled={navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])}
           onClick={() => {
             openSettingsPage();
           }}
@@ -246,7 +230,7 @@ function Toolbar(props: { window: Window }) {
             : {})}
         />
         <entry
-          enabled={navigator.isCurrentPage((pages) => pages.DB_INDEX)}
+          enabled={navigator.isCurrentPage('DB_INDEX')}
           onKeyDown={(self, ev) => {
             if (ev.key === 'Enter') return true;
             if (ev.key === 'Backspace' && self.getText() === '') return true;
@@ -263,7 +247,7 @@ function Toolbar(props: { window: Window }) {
                 node.setText('');
                 updateFilter('');
               }
-              if (navigator.isCurrentPage((pages) => pages.WELCOME)) {
+              if (navigator.isCurrentPage('WELCOME')) {
                 node.setText('');
                 updateFilter('');
               }

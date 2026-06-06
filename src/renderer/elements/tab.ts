@@ -28,9 +28,7 @@ class Tab extends View {
       if (this.queue.length > 0) this.addFromQueue();
       this.children.push(child);
       this.node?.addPage(this.titles[this.children.length] || '', child.node!);
-    } else {
-      this.queue.push(child);
-    }
+    } else this.queue.push(child);
     child.parent = this;
   }
 

@@ -22,7 +22,7 @@ function TrayMenu(props: { win: ToggleableWindow }) {
       onClick: () => {
         setUnlockedDbIndex(null);
         setSelectedDbPath('');
-        navigator.replace({ to: (pages) => pages.WELCOME });
+        navigator.replace({ to: 'WELCOME' });
       }
     },
     {
@@ -36,8 +36,7 @@ function TrayMenu(props: { win: ToggleableWindow }) {
   menu
     .itemAt(1)
     .setEnabled(
-      unlockedDbIndex() !== null &&
-        navigator.isCurrentPage((pages) => pages.DB_INDEX)
+      unlockedDbIndex() !== null && navigator.isCurrentPage('DB_INDEX')
     );
   return menu;
 }

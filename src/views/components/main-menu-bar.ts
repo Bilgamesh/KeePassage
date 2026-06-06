@@ -42,25 +42,23 @@ const rules = () => [
     labels: [t('recentDatabases')],
     enabled:
       appSettings().recent.length > 0 &&
-      navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
+      navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])
   },
   {
     labels: [t('newDb...'), t('openDb...')],
-    enabled: navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
+    enabled: navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])
   },
   {
     labels: [t('lockDb')],
-    enabled:
-      unlockedDbIndex() !== null &&
-      navigator.isCurrentPage((pages) => pages.DB_INDEX)
+    enabled: unlockedDbIndex() !== null && navigator.isCurrentPage('DB_INDEX')
   },
   {
     labels: [t('entries'), t('newEntry')],
-    enabled: navigator.isCurrentPage((pages) => pages.DB_INDEX)
+    enabled: navigator.isCurrentPage('DB_INDEX')
   },
   {
     labels: [t('tools')],
-    enabled: navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
+    enabled: navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])
   },
   {
     labels: [
@@ -71,13 +69,11 @@ const rules = () => [
       t('showQrCode'),
       t('copyUrl')
     ],
-    enabled:
-      navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
-      selectedEntry() !== null
+    enabled: navigator.isCurrentPage('DB_INDEX') && selectedEntry() !== null
   },
   {
     labels: [t('passwordGenerator'), t('settings')],
-    enabled: navigator.isCurrentPage((pages) => [pages.WELCOME, pages.DB_INDEX])
+    enabled: navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])
   }
 ];
 
@@ -104,12 +100,7 @@ function MainMenuBar(props: { window: Window }) {
           label: t('newDb...'),
           accelerator: 'CmdOrCtrl+Shift+N',
           onClick: async () => {
-            if (
-              navigator.isCurrentPage((pages) => [
-                pages.WELCOME,
-                pages.DB_INDEX
-              ])
-            ) {
+            if (navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])) {
               const win = DatabaseWindow(true)!;
               render(
                 () =>
@@ -127,12 +118,7 @@ function MainMenuBar(props: { window: Window }) {
           label: t('openDb...'),
           accelerator: 'CmdOrCtrl+O',
           onClick: async () => {
-            if (
-              navigator.isCurrentPage((pages) => [
-                pages.WELCOME,
-                pages.DB_INDEX
-              ])
-            ) {
+            if (navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])) {
               const dialog = FileOpenDialog.create();
               dialog.setFilters([
                 {
@@ -155,10 +141,7 @@ function MainMenuBar(props: { window: Window }) {
               onClick: async () => {
                 if (
                   selectedDbPath() !== path &&
-                  navigator.isCurrentPage((pages) => [
-                    pages.WELCOME,
-                    pages.DB_INDEX
-                  ])
+                  navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])
                 ) {
                   openDatabase(props.window, path);
                 }
@@ -182,11 +165,11 @@ function MainMenuBar(props: { window: Window }) {
           onClick: async () => {
             if (
               unlockedDbIndex() !== null &&
-              navigator.isCurrentPage((pages) => pages.DB_INDEX)
+              navigator.isCurrentPage('DB_INDEX')
             ) {
               setUnlockedDbIndex(null);
               setSelectedDbPath('');
-              navigator.replace({ to: (pages) => pages.WELCOME });
+              navigator.replace({ to: 'WELCOME' });
             }
           }
         },
@@ -210,8 +193,7 @@ function MainMenuBar(props: { window: Window }) {
           label: t('newEntry'),
           accelerator: 'CmdOrCtrl+N',
           onClick: async () => {
-            if (navigator.isCurrentPage((pages) => pages.DB_INDEX))
-              addNewEntry();
+            if (navigator.isCurrentPage('DB_INDEX')) addNewEntry();
           }
         },
         {
@@ -219,7 +201,7 @@ function MainMenuBar(props: { window: Window }) {
           accelerator: 'CmdOrCtrl+E',
           onClick: async () => {
             if (
-              navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+              navigator.isCurrentPage('DB_INDEX') &&
               selectedEntry() !== null
             ) {
               editEntry(props.window);
@@ -231,7 +213,7 @@ function MainMenuBar(props: { window: Window }) {
           accelerator: 'Delete',
           onClick: async () => {
             if (
-              navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+              navigator.isCurrentPage('DB_INDEX') &&
               selectedEntry() !== null
             ) {
               deleteEntry(props.window);
@@ -244,7 +226,7 @@ function MainMenuBar(props: { window: Window }) {
           accelerator: 'CmdOrCtrl+B',
           onClick: async () => {
             if (
-              navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+              navigator.isCurrentPage('DB_INDEX') &&
               selectedEntry() !== null
             ) {
               copyUsername();
@@ -254,14 +236,14 @@ function MainMenuBar(props: { window: Window }) {
         {
           label: t('copyPassword'),
           accelerator:
-            navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+            navigator.isCurrentPage('DB_INDEX') &&
             selectedEntry() !== null &&
             copyingEnabled()
               ? 'CmdOrCtrl+C'
               : null,
           onClick: async () => {
             if (
-              navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+              navigator.isCurrentPage('DB_INDEX') &&
               selectedEntry() !== null &&
               copyingEnabled()
             ) {
@@ -273,7 +255,7 @@ function MainMenuBar(props: { window: Window }) {
           label: t('showQrCode'),
           onClick: async () => {
             if (
-              navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+              navigator.isCurrentPage('DB_INDEX') &&
               selectedEntry() !== null
             ) {
               showQrCode(props.window);
@@ -285,7 +267,7 @@ function MainMenuBar(props: { window: Window }) {
           accelerator: 'CmdOrCtrl+U',
           onClick: async () => {
             if (
-              navigator.isCurrentPage((pages) => pages.DB_INDEX) &&
+              navigator.isCurrentPage('DB_INDEX') &&
               selectedEntry() !== null
             ) {
               copyUrl();
@@ -300,12 +282,7 @@ function MainMenuBar(props: { window: Window }) {
         {
           label: t('passwordGenerator'),
           onClick: () => {
-            if (
-              navigator.isCurrentPage((pages) => [
-                pages.WELCOME,
-                pages.DB_INDEX
-              ])
-            ) {
+            if (navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])) {
               openPasswordGenerator();
             }
           }
@@ -314,12 +291,7 @@ function MainMenuBar(props: { window: Window }) {
           label: t('settings'),
           accelerator: 'CmdOrCtrl+,',
           onClick: () => {
-            if (
-              navigator.isCurrentPage((pages) => [
-                pages.WELCOME,
-                pages.DB_INDEX
-              ])
-            ) {
+            if (navigator.isCurrentPage(['WELCOME', 'DB_INDEX'])) {
               openSettingsPage();
             }
           }

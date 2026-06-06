@@ -58,13 +58,13 @@ function restoreRawEntry(form: Form) {
 async function requestEntry(password?: string, existingEntry?: Entry) {
   controller = new AbortController();
   setPasswordVisible(false);
-  navigator.push((pages) => ({
-    index: pages.ENTRY,
+  navigator.push({
+    index: 'ENTRY',
     cleanup: () => {
       if (controller && !controller.signal.aborted)
         controller.abort('Page cleanup');
     }
-  }));
+  });
   if (existingEntry && typeof password === 'string')
     restoreRawEntry({ ...existingEntry, password });
   try {

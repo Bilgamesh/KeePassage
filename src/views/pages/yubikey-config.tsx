@@ -43,7 +43,7 @@ function YubiKeyConfigPage(props: { window: Window }) {
 
   const navigator = new Navigator({
     KEY_SELECTION: 0,
-    PINTENTRY: 1,
+    PINENTRY: 1,
     TOUCH: 2
   });
 
@@ -134,8 +134,8 @@ function YubiKeyConfigPage(props: { window: Window }) {
                   const signal = requestTouch(navigator);
                   signal.addEventListener('abort', () => {
                     navigator.replace({
-                      from: (p) => p.TOUCH,
-                      to: (p) => p.KEY_SELECTION
+                      from: 'TOUCH',
+                      to: 'KEY_SELECTION'
                     });
                   });
                   try {
@@ -144,8 +144,8 @@ function YubiKeyConfigPage(props: { window: Window }) {
                     if (!signal.aborted) showError(props.window, err);
                   } finally {
                     navigator.replace({
-                      from: (p) => [p.PINTENTRY, p.TOUCH],
-                      to: (p) => p.KEY_SELECTION
+                      from: ['PINENTRY', 'TOUCH'],
+                      to: 'KEY_SELECTION'
                     });
                   }
                 }}

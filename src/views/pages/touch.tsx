@@ -21,15 +21,15 @@ function requestTouch<T extends NavigationIndex>(navigator: Navigator<T>) {
   // but if the PIN is correct, PCSC stays silent until user touches the key sensor.
   // We assume that if there was no error within the initial 50ms, PIN must be correct and we prompt the user to tap the key.
   setTimeout(50).then(() => {
-    const stillOnSamePage = navigator.isCurrentPage(() => previousPageId);
+    const stillOnSamePage = navigator.isCurrentPage(previousPageId);
     if (!newAbortController.signal.aborted && stillOnSamePage)
-      navigator.push((pages) => ({
-        index: pages.TOUCH,
+      navigator.push({
+        index: 'TOUCH',
         cleanup: () => {
           if (!newAbortController.signal.aborted)
             newAbortController.abort('Page cleanup');
         }
-      }));
+      });
   });
   controller = newAbortController;
   return controller.signal;

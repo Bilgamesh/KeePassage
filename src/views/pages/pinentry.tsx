@@ -7,7 +7,7 @@ import { createListeners } from '#/utils/listen';
 import { Expand } from '#/views/components/expand';
 import type { Navigator } from '#/views/components/router';
 
-type NavigationIndex = { PINTENTRY: number };
+type NavigationIndex = { PINENTRY: number };
 
 const pinListeners = createListeners<string | null>();
 const entryNodes: Record<string, Entry> = {};
@@ -29,13 +29,13 @@ async function requestPin<T extends NavigationIndex>(
 
   setSerial(serial);
   const newAbortController = new AbortController();
-  navigator.push((pages) => ({
-    index: pages.PINTENTRY,
+  navigator.push({
+    index: 'PINENTRY',
     cleanup: () =>
       newAbortController.signal.aborted
         ? null
         : controller.abort('Page cleanup')
-  }));
+  });
   entryNodes[navigator.id]?.focus();
   controller = newAbortController;
   try {
