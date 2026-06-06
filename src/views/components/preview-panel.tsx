@@ -63,7 +63,7 @@ function PreviewPanel(props: {
             value={displayedUserName()}
           />
           <PreviewLine
-            label={t('password')}
+            label={`${t('password')}:`}
             style={{
               'margin-top': 10,
               height: process.platform === 'win32' ? 22 : 35

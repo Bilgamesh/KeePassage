@@ -277,7 +277,9 @@ async function showQrCode(window: Window) {
     });
     if (password) {
       const code = await qrCodeToString(password);
-      const window = QrCodeWindow({ title: `${entry.title} - Password` });
+      const window = QrCodeWindow({
+        title: `${entry.title} - ${t('password')}`
+      });
       render(() => QRCode({ code, window }), window);
       window.fitSize();
       window.activate();

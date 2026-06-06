@@ -128,7 +128,7 @@ function EntryPage() {
       <EntryLine
         onTextChange={setPassword}
         text={password}
-        title={t('password')}
+        title={`${t('password')}:`}
         type={passwordVisible() ? 'normal' : 'password'}
       >
         <IconButton
